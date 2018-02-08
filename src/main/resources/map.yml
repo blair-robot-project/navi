@@ -536,14 +536,26 @@ buttons:
                         axis: 3
                 triggerAt: 0.9
         command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                '@id': dropLaunchpads
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.SolenoidSimple:
-                        '@id': launchpadPiston
-                        piston:
-                            forward: 6
-                            reverse: 7
+            org.usfirst.frc.team449.robot.commands.general.ConditionalCommandTimeBased:
+                '@id': conditionalLaunchpadDrop
+                matchTimeSecs: 120
+                afterCommand:
+                    org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+                        '@id': parallelLaunchpadDropGroup
+                        commandSet:
+                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                '@id': dropLaunchpads
+                                subsystem:
+                                    org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.SolenoidSimple:
+                                        '@id': launchpadPiston
+                                        piston:
+                                            forward: 6
+                                            reverse: 7
+                            - org.usfirst.frc.team449.robot.commands.general.RequireSubsystem:
+                                '@id': turnOffDrive
+                                subsystem:
+                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                        drive
         action: WHEN_PRESSED
     #Winch in launchpads
     -   button:
