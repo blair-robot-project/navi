@@ -604,12 +604,20 @@ buttons:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': raiseIntakeAndCarriage
                 commandList:
+                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                            '@id': holdCubeGently
+                            subsystem:
+                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+                                    carriage
+                            mode: IN_SLOW
                     -   org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                            '@id': moveUpElevatorToSwitch
                             subsystem:
                                 org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                     elevator
                             setpoint: 3
                     -   org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
+                            '@id': liftSideswipeManual
                             subsystem:
                                 org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
                                     intake
