@@ -298,13 +298,15 @@ buttons:
 #                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
 #                        drive
 #        action: WHEN_PRESSED
+    #Driver controls
+    #Lower intake
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
                 '@id': intakeDownButton
                 joystick:
                     org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 4
+                        driverGamepad
+                buttonNumber: 1
         command:
             org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                 '@id': lir
@@ -365,183 +367,17 @@ buttons:
                 carriageIntakeMode: IN_FAST
                 carriageHoldMode: IN_SLOW
         action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': lowScaleButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        '@id': mechanismsGamepad
-                        port: 2
-                buttonNumber: 1
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                '@id': goToLowScale
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                        elevator
-                setpoint: 4.5
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': midScaleButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 2
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                '@id': goToMidScale
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                        elevator
-                setpoint: 5.5
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': highScaleButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 3
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                '@id': goToHighScale
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                        elevator
-                setpoint: 6.5
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': dropLaunchpadButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 5
-        command:
-            org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                '@id': dropAndCountdown
-                commandSet:
-                    - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                        '@id': dropLaunchpads
-                        subsystem:
-                            org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.SolenoidSimple:
-                                '@id': launchpadPiston
-                                piston:
-                                    forward: 6
-                                    reverse: 7
-                    - org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
-                        '@id': leftCountdown
-                        time: 140
-                        command:
-                            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                                '@id': raiseLeftLaunchpadTimed
-                                subsystem:
-                                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                                        '@id': leftLaunchpad
-                                        motor:
-                                            org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
-                                                '@id': leftLaunchpadVictor
-                                                port: 4
-                                                inverted: false
-                    - org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
-                        '@id': rightCountdown
-                        time: 140
-                        command:
-                            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                                '@id': raiseRightLaunchpadTimed
-                                subsystem:
-                                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                                        '@id': rightLaunchpad
-                                        motor:
-                                            org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
-                                                '@id': rightLaunchpadVictor
-                                                port: 1
-                                                inverted: false
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': cancelLeftCountdownButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 6
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                leftCountdown
-        action: CANCEL_WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': cancelRightCountdownButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 7
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                rightCountdown
-        action: CANCEL_WHEN_PRESSED
-    #Manually raise left launchpad
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': raiseLeftLaunchpadButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 8
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                '@id': raiseLeftLaunchpad
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                        leftLaunchpad
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                raiseLeftLaunchpadButton
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOffWithRequires:
-                '@id': stopLeftLaunchpad
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                        leftLaunchpad
-        action: WHEN_RELEASED
-    #Manually raise right launchpad
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': raiseRightLaunchpadButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 9
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
-                '@id': raiseRightLaunchpad
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                        rightLaunchpad
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                raiseRightLaunchpadButton
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOffWithRequires:
-                '@id': stopRightLaunchpad
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
-                        rightLaunchpad
-        action: WHEN_RELEASED
-    #Shootin'
+    #Shootin' fast
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
                 '@id': shootButton
                 joystick:
                     org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                         driverGamepad
-                buttonNumber: 1
+                buttonNumber: 2
         command:
             org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                '@id': shootCommand
+                '@id': shootFast
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                         '@id': carriage
@@ -558,13 +394,92 @@ buttons:
                         '@id': carriage
                 mode: OFF
         action: WHEN_RELEASED
+    #Placing
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': placeButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        driverGamepad
+                buttonNumber: 4
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                '@id': shootSlow
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+                        '@id': carriage
+                mode: OUT_SLOW
+        action: WHEN_PRESSED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                placeButton
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                stopShootCommand
+#                '@id': stopSlowShootCommand
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                        '@id': carriage
+#                mode: OFF
+        action: WHEN_RELEASED
+    #Mechanisms player buttons
+    #Elevator positioning
+    #Low
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': lowScaleButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        '@id': mechanismsGamepad
+                        port: 2
+                buttonNumber: 2
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                '@id': goToLowScale
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+                        elevator
+                setpoint: 4.5
+        action: WHEN_PRESSED
+    #Medium
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': midScaleButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                buttonNumber: 3
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                '@id': goToMidScale
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+                        elevator
+                setpoint: 5.5
+        action: WHEN_PRESSED
+    #High
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': highScaleButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                buttonNumber: 4
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                '@id': goToHighScale
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+                        elevator
+                setpoint: 6.5
+        action: WHEN_PRESSED
     #Exchange
     -   button:
             '@id': prepareForExchangeButton
             joystick:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                     mechanismsGamepad
-            buttonNumber: 10
+            buttonNumber: 1
         command:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': prepareForExchange
@@ -581,13 +496,110 @@ buttons:
                                     elevator
                             setpoint: 0
         action: WHEN_PRESSED
-    #Raise intake stuff
+    #Lower and intake
     -   button:
-            '@id': raiseIntakeButton
-            joystick:
-                org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                    mechanismsGamepad
-            buttonNumber: 11
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': mechIntakeDownButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                buttonNumber: 6
+        command:
+            org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+                lir
+#                '@id': mechLIR
+#                actuatedIntake:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                        intake
+#                carriage:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                        carriage
+#                elevator:
+#                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionMPWithBrake:
+#                        elevator
+#                intakeSolenoidPos: kReverse
+#                elevatorUpPos: 2
+#                actuatedIntakeMode: IN_FAST
+#                carriageIntakeMode: IN_FAST
+#                carriageHoldMode: IN_SLOW
+        action: WHEN_PRESSED
+    #Drop Launchpads
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
+                '@id': dropLaunchpadButton
+                throttle:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottleSimple:
+                        '@id': dropLaunchpadTrigger
+                        sitck:
+                            org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                                mechanismsGamepad
+                        axis: 3
+                triggerAt: 0.9
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                '@id': dropLaunchpads
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.SolenoidSimple:
+                        '@id': launchpadPiston
+                        piston:
+                            forward: 6
+                            reverse: 7
+        action: WHEN_PRESSED
+    #Winch in launchpads
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                '@id': startLeftCountdownButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                angle: 270
+        command:
+            org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
+                '@id': leftCountdown
+                time: 140
+                command:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
+                        '@id': raiseLeftLaunchpadTimed
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
+                                '@id': leftLaunchpad
+                                motor:
+                                    org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': leftLaunchpadVictor
+                                        port: 4
+                                        inverted: false
+        action: WHEN_PRESSED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                '@id': startRightCountdownButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                angle: 90
+        command:
+            org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
+                '@id': rightCountdown
+                time: 140
+                command:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
+                        '@id': raiseRightLaunchpadTimed
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
+                                '@id': rightLaunchpad
+                                motor:
+                                    org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': rightLaunchpadVictor
+                                        port: 1
+                                        inverted: false
+        action: WHEN_PRESSED
+    #Raise intake stuff if sensor breaks
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': raiseIntakeButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                buttonNumber: 5
         command:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': raiseIntakeAndCarriage
@@ -604,6 +616,68 @@ buttons:
                             pistonPos: kForward
                             intakeMode: OFF
         action: WHEN_PRESSED
+    #NavX override
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                '@id': overrideNavXButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                angle: 0
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.OverrideNavX:
+                '@id': overrideNavX
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                override: true
+        action: WHEN_PRESSED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                overrideNavXButton
+        command:
+            org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.OverrideNavX:
+                '@id': unoverrideNavX
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                override: false
+        action: WHEN_RELEASED
+    #Force low gear
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                '@id': forceLowGear
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        mechanismsGamepad
+                angle: 180
+        command:
+            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+                '@id': overrideAndShift
+                commandList:
+                    - org.usfirst.frc.team449.robot.drive.shifting.commands.OverrideAutoShift:
+                        '@id': overrideAutoshift
+                        subsystem:
+                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                drive
+                        override: true
+                    - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
+                        '@id': downshift
+                        subsystem:
+                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                drive
+        action: WHEN_PRESSED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                forceLowGear
+        command:
+            org.usfirst.frc.team449.robot.drive.shifting.commands.OverrideAutoShift:
+                '@id': unoverrideAutoshift
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                override: false
+        action: WHEN_RELEASED
 autoStartupCommand:
     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
         '@id': autoCommand
