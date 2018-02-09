@@ -754,14 +754,31 @@ autoStartupCommand:
     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
         '@id': autoCommand
         commandList:
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                '@id': lowerIntakeAuto
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                        intake
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.Home:
+#                '@id': home
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                        elevator
+#                speed: 0.25
             - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                '@id': lowerIntakeAuto
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                        intake
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.Home:
-                '@id': home
+                '@id': releaseBrakeAuto
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
                         elevator
-                speed: 0.25
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.PositionVoltageRamp:
+                '@id': voltageRamp
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                        elevator
+                voltsPerSecond: 0.5
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
+#                '@id': accelTest
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                        elevator
+#                setpoint: 0.75
