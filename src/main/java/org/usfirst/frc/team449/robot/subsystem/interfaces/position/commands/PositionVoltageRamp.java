@@ -43,13 +43,16 @@ public class PositionVoltageRamp<T extends Subsystem & SubsystemPosition> extend
      *
      * @param subsystem      The subsystem to execute this command on
      * @param voltsPerSecond How many volts to increase the output by per second.
+     * @param startingVoltage The voltage to start the ramp at. Defaults to 0.
      */
     @JsonCreator
     public PositionVoltageRamp(@NotNull @JsonProperty(required = true) T subsystem,
-                       @JsonProperty(required = true) double voltsPerSecond) {
+                               @JsonProperty(required = true) double voltsPerSecond,
+                               double startingVoltage) {
         requires(subsystem);
         this.subsystem = subsystem;
         this.percentPerMillis = voltsPerSecond / 12. / 1000.;
+        this.output = startingVoltage;
     }
 
     /**
@@ -59,7 +62,6 @@ public class PositionVoltageRamp<T extends Subsystem & SubsystemPosition> extend
     protected void initialize() {
         Logger.addEvent("PositionVoltageRamp init.", this.getClass());
         lastTime = Clock.currentTimeMillis();
-        output = 0;
     }
 
     /**
