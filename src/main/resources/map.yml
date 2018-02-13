@@ -3,6 +3,26 @@ logger:
     '@id': logger
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/carriageUpAccelLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/carriageDownQuasiLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/carriageDownAccelLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/stageUpQuasiLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/stageUpAccelLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/stageDownQuasiLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/stageDownAccelLog-"
+#Drive
+#    telemetryLogFilename: "/home/lvuser/logs/highGearFwdAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/highGearRevAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/highGearFwdQuasi-"
+#    telemetryLogFilename: "/home/lvuser/logs/highGearRevQuasi-"
+#    telemetryLogFilename: "/home/lvuser/logs/highGearMaxAccel-"
+#Low
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearMaxAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevQuasi-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdQuasi-"
     loggables:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
@@ -813,3 +833,21 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
 #                        elevator
 #                setpoint: 0.75
+#            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
+#                '@id': switchToLowTune
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.DriveAtSpeed:
+#                '@id': accel
+#                velocity: 0.5
+#                seconds: 3
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.VoltageRamp:
+#                '@id': voltageRamp
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#                voltsPerSecond: 0.25
