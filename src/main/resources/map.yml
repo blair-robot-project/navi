@@ -42,7 +42,7 @@ logger:
                     PDP:
                         org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
                     voltagePerCurrentLinReg:
-                        <<: voltagePerCurrent
+                        <<: *voltagePerCurrent
                     reverseOutput: true
                     reverseSensor: false
                     enableBrakeMode: true
@@ -231,7 +231,7 @@ logger:
             PDP:
                 org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
             voltagePerCurrentLinReg:
-                <<: voltagePerCurrent
+                <<: *voltagePerCurrent
             fwdLimitSwitchNormallyOpen: false
             revLimitSwitchNormallyOpen: false
             feetPerRotation: 0.59
@@ -274,7 +274,7 @@ logger:
             PDP:
                 org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
             voltagePerCurrentLinReg:
-                <<: voltagePerCurrent
+                <<: *voltagePerCurrent
             slaveVictors:
                 - port: 14
                   inverted: true
@@ -289,7 +289,7 @@ logger:
             PDP:
                 org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
             voltagePerCurrentLinReg:
-                <<: voltagePerCurrent
+                <<: *voltagePerCurrent
             slaveVictors:
                 -   port: 12
                     inverted: true
@@ -303,7 +303,7 @@ logger:
             PDP:
                 org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
             voltagePerCurrentLinReg:
-                <<: voltagePerCurrent
+                <<: *voltagePerCurrent
         - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
             '@id': rightLaunchpadTalon
             port: 8
@@ -314,7 +314,7 @@ logger:
             PDP:
                 org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
             voltagePerCurrentLinReg:
-                <<: voltagePerCurrent
+                <<: *voltagePerCurrent
 defaultCommands:
     - subsystem:
         org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
