@@ -51,7 +51,7 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
                                       @NotNull @JsonProperty(required = true) PathGenerator pathGenerator) {
         this.talon = talon;
         this.pathGenerator = pathGenerator;
-        startedProfile = false;
+        startedProfile = true;
     }
 
     /**

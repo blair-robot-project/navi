@@ -46,7 +46,7 @@ dependencies {
     compile 'io.grpc:grpc-protobuf:1.0.0-pre2'
     // https://mvnrepository.com/artifact/org.zeromq/jeromq
     compile group: 'org.zeromq', name: 'jeromq', version: '0.4.3'
-    compile group : 'com.github.blair-robot-project', name: '449-central-repo', version:'79c8365117'
+    compile group : 'com.github.blair-robot-project', name: '449-central-repo', version:'095cc1ca1a'
     compile wpilib()
     compile ctre()
     compile navx()
