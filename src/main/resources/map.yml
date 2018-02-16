@@ -829,6 +829,7 @@ autoStartupCommand:
 #                        elevator
 #                voltsPerSecond: 0.5
             - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
+                '@id': elevatorAccel
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
                         elevator
@@ -851,3 +852,19 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
 #                        drive
 #                voltsPerSecond: 0.25
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                '@id': profile
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#                timeout: 10
+#                left:
+#                    '@id': leftProfile
+#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+#                    inverted: false
+#                    resetPosition: true
+#                right:
+#                    '@id': rightProfile
+#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+#                    inverted: false
+#                    resetPosition: true
