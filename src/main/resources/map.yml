@@ -26,7 +26,7 @@ logger:
     loggables:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
-            canID: 4
+            canID: 1
             voltagePerCurrentLinReg:
                 &voltagePerCurrent
                 bufferSize: 250
@@ -537,7 +537,7 @@ buttons:
                             org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                                 mechanismsGamepad
                         axis: 5
-                        deadband: 0.05
+                        deadband: 0.1
                         inverted: true
                         polynomial:
                             org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
@@ -834,7 +834,7 @@ autoStartupCommand:
 #                subsystem:
 #                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
 #                        elevator
-#                setpoint: 1
+#                setpoint: 0.5
 #            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
 #                '@id': switchToLowTune
 #                subsystem:

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.FeedForwardComponent;
+package org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ public abstract class FeedForwardComponent implements DoubleUnaryOperator {
      * @return A FeedForwardComponent whose methods all return 0.
      */
     @NotNull
-    public static org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.FeedForwardComponent.FeedForwardComponent getZeroFeedForward() {
-        return new org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.FeedForwardComponent.FeedForwardZeroComponent();
+    public static FeedForwardComponent getZeroFeedForward() {
+        return new FeedForwardZeroComponent();
     }
 
     /**

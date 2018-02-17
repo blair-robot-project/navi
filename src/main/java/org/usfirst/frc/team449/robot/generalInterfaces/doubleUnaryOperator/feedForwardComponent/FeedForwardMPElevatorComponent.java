@@ -3,7 +3,6 @@ package org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feed
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
-import org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.FeedForwardComponent.FeedForwardComponent;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class FeedForwardMPElevatorComponent extends FeedForwardComponent {
         Arrays.sort(positions);
         feedForwardComponents = new FeedForwardComponent[positions.length];
         for (int i = 0; i < positions.length; i++) {
-            feedForwardComponents[i] = feetToFFComponentMap.get(feedForwardComponents[i]);
+            feedForwardComponents[i] = feetToFFComponentMap.get(positions[i]);
         }
     }
 
