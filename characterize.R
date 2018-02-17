@@ -37,7 +37,7 @@ characterizeElevator <- function(velFile, accelFile, smoothing = 2){
   goodVel$accel <- smoothDerivative(goodVel$elevatorTalon.velocity, goodVel$time, smoothing)
   accelDat$accel <- smoothDerivative(accelDat$elevatorTalon.velocity, accelDat$time, smoothing)
   goodAccel <- subset(accelDat, elevatorTalon.voltage != 0)
-  goodAccel <- goodAccel[(which.max(abs(goodAccel$laccel))+1):length(goodAccel$time),]
+  goodAccel <- goodAccel[(which.max(abs(goodAccel$accel))+1):length(goodAccel$time),]
   combinedVoltage <- c(goodVel$elevatorTalon.voltage, goodAccel$elevatorTalon.voltage)
   combinedVel <- c(goodVel$elevatorTalon.velocity, goodAccel$elevatorTalon.velocity)
   combinedAccel <- c(goodVel$accel, goodAccel$accel)
