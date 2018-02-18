@@ -7,12 +7,14 @@ smoothDerivative <- function(value, timeMillis, n){
 characterizeDrive <- function(velFile, accelFile, smoothing = 2){
   vel <- read.csv(velFile)
   accel <- read.csv(accelFile)
-  goodVel <- subset(vel, abs(left.velocity) > 0.1 & left.voltage!=0 & abs(right.velocity) > 0.1 & right.voltage!=0)
+  goodVel <- subset(vel, abs(left.velocity) > 0.1 & abs(left.voltage) > 0.1 & abs(right.velocity) > 0.1 & right.voltage!=0)
+  goodVel <- goodVel[1:(length(goodVel$time) - 1), ]
   goodVel$left_accel <- smoothDerivative(goodVel$left.velocity, goodVel$time, smoothing)
   goodVel$right_accel <- smoothDerivative(goodVel$right.velocity, goodVel$time, smoothing)
   accel$left_accel <- smoothDerivative(accel$left.velocity, accel$time, smoothing)
   accel$right_accel <- smoothDerivative(accel$right.velocity, accel$time, smoothing)
   goodAccel <- subset(accel, left.voltage != 0 & right.voltage != 0)
+  goodAccel <- goodAccel[1:(length(goodAccel$time) - 2),]
   goodAccelLeft <- goodAccel[(which.max(abs(goodAccel$left_accel))+1):length(goodAccel$time),]
   goodAccelRight <- goodAccel[(which.max(abs(goodAccel$right_accel))+1):length(goodAccel$time),]
   combinedLeftVoltage <- c(goodVel$left.voltage, goodAccelLeft$left.voltage)
@@ -22,8 +24,9 @@ characterizeDrive <- function(velFile, accelFile, smoothing = 2){
   combinedLeftAccel <- c(goodVel$left_accel, goodAccelLeft$left_accel)
   combinedRightAccel <- c(goodVel$right_accel, goodAccelRight$right_accel)
   plot(goodAccelLeft$time, goodAccelLeft$left_accel)
-  plot(goodVel$time, goodVel$left.voltage)
-  plot(goodVel$left.voltage, goodVel$left.velocity)
+  plot(goodAccelRight$time, goodAccelRight$right_accel)
+  plot(goodVel$time, goodVel$right.voltage)
+  plot(goodVel$right.voltage, goodVel$right.velocity)
   leftModel <- lm(combinedLeftVoltage~combinedLeftVel+combinedLeftAccel)
   rightModel <- lm(combinedRightVoltage~combinedRightVel+combinedRightAccel)
   print(summary(leftModel))

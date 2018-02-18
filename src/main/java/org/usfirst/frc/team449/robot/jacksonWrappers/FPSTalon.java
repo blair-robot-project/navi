@@ -171,7 +171,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                     boolean reverseOutput,
                     @JsonProperty(required = true) boolean enableBrakeMode,
                     @NotNull @JsonProperty(required = true) RunningLinRegComponent voltagePerCurrentLinReg,
-                    @NotNull @JsonProperty(required = true) org.usfirst.frc.team449.robot.jacksonWrappers.PDP PDP,
+                    @NotNull @JsonProperty(required = true) PDP PDP,
                     @Nullable Boolean fwdLimitSwitchNormallyOpen,
                     @Nullable Boolean revLimitSwitchNormallyOpen,
                     @Nullable Double fwdSoftLimit,
@@ -338,7 +338,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             //Set up slaves.
             for (SlaveTalon slave : slaveTalons) {
                 slave.setMaster(port, enableBrakeMode, currentLimit, PDP, voltagePerCurrentLinReg.clone());
-                Logger.addLoggable(slave);
+//                Logger.addLoggable(slave);
             }
         }
 
@@ -848,8 +848,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                 "voltage",
                 "current",
                 "control_mode",
-                "gear",
-                "resistance"
+                "gear"
+//                "resistance"
         };
     }
 
@@ -861,7 +861,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
     @NotNull
     @Override
     public Object[] getData() {
-        voltagePerCurrentLinReg.addPoint(getOutputCurrent(), PDP.getVoltage() - getBatteryVoltage());
+//        voltagePerCurrentLinReg.addPoint(getOutputCurrent(), PDP.getVoltage() - getBatteryVoltage());
         return new Object[]{
                 getVelocity(),
                 getPositionFeet(),
@@ -871,8 +871,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                 getOutputVoltage(),
                 getOutputCurrent(),
                 getControlMode(),
-                getGear(),
-                -voltagePerCurrentLinReg.getSlope()
+                getGear()
+//                -voltagePerCurrentLinReg.getSlope()
         };
     }
 

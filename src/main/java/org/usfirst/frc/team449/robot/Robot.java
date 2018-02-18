@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
         this.loggerNotifier = new Notifier(robotMap.getLogger());
 
         //Run the logger to write all the events that happened during initialization to a file.
-        loggerNotifier.startPeriodic(0.04);
+        loggerNotifier.startPeriodic(0.03);
     }
 
     /**

@@ -51,6 +51,9 @@ public class SlaveTalon implements Loggable {
         this.talonSRX.configForwardSoftLimitEnable(false, 0);
         this.talonSRX.configReverseSoftLimitEnable(false, 0);
         this.talonSRX.configPeakOutputForward(1, 0);
+        talonSRX.enableVoltageCompensation(true);
+        talonSRX.configVoltageCompSaturation(12, 0);
+        talonSRX.configVoltageMeasurementFilter(32, 0);
     }
 
     /**
