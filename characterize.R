@@ -47,3 +47,21 @@ characterizeElevator <- function(velFile, accelFile, smoothing = 2){
   model <- lm(combinedVoltage~combinedVel+combinedAccel)
   print(summary(model))
 }
+
+characterizeElevatorTrimmed <- function(vel, accelDat, smoothing = 2){
+  goodVel <- subset(vel, abs(elevatorTalon.velocity) > 0.1 & elevatorTalon.voltage!=0)
+  goodVel$accel <- smoothDerivative(goodVel$elevatorTalon.velocity, goodVel$time, smoothing)
+  accelDat$accel <- smoothDerivative(accelDat$elevatorTalon.velocity, accelDat$time, smoothing)
+  goodAccel <- subset(accelDat, elevatorTalon.voltage != 0)
+  goodAccel <- subset(goodAccel, accel != 0)
+  goodVel <- subset(goodVel, accel != 0)
+  #goodAccel <- goodAccel[(which.max(abs(goodAccel$accel))+1):length(goodAccel$time),]
+  combinedVoltage <- c(goodVel$elevatorTalon.voltage, goodAccel$elevatorTalon.voltage)
+  combinedVel <- c(goodVel$elevatorTalon.velocity, goodAccel$elevatorTalon.velocity)
+  combinedAccel <- c(goodVel$accel, goodAccel$accel)
+  plot(goodAccel$time, goodAccel$accel)
+  plot(goodVel$time, goodVel$elevatorTalon.voltage)
+  plot(goodVel$elevatorTalon.voltage, goodVel$elevatorTalon.velocity)
+  model <- lm(combinedVoltage~combinedVel+combinedAccel)
+  print(summary(model))
+}

@@ -11,15 +11,25 @@ import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
 import org.usfirst.frc.team449.robot.generalInterfaces.updatable.Updatable;
 
 /**
- * An object representing the Power Distribution Panel that logs power, current, and resistance.
+ * An object representing the {@link PowerDistributionPanel} that logs power, current, and resistance.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
+public class PDP implements Loggable, Updatable {
+
+    /**
+     * The WPILib PDP this is a wrapper on.
+     */
+    private final PowerDistributionPanel PDP;
 
     /**
      * The component for doing linear regression to find the resistance.
      */
     private final RunningLinRegComponent voltagePerCurrentLinReg;
+
+    /**
+     * The cached values from the PDP object this wraps.
+     */
+    private double voltage, totalCurrent;
 
     /**
      * Default constructor.
@@ -30,7 +40,7 @@ public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
     @JsonCreator
     public PDP(int canID,
                @NotNull @JsonProperty(required = true) RunningLinRegComponent voltagePerCurrentLinReg) {
-        super(canID);
+        this.PDP = new PowerDistributionPanel(canID);
         this.voltagePerCurrentLinReg = voltagePerCurrentLinReg;
     }
 
@@ -53,6 +63,24 @@ public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
     }
 
     /**
+     * Query the input voltage of the PDP.
+     *
+     * @return The voltage of the PDP in volts
+     */
+    public double getVoltage() {
+        return voltage;
+    }
+
+    /**
+     * Query the current of all monitored PDP channels (0-15).
+     *
+     * @return The current of all the channels in Amperes
+     */
+    public double getTotalCurrent() {
+        return totalCurrent;
+    }
+
+    /**
      * Get the headers for the data this subsystem logs every loop.
      *
      * @return An N-length array of String labels for data, where N is the length of the Object[] returned by getData().
@@ -61,7 +89,6 @@ public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
     @Override
     public String[] getHeader() {
         return new String[]{
-                "temperature",
                 "current",
                 "voltage",
                 "resistance",
@@ -78,7 +105,6 @@ public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
     @Override
     public Object[] getData() {
         return new Object[]{
-                getTemperature(),
                 getTotalCurrent(),
                 getVoltage(),
                 getResistance(),
@@ -102,7 +128,9 @@ public class PDP extends PowerDistributionPanel implements Loggable, Updatable {
      */
     @Override
     public void update() {
+        this.totalCurrent = PDP.getTotalCurrent();
+        this.voltage = PDP.getVoltage();
         //Calculate running linear regression
-        voltagePerCurrentLinReg.addPoint(getTotalCurrent(), getVoltage());
+        voltagePerCurrentLinReg.addPoint(totalCurrent, voltage);
     }
 }

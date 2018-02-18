@@ -63,13 +63,13 @@ logger:
                     updaterProcessPeriodSecs: 0.005
                     statusFrameRatesMillis: !!map
                         Status_4_AinTempVbat : 15
-#                    slaveTalons:
-#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-#                            port: 2
-#                            inverted: true
-#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-#                            port: 3
-#                            inverted: true
+                    slaveTalons:
+                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+                            port: 2
+                            inverted: true
+                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+                            port: 3
+                            inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
@@ -81,13 +81,13 @@ logger:
                     perGearSettings:
                         - <<: *lowGear
                         - <<: *highGear
-#                    slaveTalons:
-#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-#                            port: 5
-#                            inverted: false
-#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-#                            port: 6
-#                            inverted: false
+                    slaveTalons:
+                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+                            port: 5
+                            inverted: false
+                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+                            port: 6
+                            inverted: false
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
@@ -241,8 +241,8 @@ logger:
             enableVoltageComp: true
             feedbackDevice: QuadEncoder
             encoderCPR: 1024
-#            perGearSettings:
-#                -   kP: 0
+            perGearSettings:
+                -   kP: 0
 #                    feedForwardComponent:
 #                        org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardMPElevatorComponent:
 #                            feetToFFComponentMap: !!map
@@ -263,58 +263,6 @@ logger:
             slaveVictors:
                 -   port: 12
                     inverted: true
-        - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-            '@id': intakeTalon
-            port: 11
-            name: "sideswipe_talon"
-            reverseOutput: false
-            enableBrakeMode: false
-            enableVoltageComp: true
-            currentLimit: 40
-            PDP:
-                org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
-            voltagePerCurrentLinReg:
-                <<: *voltagePerCurrent
-            slaveVictors:
-                - port: 14
-                  inverted: true
-        - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-            '@id': carriageTalon
-            port: 9
-            name: "carriage_talon"
-            reverseOutput: false
-            enableBrakeMode: false
-            enableVoltageComp: true
-            currentLimit: 30
-            PDP:
-                org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
-            voltagePerCurrentLinReg:
-                <<: *voltagePerCurrent
-            slaveVictors:
-                -   port: 13
-                    inverted: true
-        - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-            '@id': leftLaunchpadTalon
-            port: 7
-            name: "left_launchpad_talon"
-            reverseOutput: false
-            enableBrakeMode: true
-            enableVoltageComp: true
-            PDP:
-                org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
-            voltagePerCurrentLinReg:
-                <<: *voltagePerCurrent
-        - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-            '@id': rightLaunchpadTalon
-            port: 8
-            name: "right_launchpad_talon"
-            reverseOutput: false
-            enableBrakeMode: true
-            enableVoltageComp: true
-            PDP:
-                org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
-            voltagePerCurrentLinReg:
-                <<: *voltagePerCurrent
 defaultCommands:
     - subsystem:
         org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
@@ -364,7 +312,20 @@ buttons:
                         slowSpeed: 0.5
                         motor:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                intakeTalon
+                                '@id': intakeTalon
+                                port: 11
+                                name: "sideswipe_talon"
+                                reverseOutput: false
+                                enableBrakeMode: false
+                                enableVoltageComp: true
+                                currentLimit: 40
+                                PDP:
+                                    org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
+                                voltagePerCurrentLinReg:
+                                    <<: *voltagePerCurrent
+                                slaveVictors:
+                                    - port: 14
+                                      inverted: true
                 carriage:
                     org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                         '@id': carriage
@@ -373,7 +334,20 @@ buttons:
                                 cubeSensor
                         motor:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                carriageTalon
+                                '@id': carriageTalon
+                                port: 9
+                                name: "carriage_talon"
+                                reverseOutput: false
+                                enableBrakeMode: false
+                                enableVoltageComp: true
+                                currentLimit: 30
+                                PDP:
+                                    org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
+                                voltagePerCurrentLinReg:
+                                    <<: *voltagePerCurrent
+                                slaveVictors:
+                                    -   port: 13
+                                        inverted: true
                         fastSpeed: 1
                         slowSpeed: 0.25
                 elevator:
@@ -648,7 +622,16 @@ buttons:
                                 '@id': leftLaunchpad
                                 motor:
                                     org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                        leftLaunchpadTalon
+                                        '@id': leftLaunchpadTalon
+                                        port: 7
+                                        name: "left_launchpad_talon"
+                                        reverseOutput: false
+                                        enableBrakeMode: true
+                                        enableVoltageComp: true
+                                        PDP:
+                                            org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
+                                        voltagePerCurrentLinReg:
+                                            <<: *voltagePerCurrent
         action: WHEN_PRESSED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
@@ -669,7 +652,16 @@ buttons:
                                 '@id': rightLaunchpad
                                 motor:
                                     org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                        rightLaunchpadTalon
+                                        '@id': rightLaunchpadTalon
+                                        port: 8
+                                        name: "right_launchpad_talon"
+                                        reverseOutput: false
+                                        enableBrakeMode: true
+                                        enableVoltageComp: true
+                                        PDP:
+                                            org.usfirst.frc.team449.robot.jacksonWrappers.PDP: PDP
+                                        voltagePerCurrentLinReg:
+                                            <<: *voltagePerCurrent
         action: WHEN_PRESSED
     #Raise intake stuff if sensor breaks
     -   button:
@@ -816,23 +808,23 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
 #                        elevator
 #                speed: 0.25
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                '@id': releaseBrakeAuto
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-                        elevator
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                '@id': releaseBrakeAuto
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                        elevator
 #            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.PositionVoltageRamp:
 #                '@id': voltageRamp
 #                subsystem:
 #                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
 #                        elevator
 #                voltsPerSecond: 0.5
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
-                '@id': elevatorAccel
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-                        elevator
-                setpoint: 0.4
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
+#                '@id': elevatorAccel
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                        elevator
+#                setpoint: 1
 #            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
 #                '@id': switchToLowTune
 #                subsystem:
@@ -851,19 +843,19 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
 #                        drive
 #                voltsPerSecond: 0.25
-#            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-#                '@id': profile
-#                subsystem:
-#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-#                        drive
-#                timeout: 10
-#                left:
-#                    '@id': leftProfile
-#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
-#                    inverted: false
-#                    resetPosition: true
-#                right:
-#                    '@id': rightProfile
-#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
-#                    inverted: false
-#                    resetPosition: true
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                '@id': profile
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                timeout: 10
+                left:
+                    '@id': leftProfile
+                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+                    inverted: false
+                    resetPosition: true
+                right:
+                    '@id': rightProfile
+                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+                    inverted: false
+                    resetPosition: true

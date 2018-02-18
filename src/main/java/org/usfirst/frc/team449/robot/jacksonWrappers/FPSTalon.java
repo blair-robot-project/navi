@@ -43,7 +43,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * The PDP this Talon is connected to.
      */
     @NotNull
-    protected final org.usfirst.frc.team449.robot.jacksonWrappers.PDP PDP;
+    protected final PDP PDP;
     /**
      * The counts per rotation of the encoder being used, or null if there is no encoder.
      */

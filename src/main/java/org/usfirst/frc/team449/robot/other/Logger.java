@@ -67,6 +67,8 @@ public class Logger implements Runnable {
      */
     private final long startTime;
 
+    private long lastTime;
+
     /**
      * Default constructor.
      *
@@ -126,6 +128,7 @@ public class Logger implements Runnable {
         telemetryLogWriter.write(telemetryHeader.toString());
         eventLogWriter.close();
         telemetryLogWriter.close();
+        lastTime = System.currentTimeMillis();
     }
 
     /**
@@ -153,6 +156,8 @@ public class Logger implements Runnable {
      */
     @Override
     public void run() {
+        System.out.println("dt: "+(System.currentTimeMillis()-lastTime));
+        lastTime = System.currentTimeMillis();
         FileWriter eventLogWriter = null;
         try {
             eventLogWriter = new FileWriter(eventLogFilename, true);
@@ -198,9 +203,6 @@ public class Logger implements Runnable {
                     } else if (datum.getClass().equals(int.class) || datum.getClass().equals(Integer.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (int) datum);
                     } else if (datum.getClass().equals(double.class)) {
-                        System.out.println("Double item name: " + itemNames[i][j]);
-                        System.out.println("Double: " + datum);
-                        System.out.println("Double class: " + datum.getClass());
                         SmartDashboard.putNumber(itemNames[i][j], (double) datum);
                     } else if (datum.getClass().equals(Double.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (Double) datum);

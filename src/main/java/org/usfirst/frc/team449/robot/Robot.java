@@ -3,6 +3,7 @@ package org.usfirst.frc.team449.robot;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
     /**
      * The name of the map to read from. Should be overriden by a subclass to change the name.
      */
-    protected String mapName = "map.yml";
+    protected String mapName = "no_log_map.yml";
 
     /**
      * The object constructed directly from the yaml map.
@@ -88,7 +89,7 @@ public class Robot extends TimedRobot {
         this.loggerNotifier = new Notifier(robotMap.getLogger());
 
         //Run the logger to write all the events that happened during initialization to a file.
-        robotMap.getLogger().run();
+        loggerNotifier.startPeriodic(0.04);
     }
 
     /**
@@ -113,7 +114,8 @@ public class Robot extends TimedRobot {
         }
 
         //Log
-        loggerNotifier.startSingle(0);
+//        loggerNotifier.startSingle(0);
+//        robotMap.getLogger().run();
     }
 
     /**
@@ -128,7 +130,8 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         //Log
-        loggerNotifier.startSingle(0);
+//        loggerNotifier.startSingle(0);
+//        robotMap.getLogger().run();
     }
 
     /**
@@ -153,7 +156,8 @@ public class Robot extends TimedRobot {
         }
 
         //Log
-        loggerNotifier.startSingle(0);
+//        loggerNotifier.startSingle(0);
+//        robotMap.getLogger().run();
     }
 
     /**
@@ -167,7 +171,8 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         //Log
-        loggerNotifier.startSingle(0);
+//        loggerNotifier.startSingle(0);
+//        robotMap.getLogger().run();
     }
 
     /**
@@ -201,6 +206,7 @@ public class Robot extends TimedRobot {
         this.robotMap.getUpdater().run();
 
         //Log
-        loggerNotifier.startSingle(0);
+//        loggerNotifier.startSingle(0);
+//        robotMap.getLogger().run();
     }
 }

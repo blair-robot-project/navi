@@ -26,7 +26,7 @@ public class SlaveTalon implements Loggable {
     /**
      * The PDP this talon runs on. Used for resistance logging purposes.
      */
-    private org.usfirst.frc.team449.robot.jacksonWrappers.PDP PDP;
+    private PDP PDP;
 
     /**
      * The linear regression component for logging resistance.

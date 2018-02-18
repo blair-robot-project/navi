@@ -6,10 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
 import org.usfirst.frc.team449.robot.generalInterfaces.updatable.Updatable;
+
+import static com.kauailabs.navx.frc.AHRS.SerialDataType.kProcessedData;
 
 /**
  * A Jackson-compatible, invertible wrapper for the NavX.
@@ -44,9 +47,9 @@ public class MappedAHRS implements Loggable, Updatable {
      * @param invertYaw Whether or not to invert the yaw axis. Defaults to true.
      */
     @JsonCreator
-    public MappedAHRS(@JsonProperty(required = true) SPI.Port port,
+    public MappedAHRS(@JsonProperty(required = true) SerialPort.Port port,
                       Boolean invertYaw) {
-        this.ahrs = new AHRS(port);
+        this.ahrs = new AHRS(port, kProcessedData, (byte) 100);
         ahrs.reset();
         if (invertYaw == null || invertYaw) {
             this.invertYaw = -1;
