@@ -533,33 +533,15 @@ buttons:
                                     2 : 1
                 triggerAt: 0.0001
         command:
-            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                '@id': unbrakeAndMove
-                commandList:
-                    - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                        '@id': releaseBrake
-                        subsystem:
-                            org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                elevator
-                    - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.ControlPositionSubsystemWithThrottle:
-                        '@id': manualControl
-                        throttle:
-                            org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                manuallyControlElevatorThrottle
-                        subsystem:
-                            org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                elevator
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
-                manuallyControlElevatorButton
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
-                '@id': engageBrake
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.ControlPositionSubsystemWithThrottle:
+                '@id': manualControl
+                throttle:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
+                        manuallyControlElevatorThrottle
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
-        action: WHEN_RELEASED
+        action: WHEN_PRESSED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.NegateButton:
                 '@id': negatedMCEB
@@ -567,8 +549,8 @@ buttons:
                     org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
                         manuallyControlElevatorButton
         command:
-            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                unbrakeAndMove
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.ControlPositionSubsystemWithThrottle:
+                manualControl
         action: CANCEL_WHEN_PRESSED
     #Lower and intake
     -   button:
