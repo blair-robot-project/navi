@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.components.RunningLinRegComponent;
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
 
 /**
@@ -22,16 +21,6 @@ public class SlaveTalon implements Loggable {
      */
     @NotNull
     private final TalonSRX talonSRX;
-
-    /**
-     * The PDP this talon runs on. Used for resistance logging purposes.
-     */
-    private PDP PDP;
-
-    /**
-     * The linear regression component for logging resistance.
-     */
-    private RunningLinRegComponent linRegComponent;
 
     /**
      * Default constructor.
@@ -62,11 +51,9 @@ public class SlaveTalon implements Loggable {
      * @param port            The CAN ID of the device to follow.
      * @param brakeMode       Whether this Talon should be in brake mode or coast mode.
      * @param currentLimit    The current limit for this Talon. Can be null for no current limit.
-     * @param PDP             The PDP this Talon is connected to.
-     * @param linRegComponent The linear regression component for logging resistance.
+     * @param voltageCompSamples The number of voltage compensation samples to use, or null to not compensate voltage.
      */
-    public void setMaster(int port, boolean brakeMode, @Nullable Integer currentLimit,
-                          @NotNull org.usfirst.frc.team449.robot.jacksonWrappers.PDP PDP, @NotNull RunningLinRegComponent linRegComponent) {
+    public void setMaster(int port, boolean brakeMode, @Nullable Integer currentLimit, @Nullable Integer voltageCompSamples) {
         //Brake mode doesn't automatically follow master
         this.talonSRX.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
 
@@ -80,12 +67,17 @@ public class SlaveTalon implements Loggable {
             talonSRX.enableCurrentLimit(false);
         }
 
+        //Voltage comp might not follow master either
+        if (voltageCompSamples != null){
+            talonSRX.enableVoltageCompensation(true);
+            talonSRX.configVoltageCompSaturation(12, 0);
+            talonSRX.configVoltageMeasurementFilter(voltageCompSamples, 0);
+        } else {
+            talonSRX.enableVoltageCompensation(false);
+        }
+
         //Follow the leader
         this.talonSRX.set(ControlMode.Follower, port);
-
-        //Resistance logging
-        this.PDP = PDP;
-        this.linRegComponent = linRegComponent;
     }
 
     /**
@@ -99,7 +91,6 @@ public class SlaveTalon implements Loggable {
         return new String[]{
                 "current",
                 "voltage",
-                "resistance"
         };
     }
 
@@ -111,11 +102,9 @@ public class SlaveTalon implements Loggable {
     @NotNull
     @Override
     public Object[] getData() {
-        linRegComponent.addPoint(talonSRX.getOutputCurrent(), PDP.getVoltage() - talonSRX.getBusVoltage());
         return new Object[]{
                 talonSRX.getOutputCurrent(),
                 talonSRX.getMotorOutputVoltage(),
-                -linRegComponent.getSlope()
         };
     }
 

@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link VictorSPX} that will be slaved to another Victor or a {@link com.ctre.phoenix.motorcontrol.can.TalonSRX}.
@@ -37,10 +38,20 @@ public class SlaveVictor {
      *
      * @param toFollow  The motor controller to follow.
      * @param brakeMode Whether this Talon should be in brake mode or coast mode.
+     * @param voltageCompSamples The number of voltage compensation samples to use, or null to not compensate voltage.
      */
-    public void setMaster(IMotorController toFollow, boolean brakeMode) {
+    public void setMaster(@NotNull IMotorController toFollow, boolean brakeMode, @Nullable Integer voltageCompSamples) {
         //Brake mode doesn't automatically follow master
         victorSPX.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
+
+        //Voltage comp might not follow master either
+        if (voltageCompSamples != null){
+            victorSPX.enableVoltageCompensation(true);
+            victorSPX.configVoltageCompSaturation(12, 0);
+            victorSPX.configVoltageMeasurementFilter(voltageCompSamples, 0);
+        } else {
+            victorSPX.enableVoltageCompensation(false);
+        }
 
         //Follow the leader
         victorSPX.follow(toFollow);
