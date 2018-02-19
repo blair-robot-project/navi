@@ -271,7 +271,7 @@ logger:
                 <<: *voltagePerCurrent
 #            fwdLimitSwitchNormallyOpen: false
 #            revLimitSwitchNormallyOpen: false
-            postEncoderGearing: 0.08333333333
+            postEncoderGearing: 1
             feetPerRotation: 0.59
             currentLimit: 40
             enableVoltageComp: true
@@ -373,7 +373,7 @@ buttons:
                                 '@id': carriageTalon
                                 port: 9
                                 name: "carriage_talon"
-                                reverseOutput: false
+                                reverseOutput: true
                                 enableBrakeMode: false
                                 enableVoltageComp: true
                                 currentLimit: 30
@@ -382,9 +382,9 @@ buttons:
                                 voltagePerCurrentLinReg:
                                     <<: *voltagePerCurrent
                                 slaveVictors:
-                                    -   port: 13
-                                        inverted: true
-                        fastSpeed: 1
+                                    - port: 13
+                                      inverted: false
+                        fastSpeed: 0.5
                         slowSpeed: 0.25
                 elevator:
                     org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
@@ -856,12 +856,12 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
 #                        elevator
 #                voltsPerSecond: 0.5
-#            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
-#                '@id': elevatorAccel
-#                subsystem:
-#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-#                        elevator
-#                setpoint: 1
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
+                '@id': elevatorAccel
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                        elevator
+                setpoint: 1
 #            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
 #                '@id': switchToLowTune
 #                subsystem:
@@ -880,22 +880,22 @@ autoStartupCommand:
 #                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
 #                        drive
 #                voltsPerSecond: 0.25
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                '@id': profile
-                subsystem:
-                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                        drive
-                timeout: 10
-                left:
-                    '@id': leftProfile
-                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
-                    inverted: false
-                    resetPosition: true
-                right:
-                    '@id': rightProfile
-                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
-                    inverted: false
-                    resetPosition: true
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                '@id': profile
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#                timeout: 10
+#                left:
+#                    '@id': leftProfile
+#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+#                    inverted: false
+#                    resetPosition: true
+#                right:
+#                    '@id': rightProfile
+#                    filename: "/home/lvuser/449_resources/forward100InProfile.csv"
+#                    inverted: false
+#                    resetPosition: true
 #            - org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
 #                '@id': raiseRightLaunchpadAuto
 #                subsystem:
