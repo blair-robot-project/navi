@@ -2,13 +2,13 @@
 logger:
     '@id': logger
     eventLogFilename: "/home/lvuser/logs/eventLog-"
-    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/carriageUpAccelLog-"
+#    telemetryLogFilename: "/home/lvuser/lvuserogs/carriageUpAccelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageDownQuasiLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageDownAccelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/stageUpQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/stageUpAccelLog-"
+    telemetryLogFilename: "/home/lvuser/logs/stageUpAccelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/stageDownQuasiLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/stageDownAccelLog-"
 #Drive
@@ -284,18 +284,16 @@ logger:
 #                            feetToFFComponentMap: !!map
 #                                3.474 :
 #                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                        kVFwd: 2.25304
-#                                        kAFwd: 0.18389
-#                                        interceptVoltageFwd: 2.55777
-#                                        interceptVoltageRev: 1.5577
+#                                        kVFwd: 2.95762
+#                                        kAFwd: 0.04117
+#                                        interceptVoltageFwd: 2.29000
+#                                        interceptVoltageRev: -1.1
 #                                100 :
 #                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                        kVFwd:
-#                                        kVRev:
-#                                        kAFwd:
-#                                        kARev:
-#                                        interceptVoltageFwd:
-#                                        interceptVoltageRev:
+#                                        kVFwd: 2.77450
+#                                        kAFwd: 0.17835
+#                                        interceptVoltageFwd: 2.56113
+#                                        interceptVoltageRev: -.8
             slaveVictors:
                 -   port: 12
                     inverted: true
@@ -861,7 +859,7 @@ autoStartupCommand:
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
                         elevator
-                setpoint: 1
+                setpoint: .7
 #            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
 #                '@id': switchToLowTune
 #                subsystem:
