@@ -50,6 +50,7 @@ public class SubsystemPositionMPWithBrake extends SubsystemPositionOnboardMP imp
                                         @JsonProperty(required = true) @NotNull MappedDoubleSolenoid piston,
                                         @Nullable DoubleSolenoid.Value brakeReleasePosition) {
         super(talon, pathGenerator);
+        talon.resetPosition();
         this.piston = piston;
         pistonPos = DoubleSolenoid.Value.kOff;
         this.brakeReleasePosition = brakeReleasePosition != null ? brakeReleasePosition : DoubleSolenoid.Value.kReverse;
