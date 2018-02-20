@@ -48,7 +48,7 @@ logger:
                     enableBrakeMode: true
                     postEncoderGearing: 0.13333333333
                     feetPerRotation: 1.72927183
-#                    currentLimit: 35
+                    currentLimit: 35
                     enableVoltageComp: true
                     feedbackDevice: QuadEncoder
                     encoderCPR: 256
@@ -344,8 +344,8 @@ buttons:
                             '@id': sideswipePiston
                             forward: 2
                             reverse: 3
-                        fastSpeed: 1
-                        slowSpeed: 0.5
+                        fastSpeed: 0.75
+                        slowSpeed: 0.75
                         motor:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                                 '@id': intakeTalon

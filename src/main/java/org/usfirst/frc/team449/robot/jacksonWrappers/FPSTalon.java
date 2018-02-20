@@ -316,6 +316,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         //Set the current limit if it was given
         if (currentLimit != null) {
             canTalon.configContinuousCurrentLimit(currentLimit, 0);
+            canTalon.configPeakCurrentDuration(0, 0);
             canTalon.configPeakCurrentLimit(0, 0); // No duration
             canTalon.enableCurrentLimit(true);
         } else {
