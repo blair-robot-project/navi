@@ -40,11 +40,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
     @NotNull
     protected final TalonSRX canTalon;
     /**
-     * The PDP this Talon is connected to.
-     */
-    @NotNull
-    protected final PDP PDP;
-    /**
      * The counts per rotation of the encoder being used, or null if there is no encoder.
      */
     @Nullable
@@ -86,11 +81,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
     @NotNull
     private final String name;
     /**
-     * The component for doing linear regression to find the resistance.
-     */
-    @NotNull
-    private final RunningLinRegComponent voltagePerCurrentLinReg;
-    /**
      * Whether the forwards or reverse limit switches are normally open or closed, respectively.
      */
     private final boolean fwdLimitSwitchNormallyOpen, revLimitSwitchNormallyOpen;
@@ -125,8 +115,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * @param name                       The talon's name, used for logging purposes. Defaults to talon_portnum
      * @param reverseOutput              Whether to reverse the output.
      * @param enableBrakeMode            Whether to brake or coast when stopped.
-     * @param voltagePerCurrentLinReg    The component for doing linear regression to find the resistance.
-     * @param PDP                        The PDP this Talon is connected to.
      * @param fwdLimitSwitchNormallyOpen Whether the forward limit switch is normally open or closed. If this is null,
      *                                   the forward limit switch is disabled.
      * @param revLimitSwitchNormallyOpen Whether the reverse limit switch is normally open or closed. If this is null,
@@ -170,8 +158,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                     @Nullable String name,
                     boolean reverseOutput,
                     @JsonProperty(required = true) boolean enableBrakeMode,
-                    @NotNull @JsonProperty(required = true) RunningLinRegComponent voltagePerCurrentLinReg,
-                    @NotNull @JsonProperty(required = true) PDP PDP,
                     @Nullable Boolean fwdLimitSwitchNormallyOpen,
                     @Nullable Boolean revLimitSwitchNormallyOpen,
                     @Nullable Double fwdSoftLimit,
@@ -203,9 +189,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         canTalon.setNeutralMode(enableBrakeMode ? NeutralMode.Brake : NeutralMode.Coast);
         //Reset the position
         resetPosition();
-
-        this.PDP = PDP;
-        this.voltagePerCurrentLinReg = voltagePerCurrentLinReg;
 
         //Set frame rates
         if (controlFrameRatesMillis != null) {
@@ -340,15 +323,16 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         if (slaveTalons != null) {
             //Set up slaves.
             for (SlaveTalon slave : slaveTalons) {
-                slave.setMaster(port, enableBrakeMode, currentLimit, PDP, voltagePerCurrentLinReg.clone());
-//                Logger.addLoggable(slave);
+                slave.setMaster(port, enableBrakeMode, currentLimit,
+                        enableVoltageComp ? (voltageCompSamples != null ? voltageCompSamples : 32) : null);
             }
         }
 
         if (slaveVictors != null) {
             //Set up slaves.
             for (SlaveVictor slave : slaveVictors) {
-                slave.setMaster(canTalon, enableBrakeMode);
+                slave.setMaster(canTalon, enableBrakeMode,
+                        enableVoltageComp ? (voltageCompSamples != null ? voltageCompSamples : 32) : null);
             }
         }
     }

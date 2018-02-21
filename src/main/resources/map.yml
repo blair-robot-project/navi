@@ -1,6 +1,7 @@
 ---
 logger:
     '@id': logger
+    loopTimeMillis: 30
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
@@ -377,7 +378,7 @@ buttons:
                         fastSpeed: 1
                         slowSpeed: 0.25
                 elevator:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         '@id': elevator
                         talon:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
@@ -387,10 +388,6 @@ buttons:
                             fwdMaxVel: 5
                             revMaxVel: 10
                             maxAccel: 5
-                        piston:
-                            '@id': brakePiston
-                            forward: 7
-                            reverse: 6
                 intakeSolenoidPos: kReverse
                 elevatorUpPos: 2
                 actuatedIntakeMode: IN_FAST
@@ -462,7 +459,7 @@ buttons:
             org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                 '@id': goToLowScale
                 subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
                 setpoint: 4.5
         action: WHEN_PRESSED
@@ -478,7 +475,7 @@ buttons:
             org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                 '@id': goToMidScale
                 subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
                 setpoint: 5.5
         action: WHEN_PRESSED
@@ -494,7 +491,7 @@ buttons:
             org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                 '@id': goToHighScale
                 subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
                 setpoint: 6.5
         action: WHEN_PRESSED
@@ -520,7 +517,7 @@ buttons:
                     -   org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                             '@id': goToBottom
                             subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                                org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                     elevator
                             setpoint: 0
         action: WHEN_PRESSED
@@ -544,33 +541,15 @@ buttons:
                                     2 : 1
                 triggerAt: 0.0001
         command:
-            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                '@id': unbrakeAndMove
-                commandList:
-                    - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                        '@id': releaseBrake
-                        subsystem:
-                            org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-                                elevator
-                    - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.ControlPositionSubsystemWithThrottle:
-                        '@id': manualControl
-                        throttle:
-                            org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                manuallyControlElevatorThrottle
-                        subsystem:
-                            org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-                                elevator
-        action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
-                manuallyControlElevatorButton
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
-                '@id': engageBrake
+            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.ControlPositionSubsystemWithThrottle:
+                '@id': manualControl
+                throttle:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
+                        manuallyControlElevatorThrottle
                 subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
-        action: WHEN_RELEASED
+        action: WHEN_PRESSED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.NegateButton:
                 '@id': negatedMCEB
@@ -579,7 +558,7 @@ buttons:
                         manuallyControlElevatorButton
         command:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                unbrakeAndMove
+                manualControl
         action: CANCEL_WHEN_PRESSED
     #Lower and intake
     -   button:
@@ -692,7 +671,7 @@ buttons:
                     -   org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                             '@id': moveUpElevatorToSwitch
                             subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                                org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                     elevator
                             setpoint: 3
                     -   org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
@@ -728,7 +707,7 @@ buttons:
                     -   org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
                             '@id': moveUpElevatorDown
                             subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                                org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                     elevator
                             setpoint: 0
                     -   org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
@@ -813,24 +792,19 @@ autoStartupCommand:
 #            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.Home:
 #                '@id': home
 #                subsystem:
-#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
 #                        elevator
 #                speed: 0.25
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                '@id': releaseBrakeAuto
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
-                        elevator
 #            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.PositionVoltageRamp:
 #                '@id': voltageRamp
 #                subsystem:
-#                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+#                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
 #                        elevator
 #                voltsPerSecond: 0.5
             - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.SetSubsystemPositionVelocity:
                 '@id': elevatorAccel
                 subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.elevator.SubsystemPositionMPWithBrake:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
                 setpoint: 0.4
 #            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:

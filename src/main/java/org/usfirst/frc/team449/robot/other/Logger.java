@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.jetbrains.annotations.NotNull;
@@ -63,11 +64,29 @@ public class Logger implements Runnable {
     private final String[][] itemNames;
 
     /**
+     * The loop time of the logging loop in milliseconds.
+     */
+    private final int loopTimeMillis;
+
+    /**
+     * The notifier that runs this thread.
+     */
+    private final Notifier notifier;
+
+    /**
      * The time this that logging started. We don't use {@link Clock} because this is a separate thread.
      */
     private final long startTime;
 
+    /**
+     * The last time, in milliseconds, that the logger was run.
+     */
     private long lastTime;
+
+    /**
+     * The type of the datum currently being logged. Field to avoid garbage collection.
+     */
+    private Class datumClass;
 
     /**
      * Default constructor.
@@ -82,12 +101,15 @@ public class Logger implements Runnable {
     @JsonCreator
     public Logger(@NotNull @JsonProperty(required = true) Loggable[] loggables,
                   @NotNull @JsonProperty(required = true) String eventLogFilename,
-                  @NotNull @JsonProperty(required = true) String telemetryLogFilename) throws IOException {
+                  @NotNull @JsonProperty(required = true) String telemetryLogFilename,
+                  @JsonProperty(required = true) int loopTimeMillis) throws IOException {
         //Set up the file names, using a time stamp to avoid overwriting old log files.
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         startTime = System.currentTimeMillis();
         this.eventLogFilename = eventLogFilename + timeStamp + ".csv";
         this.telemetryLogFilename = telemetryLogFilename + timeStamp + ".csv";
+        this.loopTimeMillis = loopTimeMillis;
+        this.notifier = new Notifier(this);
 
         //Set up the list of loggables.
         this.loggables = Arrays.copyOf(loggables, loggables.length + addedLoggables.size());
@@ -195,22 +217,23 @@ public class Logger implements Runnable {
             Object[] data = loggables[i].getData();
             for (int j = 0; j < data.length; j++) {
                 Object datum = data[j];
+                datumClass = datum.getClass();
                 //We do this big thing here so we log it to SmartDashboard as the correct data type, so we make each
                 //thing into a booleanBox, graph, etc.
                 if (datum != null) {
-                    if (datum.getClass().equals(boolean.class) || datum.getClass().equals(Boolean.class)) {
+                    if (datumClass.equals(boolean.class) || datum.getClass().equals(Boolean.class)) {
                         SmartDashboard.putBoolean(itemNames[i][j], (boolean) datum);
-                    } else if (datum.getClass().equals(int.class) || datum.getClass().equals(Integer.class)) {
+                    } else if (datumClass.equals(int.class) || datumClass.equals(Integer.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (int) datum);
-                    } else if (datum.getClass().equals(double.class)) {
+                    } else if (datumClass.equals(double.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (double) datum);
-                    } else if (datum.getClass().equals(Double.class)) {
+                    } else if (datumClass.equals(Double.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (Double) datum);
-                    } else if (datum.getClass().equals(long.class) || datum.getClass().equals(Long.class)) {
+                    } else if (datumClass.equals(long.class) || datumClass.equals(Long.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (long) datum);
-                    } else if (datum.getClass().equals(Sendable.class)) {
+                    } else if (datumClass.equals(Sendable.class)) {
                         SmartDashboard.putData(itemNames[i][j], (Sendable) datum);
-                    } else if (datum.getClass().equals(String.class)) {
+                    } else if (datumClass.equals(String.class)) {
                         SmartDashboard.putString(itemNames[i][j], (String) datum);
                     } else {
                         SmartDashboard.putString(itemNames[i][j], datum.toString());
@@ -246,5 +269,12 @@ public class Logger implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Start running the logger.
+     */
+    public void start(){
+        notifier.startPeriodic(loopTimeMillis/1000.);
     }
 }

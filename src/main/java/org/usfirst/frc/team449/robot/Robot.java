@@ -40,11 +40,6 @@ public class Robot extends TimedRobot {
     protected RobotMap robotMap;
 
     /**
-     * The Notifier running the logging thread.
-     */
-    protected Notifier loggerNotifier;
-
-    /**
      * Whether or not the robot has been enabled yet.
      */
     protected boolean enabled;
@@ -85,11 +80,7 @@ public class Robot extends TimedRobot {
         //Read sensors
         this.robotMap.getUpdater().run();
 
-        //Set fields from the map.
-        this.loggerNotifier = new Notifier(robotMap.getLogger());
-
-        //Run the logger to write all the events that happened during initialization to a file.
-        loggerNotifier.startPeriodic(0.03);
+        robotMap.getLogger().start();
     }
 
     /**
@@ -112,10 +103,6 @@ public class Robot extends TimedRobot {
         if (robotMap.getTeleopStartupCommand() != null) {
             robotMap.getTeleopStartupCommand().start();
         }
-
-        //Log
-//        loggerNotifier.startSingle(0);
-//        robotMap.getLogger().run();
     }
 
     /**
@@ -128,10 +115,6 @@ public class Robot extends TimedRobot {
 
         //Run all commands. This is a WPILib thing you don't really have to worry about.
         Scheduler.getInstance().run();
-
-        //Log
-//        loggerNotifier.startSingle(0);
-//        robotMap.getLogger().run();
     }
 
     /**
@@ -154,10 +137,6 @@ public class Robot extends TimedRobot {
         if (robotMap.getAutoStartupCommand() != null) {
             robotMap.getAutoStartupCommand().start();
         }
-
-        //Log
-//        loggerNotifier.startSingle(0);
-//        robotMap.getLogger().run();
     }
 
     /**
@@ -169,10 +148,6 @@ public class Robot extends TimedRobot {
         this.robotMap.getUpdater().run();
         //Run all commands. This is a WPILib thing you don't really have to worry about.
         Scheduler.getInstance().run();
-
-        //Log
-//        loggerNotifier.startSingle(0);
-//        robotMap.getLogger().run();
     }
 
     /**
@@ -204,9 +179,5 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         //Read sensors
         this.robotMap.getUpdater().run();
-
-        //Log
-//        loggerNotifier.startSingle(0);
-//        robotMap.getLogger().run();
     }
 }
