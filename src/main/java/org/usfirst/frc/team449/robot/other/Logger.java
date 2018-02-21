@@ -15,10 +15,7 @@ import org.usfirst.frc.team449.robot.other.LogEvent;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * A logger that logs telemetry data and individual events. Should be run as a separate thread from the main robot
@@ -79,6 +76,12 @@ public class Logger implements Runnable {
     private final long startTime;
 
     /**
+     * The filewriters for writing to the telemetry and event logs.
+     */
+    @NotNull
+    private final FileWriter telemetryLogWriter, eventLogWriter;
+
+    /**
      * The last time, in milliseconds, that the logger was run.
      */
     private long lastTime;
@@ -87,6 +90,21 @@ public class Logger implements Runnable {
      * The type of the datum currently being logged. Field to avoid garbage collection.
      */
     private Class datumClass;
+
+    /**
+     * The list of data from the loggable being logged. Field to avoid garbage collection.
+     */
+    private Object[] data;
+
+    /**
+     * The datum currently being logged. Field to avoid garbage collection.
+     */
+    private Object datum;
+
+    /**
+     * The current line of telemetry data being built up. Field to avoid garbage collection.
+     */
+    private StringBuilder telemetryData;
 
     /**
      * Default constructor.
@@ -123,8 +141,8 @@ public class Logger implements Runnable {
         //Construct itemNames.
         itemNames = new String[this.loggables.length][];
 
-        FileWriter eventLogWriter = new FileWriter(this.eventLogFilename);
-        FileWriter telemetryLogWriter = new FileWriter(this.telemetryLogFilename);
+        eventLogWriter = new FileWriter(this.eventLogFilename);
+        telemetryLogWriter = new FileWriter(this.telemetryLogFilename);
         //Write the file headers
         eventLogWriter.write("time,class,message" + "\n");
         //We use a StringBuilder because it's better for building up a string via concatenation.
@@ -149,8 +167,8 @@ public class Logger implements Runnable {
         telemetryHeader.append("\n");
         //Write the telemetry file header
         telemetryLogWriter.write(telemetryHeader.toString());
-        eventLogWriter.close();
-        telemetryLogWriter.close();
+        eventLogWriter.flush();
+        telemetryLogWriter.flush();
         lastTime = System.currentTimeMillis();
     }
 
@@ -181,33 +199,22 @@ public class Logger implements Runnable {
     public void run() {
         System.out.println("dt: "+(System.currentTimeMillis()-lastTime));
         lastTime = System.currentTimeMillis();
-        FileWriter eventLogWriter = null;
-        try {
-            eventLogWriter = new FileWriter(eventLogFilename, true);
-        } catch (IOException e) {
-            System.out.println("Event log not found!");
-            e.printStackTrace();
-        }
-        FileWriter telemetryLogWriter = null;
-        try {
-            telemetryLogWriter = new FileWriter(telemetryLogFilename, true);
-        } catch (IOException e) {
-            System.out.println("Telemetry log not found!");
-            e.printStackTrace();
-        }
+
         try {
             //Log each event to a file
             for (LogEvent event : events) {
                 eventLogWriter.write(event.toString() + "\n");
             }
+            eventLogWriter.flush();
         } catch (IOException e) {
             System.out.println("Logging failed!");
             e.printStackTrace();
         }
+
         //Collect telemetry data and write it to SmartDashboard and a file.
         events = new ArrayList<>();
         //We use a StringBuilder because it's better for building up a string via concatenation.
-        StringBuilder telemetryData = new StringBuilder();
+        telemetryData = new StringBuilder();
 
         //Log the times
         telemetryData.append(System.currentTimeMillis() - startTime).append(",");
@@ -215,14 +222,19 @@ public class Logger implements Runnable {
 
         //Loop through each datum
         for (int i = 0; i < loggables.length; i++) {
-            Object[] data = loggables[i].getData();
+            try {
+                data = loggables[i].getData();
+            } catch (ConcurrentModificationException e){
+                data = new Object[0];
+            }
+
             for (int j = 0; j < data.length; j++) {
-                Object datum = data[j];
+                datum = data[j];
                 datumClass = datum.getClass();
                 //We do this big thing here so we log it to SmartDashboard as the correct data type, so we make each
                 //thing into a booleanBox, graph, etc.
                 if (datum != null) {
-                    if (datumClass.equals(boolean.class) || datum.getClass().equals(Boolean.class)) {
+                    if (datumClass.equals(boolean.class) || datumClass.equals(Boolean.class)) {
                         SmartDashboard.putBoolean(itemNames[i][j], (boolean) datum);
                     } else if (datumClass.equals(int.class) || datumClass.equals(Integer.class)) {
                         SmartDashboard.putNumber(itemNames[i][j], (int) datum);
@@ -250,24 +262,12 @@ public class Logger implements Runnable {
             }
         }
 
-        String telemetryString = telemetryData.toString();
-        telemetryString = telemetryString.substring(0, telemetryString.length() - 1);
-        telemetryString += "\n";
         //Log the data to a file.
         try {
-            telemetryLogWriter.write(telemetryString);
+            telemetryLogWriter.write(telemetryData.toString().substring(0, telemetryData.length() - 1)+"\n");
+            telemetryLogWriter.flush();
         } catch (IOException e) {
             System.out.println("Logging failed!");
-            e.printStackTrace();
-        }
-        try {
-            telemetryLogWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            eventLogWriter.close();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
