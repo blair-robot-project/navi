@@ -272,7 +272,7 @@ logger:
 #            fwdLimitSwitchNormallyOpen: false
 #            revLimitSwitchNormallyOpen: false
             postEncoderGearing: 1
-            feetPerRotation: 0.59
+            feetPerRotation: .869
             currentLimit: 40
             enableVoltageComp: true
             feedbackDevice: QuadEncoder
@@ -284,14 +284,14 @@ logger:
 #                            feetToFFComponentMap: !!map
 #                                3.474 :
 #                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                        kVFwd: 2.95762
-#                                        kAFwd: 0.04117
+#                                        kVFwd: 2.01
+#                                        kAFwd: 0.0279
 #                                        interceptVoltageFwd: 2.29000
 #                                        interceptVoltageRev: -1.1
 #                                100 :
 #                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                        kVFwd: 2.77450
-#                                        kAFwd: 0.17835
+#                                        kVFwd: 1.884
+#                                        kAFwd: 0.1211
 #                                        interceptVoltageFwd: 2.56113
 #                                        interceptVoltageRev: -.8
             slaveVictors:
