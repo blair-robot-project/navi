@@ -201,6 +201,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         canTalon.setInverted(reverseOutput);
         //Set brake mode
         canTalon.setNeutralMode(enableBrakeMode ? NeutralMode.Brake : NeutralMode.Coast);
+        //Reset the position
+        resetPosition();
 
         this.PDP = PDP;
         this.voltagePerCurrentLinReg = voltagePerCurrentLinReg;

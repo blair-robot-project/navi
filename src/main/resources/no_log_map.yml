@@ -4,7 +4,7 @@ logger:
     eventLogFilename: "/home/lvuser/logs/eventLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/lvuserogs/carriageUpAccelLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/carriageUpAccelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageDownQuasiLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageDownAccelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/stageUpQuasiLog-"
