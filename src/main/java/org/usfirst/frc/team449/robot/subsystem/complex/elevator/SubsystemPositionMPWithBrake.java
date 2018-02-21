@@ -81,10 +81,10 @@ public class SubsystemPositionMPWithBrake extends SubsystemPositionOnboardMP imp
     @Override
     public void periodic() {
         //Start the profile if it's ready
-        if (!startedProfile && readyToRunProfile()) {
+        if (!shouldStartProfile && readyToRunProfile()) {
             talon.startRunningMP();
             setSolenoid(brakeReleasePosition);
-            startedProfile = true;
+            shouldStartProfile = true;
         }
     }
 }

@@ -9,8 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.components.PathGenerator;
 import org.usfirst.frc.team449.robot.generalInterfaces.updatable.Updatable;
 import org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon;
+import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.other.MotionProfileData;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.SubsystemMP;
+
+import java.util.Arrays;
 
 /**
  * A SubsystemPosition that moves using motion profiles.
@@ -28,9 +31,9 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
      */
     private final PathGenerator pathGenerator;
     /**
-     * Whether or not the profile loaded into the Talon has been started.
+     * Whether or not to start running the profile loaded into the Talon.
      */
-    protected boolean startedProfile;
+    protected boolean shouldStartProfile;
     /**
      * The previously observed Talon velocity. Used for calculating acceleration.
      */
@@ -51,7 +54,7 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
                                       @NotNull @JsonProperty(required = true) PathGenerator pathGenerator) {
         this.talon = talon;
         this.pathGenerator = pathGenerator;
-        startedProfile = true;
+        shouldStartProfile = false;
     }
 
     /**
@@ -73,7 +76,7 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
     public void setPositionSetpoint(double feet) {
         disableMotor();
         loadMotionProfile(pathGenerator.generateProfile(talon.getPositionFeet(), talon.getVelocity(), accel, feet));
-        startedProfile = false;
+        shouldStartProfile = true;
     }
 
     /**
@@ -121,7 +124,8 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
      */
     @Override
     public boolean onTarget() {
-        return profileFinished();
+        //Don't stop before we start the profile
+        return profileFinished() && !shouldStartProfile;
     }
 
     /**
@@ -158,9 +162,9 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
     @Override
     public void periodic() {
         //Start the profile if it's ready
-        if (!startedProfile && readyToRunProfile()) {
-            talon.startRunningMP();
-            startedProfile = true;
+        if (shouldStartProfile && readyToRunProfile()) {
+            startRunningLoadedProfile();
+            shouldStartProfile = false;
         }
     }
 
