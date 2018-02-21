@@ -96,6 +96,7 @@ public class Logger implements Runnable {
      *                             appended onto the end.
      * @param telemetryLogFilename The filepath of the log for telemetry data. Will have the timestamp and file
      *                             extension appended onto the end.
+     * @param loopTimeMillis The loop time of the logging loop in milliseconds.
      * @throws IOException If the file names provided from the log can't be written to.
      */
     @JsonCreator
