@@ -414,24 +414,22 @@ buttons:
                         driverGamepad
                 buttonNumber: 2
         command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                '@id': shootFast
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                        carriage
-                mode: OUT_FAST
+            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+                '@id': shootFastCommandList
+                commandList:
+                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                            '@id': shootFast
+                            subsystem:
+                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+                                    carriage
+                            mode: OUT_FAST
+                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                            '@id': stopShootCommand
+                            subsystem:
+                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+                                    carriage
+                            mode: "OFF"
         action: WHEN_PRESSED
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                shootButton
-        command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                '@id': stopShootCommand
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                        carriage
-                mode: "OFF"
-        action: WHEN_RELEASED
     #Placing
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
