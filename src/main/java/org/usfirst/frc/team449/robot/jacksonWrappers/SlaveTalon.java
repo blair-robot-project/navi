@@ -60,6 +60,7 @@ public class SlaveTalon implements Loggable {
         //Current limiting might not automatically follow master, set it just to be safe
         if (currentLimit != null) {
             talonSRX.configContinuousCurrentLimit(currentLimit, 0);
+            talonSRX.configPeakCurrentDuration(0,0);
             talonSRX.configPeakCurrentLimit(0, 0); // No duration
             talonSRX.enableCurrentLimit(true);
         } else {
