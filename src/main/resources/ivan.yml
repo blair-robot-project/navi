@@ -327,9 +327,11 @@ buttons:
                             org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotorCluster:
                                 motors:
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': rightSideswipeMotor
                                         port: 4
                                         inverted: false
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': leftSideswipeMotor
                                         port: 1
                                         inverted: true
                 carriage:
@@ -342,9 +344,11 @@ buttons:
                             org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotorCluster:
                                 motors:
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': rightCarriageMotor
                                         port: 5
                                         inverted: false
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': leftCarriageMotor
                                         port: 2
                                         inverted: true
                         fastSpeed: 0.5
@@ -599,6 +603,7 @@ buttons:
                                 '@id': leftLaunchpad
                                 motor:
                                     org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': leftLaunchpadMotor
                                         port: 0
                                         inverted: false
         action: WHEN_PRESSED
@@ -622,6 +627,7 @@ buttons:
                                 velocity: 1
                                 motor:
                                     org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        '@id': rightLaunchpadMotor
                                         port: 3
                                         inverted: false
         action: WHEN_PRESSED

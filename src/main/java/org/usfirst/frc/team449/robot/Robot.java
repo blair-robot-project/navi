@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
     /**
      * The name of the map to read from. Should be overriden by a subclass to change the name.
      */
-    protected String mapName = "map.yml";
+    protected String mapName = "ivan.yml";
 
     /**
      * The object constructed directly from the yaml map.
