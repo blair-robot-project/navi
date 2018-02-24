@@ -39,7 +39,7 @@ logger:
                     &leftMaster
                     '@id': leftMaster
                     name: left
-                    port: 3
+                    port: 19
                     reverseOutput: true
                     reverseSensor: false
                     enableBrakeMode: true
@@ -82,17 +82,17 @@ logger:
                         Status_4_AinTempVbat : 15
                     slaveTalons:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 2
+                            port: 20
                             inverted: true
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 1
-                            inverted: true
+                    slaveVictors:
+                        - port: 21
+                          inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
                     '@id': rightMaster
                     name: right
-                    port: 6
+                    port: 15
                     reverseOutput: false
                     reverseSensor: false
                     perGearSettings:
@@ -116,11 +116,11 @@ logger:
                                 interceptVoltageRev: 0.777298
                     slaveTalons:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 4
+                            port: 16
                             inverted: false
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 5
-                            inverted: false
+                    slaveVictors:
+                        - port: 17
+                          inverted: false
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
@@ -257,7 +257,7 @@ logger:
             channel: 0
         - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
             '@id': elevatorTalon
-            port: 10
+            port: 18
             name: "elevatorTalon"
             reverseOutput: true
             reverseSensor: false
@@ -286,7 +286,7 @@ logger:
                                         interceptVoltageFwd: 2.56113
                                         interceptVoltageRev: -0.8
             slaveVictors:
-                -   port: 12
+                -   port: 22
                     inverted: true
 defaultCommands:
     - subsystem:
@@ -324,17 +324,14 @@ buttons:
                         fastSpeed: 0.75
                         slowSpeed: 0.75
                         motor:
-                            org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                '@id': intakeTalon
-                                port: 11
-                                name: "sideswipe_talon"
-                                reverseOutput: false
-                                enableBrakeMode: false
-                                enableVoltageComp: true
-                                currentLimit: 30
-                                slaveVictors:
-                                    - port: 14
-                                      inverted: true
+                            org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotorCluster:
+                                motors:
+                                    - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 4
+                                        inverted: false
+                                    - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 1
+                                        inverted: true
                 carriage:
                     org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                         '@id': carriage
@@ -342,17 +339,14 @@ buttons:
                             org.usfirst.frc.team449.robot.jacksonWrappers.MappedDigitalInput:
                                 cubeSensor
                         motor:
-                            org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                '@id': carriageTalon
-                                port: 9
-                                name: "carriage_talon"
-                                reverseOutput: true
-                                enableBrakeMode: false
-                                enableVoltageComp: true
-                                currentLimit: 30
-                                slaveVictors:
-                                    - port: 13
-                                      inverted: false
+                            org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotorCluster:
+                                motors:
+                                    - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 5
+                                        inverted: false
+                                    - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 2
+                                        inverted: true
                         fastSpeed: 0.5
                         slowSpeed: 0.25
                 elevator:
@@ -604,13 +598,9 @@ buttons:
                             org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
                                 '@id': leftLaunchpad
                                 motor:
-                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                        '@id': leftLaunchpadTalon
-                                        port: 7
-                                        name: "left_launchpad_talon"
-                                        reverseOutput: false
-                                        enableBrakeMode: true
-                                        enableVoltageComp: true
+                                    org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 0
+                                        inverted: false
         action: WHEN_PRESSED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
@@ -631,13 +621,9 @@ buttons:
                                 '@id': rightLaunchpad
                                 velocity: 1
                                 motor:
-                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                        '@id': rightLaunchpadTalon
-                                        port: 8
-                                        name: "right_launchpad_talon"
-                                        reverseOutput: false
-                                        enableBrakeMode: true
-                                        enableVoltageComp: true
+                                    org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                        port: 3
+                                        inverted: false
         action: WHEN_PRESSED
     #Raise intake stuff if sensor breaks
     -   button:
