@@ -151,7 +151,8 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
     public void update() {
         //Update acceleration
         accel = talon.getVelocity() - lastVel;
-        lastVel = talon.getVelocity();
+        //Do clever math to get the talon velocity back out
+        lastVel = accel + lastVel;
     }
 
     /**

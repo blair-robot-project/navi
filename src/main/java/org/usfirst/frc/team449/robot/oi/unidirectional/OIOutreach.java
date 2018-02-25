@@ -124,6 +124,8 @@ public class OIOutreach implements OIUnidirectional {
      */
     @Override
     public void update() {
+        overridenOI.update();
+        overridingOI.update();
         cachedLeftRightOutput = getLeftRightOutput();
         cachedFwdRotOutput = getFwdRotOutput();
     }
