@@ -1,6 +1,6 @@
 plotProfile <- function(profileName, inverted = FALSE, wheelbaseDiameter, centerToBack, startY = 0, startPos = c(-1,-1,-1,-1,-1,-1), usePosition = TRUE){
-  left <- read.csv(paste("../calciferLeft",profileName,"Profile.csv",sep=""), header=FALSE)
-  right <- read.csv(paste("../calciferRight",profileName,"Profile.csv",sep=""), header=FALSE)
+  left <- read.csv(paste("../../449-central-repo/naviLeft",profileName,"Profile.csv",sep=""), header=FALSE)
+  right <- read.csv(paste("../../449-central-repo/naviRight",profileName,"Profile.csv",sep=""), header=FALSE)
   startingCenter <- c(startY, centerToBack)
   left$V1[1] <- 0
   left$V2[1] <- 0
@@ -142,6 +142,33 @@ plotField <- function(filename, xOffset=0, yOffset=0){
   }
 }
 
+tracedAnimation <- function(x, y, leftX, leftY, rightX, rightY, headingRadians, deltaTime, fieldFile, robotFile, robotRadius, frameSize=-1, filename="animation.mp4", robotCircleFile=NA){
+  library("animation")
+  theta <- headingRadians
+  saveVideo({
+    for(i in 1:length(x)){
+      #Set up frame
+      if(frameSize == -1){
+        plot(x=c(),y=c(),xlim=c(min(x)-robotRadius, max(x)+robotRadius),ylim=c(min(y)-robotRadius, max(y)+robotRadius), asp=1, xlab="X position (feet)", ylab="Y position (feet)")
+      } else {
+        plot(x=c(),y=c(),xlim=c(x[i]-frameSize/2, x[i]+frameSize/2),ylim=c(y[i]-frameSize/2, y[i]+frameSize/2),asp=1, xlab="X position (feet)", ylab="Y position (feet)")
+      }
+      lines(x=leftX[1:i], y=leftY[1:i], col="Green")
+      lines(x=rightX[1:i], y=rightY[1:i], col="Red")
+      plotField(fieldFile, 0, 0)
+      drawRobot(robotFile, x[i],y[i],theta[i],robotCircleFile = robotCircleFile)
+    }
+  }, interval = deltaTime, ani.width = 1920, ani.height = 1080, video.name=filename)
+}
+
 wheelbaseDiameter <- 25.5/12.
 centerToBack <- (39.5/2.)/12.
-centerToSide <- (24.5)/12.
+centerToSide <- (34.5/2.)/12.
+out <- plotProfile("SameScale", inverted = FALSE, wheelbaseDiameter=wheelbaseDiameter, centerToBack=centerToBack, startY = 11.092-centerToSide,  usePosition = TRUE)
+drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = TRUE)
+drawRobot("navi.csv", x=centerToBack, y= 11.092-centerToSide, theta = 0, "naviIntake.csv")
+tmp <- out[length(out[,1]),]
+#Time, Left X, Left Y, Right X, Right Y, Angle
+drawRobot("navi.csv", x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], "naviIntake.csv")
+tracedAnimation(x=(out[,2]+out[,4])/2, y=(out[,3]+out[,5])/2, leftX = out[,2], leftY = out[,3], rightX = out[,4], rightY = out[,5],
+                headingRadians = out[,6],deltaTime = 0.05,fieldFile = "powerUpField.csv",robotFile = "navi.csv", robotRadius = 2, filename="rightSwitch.gif", robotCircleFile="naviIntake.csv")
