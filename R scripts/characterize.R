@@ -4,6 +4,35 @@ smoothDerivative <- function(value, timeMillis, n){
   return(c(rep(0, ceiling(n/2)), smoothed, rep(0, floor(n/2))));
 }
 
+characterizeDriveRamp <- function(velFiles, smoothing = 3){
+  combinedLeftVoltage = c()
+  combinedRightVoltage = c()
+  combinedLeftVel = c()
+  combinedRightVel = c()
+  combinedLeftAccel = c()
+  combinedRightAccel = c()
+  for (velFile in velFiles){
+    vel <- read.csv(velFile)
+    goodVel <- subset(vel, abs(left.velocity) > 0.1 & abs(left.voltage) > 0.1 & abs(right.velocity) > 0.1 & right.voltage!=0)
+    goodVel <- goodVel[1:(length(goodVel$time) - 1), ]
+    goodVel$left_accel <- smoothDerivative(goodVel$left.velocity, goodVel$time, smoothing)
+    goodVel$right_accel <- smoothDerivative(goodVel$right.velocity, goodVel$time, smoothing)
+    goodVel <- subset(goodVel, left_accel != 0 & right_accel != 0)
+    plot(goodVel$left.voltage, goodVel$left.velocity)
+    plot(goodVel$time, goodVel$left_accel)
+    combinedLeftVoltage <- c(combinedLeftVoltage, goodVel$left.voltage)
+    combinedRightVoltage <- c(combinedRightVoltage, goodVel$right.voltage)
+    combinedLeftVel <- c(combinedLeftVel, goodVel$left.velocity)
+    combinedRightVel <- c(combinedRightVel, goodVel$right.velocity)
+    combinedLeftAccel <- c(combinedLeftAccel, goodVel$left_accel)
+    combinedRightAccel <- c(combinedRightAccel, goodVel$right_accel)
+  }
+  leftModel <- lm(combinedLeftVoltage~combinedLeftVel+combinedLeftAccel)
+  rightModel <- lm(combinedRightVoltage~combinedRightVel+combinedRightAccel)
+  print(summary(leftModel))
+  print(summary(rightModel))
+}
+
 characterizeDrive <- function(velFile, accelFile, smoothing = 2){
   vel <- read.csv(velFile)
   accel <- read.csv(accelFile)

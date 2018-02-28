@@ -20,6 +20,7 @@ logger:
                     '@id': leftMaster
                     name: left
                     port: 19
+                    fwdPeakOutputVoltage: 12
                     reverseOutput: true
                     reverseSensor: false
                     enableBrakeMode: true
