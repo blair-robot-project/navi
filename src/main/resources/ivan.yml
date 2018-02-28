@@ -55,7 +55,7 @@ logger:
                           gear: LOW
 #                          motionProfilePFwd: 0.5
                           maxSpeed: 7.5
-#                          kP: 0.15
+                          kP: 0.15
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 1.255185
@@ -67,7 +67,7 @@ logger:
                         - &highGear
                           gear: HIGH
                           maxSpeed: 17
-#                          kP: 0.3
+                          kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 0.482733
@@ -121,7 +121,7 @@ logger:
                     slaveVictors:
                         - port: 17
                           inverted: false
-            startingOverrideAutoshift: true
+            startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
                     '@id': navX

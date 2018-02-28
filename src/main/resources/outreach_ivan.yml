@@ -20,7 +20,6 @@ logger:
                     '@id': leftMaster
                     name: left
                     port: 19
-                    fwdPeakOutputVoltage: 12
                     reverseOutput: true
                     reverseSensor: false
                     enableBrakeMode: true
@@ -34,29 +33,26 @@ logger:
                     perGearSettings:
                         - &lowGear
                           gear: LOW
-#                          motionProfilePFwd: 0.5
-#                          maxSpeed: 7.5
-#                          kP: 0.15
-#                          feedForwardComponent:
-#                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                kVFwd:
-#                                kVRev:
-#                                kAFwd:
-#                                kARev:
-#                                interceptVoltageFwd:
-#                                interceptVoltageRev:
+                          maxSpeed: 3
+                          feedForwardComponent:
+                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
+                                kVFwd: 1.255185
+                                kVRev: 1.256764
+                                kAFwd: 0.189513
+                                kARev: 0.197636
+                                interceptVoltageFwd: 0.793935
+                                interceptVoltageRev: 0.682760
                         - &highGear
                           gear: HIGH
-#                          maxSpeed: 17
-#                          kP: 0.3
-#                          feedForwardComponent:
-#                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                kVFwd:
-#                                kVRev:
-#                                kAFwd:
-#                                kARev:
-#                                interceptVoltageFwd:
-#                                interceptVoltageRev:
+                          maxSpeed: 17
+                          feedForwardComponent:
+                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
+                                kVFwd: 0.482733
+                                kVRev: 0.490004
+                                kAFwd: 0.081959
+                                kARev: 0.080663
+                                interceptVoltageFwd: 1.135162
+                                interceptVoltageRev: 1.025326
                     minNumPointsInBottomBuffer: 10
                     updaterProcessPeriodSecs: 0.005
                     statusFrameRatesMillis: !!map
@@ -78,23 +74,23 @@ logger:
                     reverseSensor: false
                     perGearSettings:
                         - <<: *lowGear
-#                          feedForwardComponent:
-#                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                kVFwd:
-#                                kVRev:
-#                                kAFwd:
-#                                kARev:
-#                                interceptVoltageFwd:
-#                                interceptVoltageRev:
+                          feedForwardComponent:
+                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
+                                kVFwd: 1.289911
+                                kVRev: 1.270960
+                                kAFwd: 0.185705
+                                kARev: 0.196562
+                                interceptVoltageFwd: 0.906462
+                                interceptVoltageRev: 0.771792
                         - <<: *highGear
-#                          feedForwardComponent:
-#                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-#                                kVFwd:
-#                                kVRev:
-#                                kAFwd:
-#                                kARev:
-#                                interceptVoltageFwd:
-#                                interceptVoltageRev:
+                          feedForwardComponent:
+                              org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
+                                kVFwd: 0.499961
+                                kVRev: 0.493175
+                                kAFwd: 0.085551
+                                kARev: 0.083681
+                                interceptVoltageFwd: 1.286658
+                                interceptVoltageRev: 1.167943
                     slaveTalons:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 16
