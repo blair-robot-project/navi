@@ -1,6 +1,7 @@
-#Simple helper conversion methods
-rad2deg <- function(rad) {(rad * 180) / (pi)}
-deg2rad <- function(deg) {(deg * pi) / (180)}
+#Simple helper methods
+rad2deg <- function(rad) {return((rad * 180) / (pi))}
+deg2rad <- function(deg) {return((deg * pi) / (180))}
+distance <- function(x1, y1, x2, y2){return(sqrt((x1-x2)^2 + (y1-y2)^2))}
 
 plotProfile <- function(profileName, leftInverted = FALSE, rightInverted=FALSE, wheelbaseDiameter, centerToBack, startY = 0, startPos = c(-1,-1,-1,-1,-1,-1), usePosition = TRUE){
   left <- read.csv(paste("../../449-central-repo/naviLeft",profileName,"Profile.csv",sep=""), header=FALSE)
@@ -174,12 +175,14 @@ executeProfileSequence <- function(names, leftInverted, rightInverted, wheelbase
   drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = TRUE)
   tmp <- out[length(out[,1]),]
   drawRobot(robotFile, x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], intakeFile)
-  for(i in 2:length(names)){
-    out <- plotProfile(names[i], leftInverted = leftInverted[i], rightInverted = rightInverted[i], wheelbaseDiameter=wheelbaseDiameter, centerToBack=centerToBack, startPos = tmp,  usePosition = TRUE)
-    totalOut <- rbind(totalOut, out)
-    drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = FALSE)
-    tmp <- out[length(out[,1]),]
-    drawRobot(robotFile, x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], intakeFile)
+  if(length(names) > 1){
+    for(i in 2:length(names)){
+      out <- plotProfile(names[i], leftInverted = leftInverted[i], rightInverted = rightInverted[i], wheelbaseDiameter=wheelbaseDiameter, centerToBack=centerToBack, startPos = tmp,  usePosition = TRUE)
+      totalOut <- rbind(totalOut, out)
+      drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = FALSE)
+      tmp <- out[length(out[,1]),]
+      drawRobot(robotFile, x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], intakeFile)
+    }
   }
   #Time, Left X, Left Y, Right X, Right Y, Angle
   print(paste("X:",(tmp[2]+tmp[4])/2,"Y:",(tmp[3]+tmp[5])/2))
@@ -190,9 +193,14 @@ executeProfileSequence <- function(names, leftInverted, rightInverted, wheelbase
 wheelbaseDiameter <- 25.5/12.
 centerToBack <- (39.5/2.)/12.
 centerToSide <- (34.5/2.)/12.
-totalOut <- executeProfileSequence(names = c("SameScale","Turn150Raw", "SameScaleToCube", "BackupFromSwitch", "AlignForCubes"), 
-                                   leftInverted = c(FALSE,FALSE, FALSE, TRUE, FALSE),
-                                   rightInverted = c(FALSE, TRUE, FALSE, TRUE, FALSE), 
+# totalOut <- executeProfileSequence(names = c("SameScale","Turn150Raw", "SameScaleToCube", "BackupFromSwitch"), 
+#                                    leftInverted = c(FALSE,FALSE, FALSE, TRUE),
+#                                    rightInverted = c(FALSE, TRUE, FALSE, TRUE), 
+#                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack, 
+#                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
+totalOut <- executeProfileSequence(names = c("SameScale", "TurnToSwitch", "SameScaleToCube2","CubeToSwitch"), 
+                                   leftInverted = c(FALSE, FALSE, FALSE, FALSE),
+                                   rightInverted = c(FALSE, TRUE, FALSE, FALSE), 
                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack, 
                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
 
