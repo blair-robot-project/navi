@@ -328,11 +328,11 @@ buttons:
                                 motors:
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
                                         '@id': rightSideswipeMotor
-                                        port: 4
+                                        port: 5
                                         inverted: false
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
                                         '@id': leftSideswipeMotor
-                                        port: 1
+                                        port: 2
                                         inverted: true
                 carriage:
                     org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
@@ -345,14 +345,14 @@ buttons:
                                 motors:
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
                                         '@id': rightCarriageMotor
-                                        port: 5
+                                        port: 4
                                         inverted: false
                                     - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
                                         '@id': leftCarriageMotor
-                                        port: 2
+                                        port: 1
                                         inverted: true
-                        fastSpeed: 0.5
-                        slowSpeed: 0.25
+                        fastSpeed: 1.0
+                        slowSpeed: -1.0
                 elevator:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         '@id': elevator

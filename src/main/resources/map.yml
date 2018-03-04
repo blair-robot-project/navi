@@ -4,26 +4,6 @@ logger:
     loopTimeMillis: 60
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/carriageUpAccelLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/carriageDownQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/carriageDownAccelLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/stageUpQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/stageUpAccelLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/stageDownQuasiLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/stageDownAccelLog-"
-#Drive
-#    telemetryLogFilename: "/home/lvuser/logs/highGearFwdAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/highGearRevAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/highGearFwdQuasi-"
-#    telemetryLogFilename: "/home/lvuser/logs/highGearRevQuasi-"
-#    telemetryLogFilename: "/home/lvuser/logs/highGearMaxAccel-"
-#Low
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearMaxAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevQuasi-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdQuasi-"
     loggables:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
@@ -273,7 +253,7 @@ logger:
                     feedForwardComponent:
                         org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardMPElevatorComponent:
                             feetToFFComponentMap: !!map
-                                3.474 :
+                                3.354 :
                                     org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                         kVFwd: 2.01
                                         kAFwd: 0.0279
@@ -379,7 +359,7 @@ buttons:
                 joystick:
                     org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                         driverGamepad
-                buttonNumber: 2
+                buttonNumber: 3
         command:
             org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
                 '@id': shootFast
@@ -406,7 +386,7 @@ buttons:
                 joystick:
                     org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                         driverGamepad
-                buttonNumber: 4
+                buttonNumber: 2
         command:
             org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
                 '@id': shootSlow

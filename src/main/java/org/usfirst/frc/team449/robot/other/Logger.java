@@ -206,7 +206,7 @@ public class Logger implements Runnable {
                 eventLogWriter.write(event.toString() + "\n");
             }
             eventLogWriter.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Logging failed!");
             e.printStackTrace();
         }
