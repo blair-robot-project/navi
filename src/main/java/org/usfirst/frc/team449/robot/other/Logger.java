@@ -197,7 +197,7 @@ public class Logger implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println("dt: "+(System.currentTimeMillis()-lastTime));
+//        System.out.println("dt: "+(System.currentTimeMillis()-lastTime));
         lastTime = System.currentTimeMillis();
 
         try {

@@ -18,7 +18,7 @@ public class RunCommandAtTime extends CommandGroup {
     /**
      * Default command.
      *
-     * @param time    The time, in seconds after auto starts, to run the command at.
+     * @param time    The time, in seconds before the current period ends, to run the command at.
      * @param command The command to run.
      */
     @JsonCreator

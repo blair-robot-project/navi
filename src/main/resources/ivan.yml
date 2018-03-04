@@ -44,7 +44,7 @@ logger:
                     reverseSensor: false
                     enableBrakeMode: true
                     postEncoderGearing: 0.13333333333
-                    feetPerRotation: 1.72927183
+                    feetPerRotation: 1.556344647
                     currentLimit: 35
                     enableVoltageComp: true
                     feedbackDevice: QuadEncoder
@@ -54,26 +54,26 @@ logger:
                         - &lowGear
                           gear: LOW
 #                          motionProfilePFwd: 0.5
-                          maxSpeed: 7.5
+                          maxSpeed: 6.75
                           kP: 0.15
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 1.255185
-                                kVRev: 1.256764
-                                kAFwd: 0.189513
-                                kARev: 0.197636
+                                kVFwd: 1.1296665
+                                kVRev: 1.1310876
+                                kAFwd: 0.1705617
+                                kARev: 0.1778724
                                 interceptVoltageFwd: 0.793935
                                 interceptVoltageRev: 0.682760
                         - &highGear
                           gear: HIGH
-                          maxSpeed: 17
+                          maxSpeed: 15.3
                           kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 0.482733
-                                kVRev: 0.490004
-                                kAFwd: 0.081959
-                                kARev: 0.080663
+                                kVFwd: 0.4344597
+                                kVRev: 0.4410036
+                                kAFwd: 0.0737631
+                                kARev: 0.0725967
                                 interceptVoltageFwd: 1.135162
                                 interceptVoltageRev: 1.025326
                     minNumPointsInBottomBuffer: 10
@@ -99,19 +99,19 @@ logger:
                         - <<: *lowGear
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 1.289911
-                                kVRev: 1.270960
-                                kAFwd: 0.185705
-                                kARev: 0.196562
+                                kVFwd: 1.1609199
+                                kVRev: 1.143864
+                                kAFwd: 0.1671345
+                                kARev: 0.1769058
                                 interceptVoltageFwd: 0.906462
                                 interceptVoltageRev: 0.771792
                         - <<: *highGear
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 0.499961
-                                kVRev: 0.493175
-                                kAFwd: 0.085551
-                                kARev: 0.083681
+                                kVFwd: 0.4499649
+                                kVRev: 0.4438575
+                                kAFwd: 0.0769959
+                                kARev: 0.0753129
                                 interceptVoltageFwd: 1.286658
                                 interceptVoltageRev: 1.167943
                     slaveTalons:
@@ -246,8 +246,8 @@ logger:
                     oi
             autoshiftComponent:
                 '@id': autoshiftComponent
-                upshiftSpeed: 4.5
-                downshiftSpeed: 3
+                upshiftSpeed: 4
+                downshiftSpeed: 2.7
                 upshiftDebouncer:
                     '@id': upshiftDebouncer
                     bufferTimeSeconds: 0.06

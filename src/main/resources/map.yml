@@ -1,7 +1,7 @@
 ---
 logger:
     '@id': logger
-    loopTimeMillis: 30
+    loopTimeMillis: 60
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/carriageUpQuasiLog-"
@@ -44,7 +44,7 @@ logger:
                     reverseSensor: false
                     enableBrakeMode: true
                     postEncoderGearing: 0.13333333333
-                    feetPerRotation: 1.72927183
+                    feetPerRotation: 1.556344647
                     currentLimit: 35
                     enableVoltageComp: true
                     feedbackDevice: QuadEncoder
@@ -54,26 +54,26 @@ logger:
                         - &lowGear
                           gear: LOW
                           motionProfilePFwd: 0.5
-                          maxSpeed: 7.5
+                          maxSpeed: 6.75
                           kP: 0.15
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 1.341715
-                                kVRev: 1.340561
-                                kAFwd: 0.141877
-                                kARev: 0.143981
+                                kVFwd: 1.2075435
+                                kVRev: 1.2065049
+                                kAFwd: 0.1276893
+                                kARev: 0.1295829
                                 interceptVoltageFwd: 0.653268
                                 interceptVoltageRev: 0.662020
                         - &highGear
                           gear: HIGH
-                          maxSpeed: 17
+                          maxSpeed: 15.3
                           kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 0.581216
-                                kVRev: 0.580821
-                                kAFwd: 0.175514
-                                kARev: 0.150583
+                                kVFwd: 0.5230944
+                                kVRev: 0.5227389
+                                kAFwd: 0.1579626
+                                kARev: 0.1355247
                                 interceptVoltageFwd: 0.713954
                                 interceptVoltageRev: 0.770189
                     minNumPointsInBottomBuffer: 10
@@ -99,19 +99,19 @@ logger:
                         - <<: *lowGear
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 1.338784
-                                kVRev: 1.324941
-                                kAFwd: 0.156878
-                                kARev: 0.136005
+                                kVFwd: 1.2049056
+                                kVRev: 1.1924469
+                                kAFwd: 0.1411902
+                                kARev: 0.1224045
                                 interceptVoltageFwd: 0.654647
                                 interceptVoltageRev: 0.662752
                         - <<: *highGear
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                kVFwd: 0.569571
-                                kVRev: 0.575155
-                                kAFwd: 0.199475
-                                kARev: 0.159013
+                                kVFwd: 0.5126139
+                                kVRev: 0.5176395
+                                kAFwd: 0.1795275
+                                kARev: 0.1431117
                                 interceptVoltageFwd: 0.748738
                                 interceptVoltageRev: 0.777298
                     slaveTalons:
@@ -246,8 +246,8 @@ logger:
                     oi
             autoshiftComponent:
                 '@id': autoshiftComponent
-                upshiftSpeed: 4.5
-                downshiftSpeed: 3
+                upshiftSpeed: 4
+                downshiftSpeed: 2.7
                 upshiftDebouncer:
                     '@id': upshiftDebouncer
                     bufferTimeSeconds: 0.06
@@ -565,7 +565,7 @@ buttons:
         command:
             org.usfirst.frc.team449.robot.commands.general.ConditionalCommandTimeBased:
                 '@id': conditionalLaunchpadDrop
-                matchTimeSecs: 120
+                matchTimeSecs: 30
                 afterCommand:
                     org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                         '@id': parallelLaunchpadDropGroup
@@ -596,7 +596,7 @@ buttons:
         command:
             org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
                 '@id': leftCountdown
-                time: 140
+                time: 5
                 command:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
                         '@id': raiseLeftLaunchpadTimed
@@ -622,7 +622,7 @@ buttons:
         command:
             org.usfirst.frc.team449.robot.commands.general.RunCommandAtTime:
                 '@id': rightCountdown
-                time: 140
+                time: 5
                 command:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
                         '@id': raiseRightLaunchpadTimed
