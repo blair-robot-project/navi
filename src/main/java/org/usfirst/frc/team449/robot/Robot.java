@@ -6,9 +6,6 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.jetbrains.annotations.NotNull;
-import org.usfirst.frc.team449.robot.JavaModule;
-import org.usfirst.frc.team449.robot.RobotMap;
-import org.usfirst.frc.team449.robot.WPIModule;
 import org.usfirst.frc.team449.robot.other.Clock;
 import org.yaml.snakeyaml.Yaml;
 
@@ -41,6 +38,11 @@ public class Robot extends TimedRobot {
      * Whether or not the robot has been enabled yet.
      */
     protected boolean enabled;
+
+    /**
+     * Whether or not the auto command should be started.
+     */
+    protected boolean shouldStartAuto;
 
     /**
      * The method that runs when the robot is turned on. Initializes all subsystems from the map.
@@ -77,6 +79,8 @@ public class Robot extends TimedRobot {
 
         //Read sensors
         this.robotMap.getUpdater().run();
+
+        shouldStartAuto = this.robotMap.getAutoStartupCommand() != null;
 
         robotMap.getLogger().start();
     }
@@ -132,8 +136,9 @@ public class Robot extends TimedRobot {
         }
 
         //Run the auto startup command
-        if (robotMap.getAutoStartupCommand() != null) {
+        if (shouldStartAuto && DriverStation.getInstance().getGameSpecificMessage().length() == 3) {
             robotMap.getAutoStartupCommand().start();
+            shouldStartAuto = false;
         }
     }
 
@@ -144,6 +149,13 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         //Read sensors
         this.robotMap.getUpdater().run();
+
+        //Start auto if the game-specific message has been set
+        if (shouldStartAuto && DriverStation.getInstance().getGameSpecificMessage().length() == 3){
+            robotMap.getAutoStartupCommand().start();
+            shouldStartAuto = false;
+        }
+
         //Run all commands. This is a WPILib thing you don't really have to worry about.
         Scheduler.getInstance().run();
     }

@@ -32,6 +32,11 @@ public class UnidirectionalPoseEstimator<T extends SubsystemAHRS & DriveUnidirec
     private final double absolutePosAngleTolerance;
 
     /**
+     * The pitch at the start of the match, treated as the robot being on a flat surface.
+     */
+    private final double startingPitch;
+
+    /**
      * A list of all the gyro angles recorded, in order from oldest to newest and in degrees.
      */
     @NotNull
@@ -121,6 +126,7 @@ public class UnidirectionalPoseEstimator<T extends SubsystemAHRS & DriveUnidirec
                                        double startTheta) {
         this.subsystem = subsystem;
         this.absolutePosAngleTolerance = absolutePosAngleTolerance;
+        this.startingPitch = subsystem.getPitch();
         lastTheta = startTheta;
 
         //Construct lists
@@ -188,8 +194,8 @@ public class UnidirectionalPoseEstimator<T extends SubsystemAHRS & DriveUnidirec
         vector = calcVector(deltaLeft, deltaRight, deltaTheta, lastTheta);
 
         //Only include horizontal movement
-        vector[0] = vector[0] * Math.abs(Math.cos(subsystem.getPitch()));
-        vector[1] = vector[1] * Math.abs(Math.cos(subsystem.getPitch()));
+        vector[0] = vector[0] * Math.abs(Math.cos(subsystem.getPitch() - startingPitch));
+        vector[1] = vector[1] * Math.abs(Math.cos(subsystem.getPitch() - startingPitch));
 
         //If we received an absolute position between the last run and this one, scale the vector so it only includes
         //the change since the absolute position was given
