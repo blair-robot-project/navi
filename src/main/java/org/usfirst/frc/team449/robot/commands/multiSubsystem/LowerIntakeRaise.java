@@ -57,10 +57,11 @@ public class LowerIntakeRaise<T extends Subsystem & SubsystemIntake & SubsystemS
         addSequential(new GoToPosition<>(elevator, elevatorIntakePos));
         addSequential(new SetIntakeMode(actuatedIntake, actuatedIntakeMode));
         addSequential(new IntakeUntilConditonMet<>(carriage, carriageIntakeMode, carriageHoldMode));
+        addSequential(new SetIntakeMode(actuatedIntake, SubsystemIntake.IntakeMode.OFF));
         addSequential(new GoToPosition<>(elevator, elevatorUpPos));
         //Retract the intake by setting the piston to the opposite
-        addSequential(new MovePistonAndRunIntake<>(actuatedIntake,
-                intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward, SubsystemIntake.IntakeMode.OFF));
+        addSequential(new SetSolenoid(actuatedIntake,
+                intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward));
     }
 
 }
