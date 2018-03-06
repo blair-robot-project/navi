@@ -266,7 +266,7 @@ public class Logger implements Runnable {
         try {
             telemetryLogWriter.write(telemetryData.toString().substring(0, telemetryData.length() - 1)+"\n");
             telemetryLogWriter.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Logging failed!");
             e.printStackTrace();
         }
