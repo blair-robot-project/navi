@@ -748,6 +748,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
 
         //Set proper PID constants
         if (data.isInverted()) {
+            System.out.println("Is inverted!");
             if (data.isVelocityOnly()) {
                 canTalon.config_kP(1, 0, 0);
                 canTalon.config_kI(1, 0, 0);
@@ -792,6 +793,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
                     data.getData()[i][1], data.getData()[i][2]);
             Logger.addEvent("VelPlusAccel: " + feedforward, this.getClass());
+//            System.out.println("VelPlusAccel: "+feedforward);
             point.velocity = feedforward;
 
             //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change either the profile or kA.

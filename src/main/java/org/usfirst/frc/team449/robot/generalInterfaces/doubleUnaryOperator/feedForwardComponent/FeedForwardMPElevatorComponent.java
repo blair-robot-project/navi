@@ -63,6 +63,7 @@ public class FeedForwardMPElevatorComponent extends FeedForwardComponent {
                 return (feedForwardComponents[i].calcMPVoltage(positionSetpoint, velSetpoint, accelSetpoint));
             }
         }
+        System.out.println("Catch case!");
         //Catch case.
         return 0;
     }

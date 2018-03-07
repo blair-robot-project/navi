@@ -165,6 +165,7 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
         //Start the profile if it's ready
         if (shouldStartProfile && readyToRunProfile()) {
             startRunningLoadedProfile();
+            System.out.println("Started profile");
             shouldStartProfile = false;
         }
     }
