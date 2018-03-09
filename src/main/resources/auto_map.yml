@@ -815,6 +815,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': LeftLLLlir
+                                              &lowLIR
                                               actuatedIntake:
                                                   org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
                                                       intake
@@ -946,6 +947,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': LeftLRLlir
+                                              &tallLIR
                                               actuatedIntake:
                                                   org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
                                                       intake
@@ -1039,20 +1041,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': LeftRLRlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 2
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *lowLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': LeftRLRdriveToCube
                                             commandList:
@@ -1146,20 +1135,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': LeftRRRlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 2
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *lowLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': LeftRRRdriveToCube
                                             commandList:
@@ -1247,20 +1223,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': RightRRRlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 2
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *lowLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': RightRRRdriveToCube
                                             commandList:
@@ -1351,20 +1314,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': RightRLRlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 6.5
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *tallLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': RightRLRdriveToCube
                                             commandList:
@@ -1436,20 +1386,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': RightLRLlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 2
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *lowLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': RightLRLdriveToCube
                                             commandList:
@@ -1529,20 +1466,7 @@ autoStartupCommand:
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
                                               '@id': RightLLLlir
-                                              actuatedIntake:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                      intake
-                                              carriage:
-                                                  org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                      carriage
-                                              elevator:
-                                                  org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                      elevator
-                                              intakeSolenoidPos: kReverse
-                                              elevatorUpPos: 2
-                                              actuatedIntakeMode: IN_FAST
-                                              carriageIntakeMode: IN_FAST
-                                              carriageHoldMode: IN_SLOW
+                                              <<: *lowLIR
                                         - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                             '@id': RightLLLdriveToCube
                                             commandList:
