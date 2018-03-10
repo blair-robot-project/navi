@@ -816,8 +816,8 @@ autoStartupCommand:
                                     '@id': goToCubeLeftLLL
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                              '@id': LeftLLLlir
                                               &lowLIR
+                                              '@id': LeftLLLlir
                                               actuatedIntake:
                                                   org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
                                                       intake
@@ -842,7 +842,7 @@ autoStartupCommand:
                                                     kP: 0.01
                                                     absoluteTolerance: 0
                                                     deadband: 2
-                                                     inverted: false
+                                                    inverted: false
                                                     subsystem:
                                                         org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                                                             drive
@@ -887,7 +887,7 @@ autoStartupCommand:
                             '@id': LeftLRLCommand
                             commandList:
                                 - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                    '@id': goToSwitch
+                                    '@id': goToSwitchLeftLRL
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                             '@id': LeftLRL1
@@ -948,8 +948,8 @@ autoStartupCommand:
                                     '@id': goToCubeLeftLRL
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                              '@id': LeftLRLlir
                                               &tallLIR
+                                              '@id': LeftLRLlir
                                               actuatedIntake:
                                                   org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
                                                       intake
@@ -1049,7 +1049,7 @@ autoStartupCommand:
                                             commandList:
                                                 - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
                                                     <<: *tta
-                                                    '@id': turnAfterScale
+                                                    '@id': turnAfterScaleLeftRLR
                                                     setpoint: -153.1526
                                                 - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                     '@id': LeftRLR2
@@ -1067,7 +1067,7 @@ autoStartupCommand:
                                                     timeout: 5
                                                 - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
                                                     <<: *tta
-                                                    '@id': turnToCrossCube
+                                                    '@id': turnToCrossCubeLeftRLR
                                                     setpoint: 146.1162
                                                 - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                     '@id': LeftRLR3
@@ -1264,7 +1264,7 @@ autoStartupCommand:
                             '@id': RightRLRCommand
                             commandList:
                                 - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                    '@id': goToSwitch
+                                    '@id': goToSwitchRightRLR
                                     commandSet:
                                         - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                             '@id': RightRLR1
@@ -1394,7 +1394,7 @@ autoStartupCommand:
                                             commandList:
                                                 - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
                                                     <<: *tta
-                                                    '@id': turnAfterScale
+                                                    '@id': turnAfterScaleRightLRL
                                                     setpoint: 153.1526
                                                 - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                     '@id': RightLRL2
@@ -1408,7 +1408,7 @@ autoStartupCommand:
                                                     timeout: 5
                                                 - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
                                                     <<: *tta
-                                                    '@id': turnToCrossCube
+                                                    '@id': turnToCrossCubeRightLRL
                                                     setpoint: -146.1162
                                                 - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                     '@id': RightLRL3
