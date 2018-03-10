@@ -239,7 +239,7 @@ logger:
             reverseSensor: false
             enableBrakeMode: true
             postEncoderGearing: 1
-            feetPerRotation: .869
+            feetPerRotation: .5962
             currentLimit: 40
             minNumPointsInBottomBuffer: 40
             enableVoltageComp: true
@@ -253,14 +253,14 @@ logger:
                             feetToFFComponentMap: !!map
                                 3.354 :
                                     org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                        kVFwd: 2.01
-                                        kAFwd: 0.0279
+                                        kVFwd: 1.38
+                                        kAFwd: 0.01914
                                         interceptVoltageFwd: 2.29000
                                         interceptVoltageRev: -1.1
                                 100 :
                                     org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
-                                        kVFwd: 1.884
-                                        kAFwd: 0.1211
+                                        kVFwd: 1.293
+                                        kAFwd: 0.0831
                                         interceptVoltageFwd: 2.56113
                                         interceptVoltageRev: -0.8
             slaveVictors:
