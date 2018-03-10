@@ -67,7 +67,6 @@ public class FeedForwardKaKvComponent extends FeedForwardComponent {
         if (velSetpoint > 0) {
             return velSetpoint * kVFwd + accelSetpoint * kAFwd + interceptVoltageFwd;
         } else {
-            System.out.println("Negative setpoint!");
             return velSetpoint * kVRev + accelSetpoint * kARev - interceptVoltageRev;
         }
     }

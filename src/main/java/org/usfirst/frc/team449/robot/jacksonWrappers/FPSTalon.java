@@ -397,14 +397,12 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         }
 
         //Set PID stuff
-        if (currentGearSettings.getMaxSpeed() != null) {
-            //Slot 0 velocity gains. We don't set F yet because that changes based on setpoint.
-            canTalon.config_kP(0, currentGearSettings.getkP(), 0);
-            canTalon.config_kI(0, currentGearSettings.getkI(), 0);
-            canTalon.config_kD(0, currentGearSettings.getkD(), 0);
+        //Slot 0 velocity gains. We don't set F yet because that changes based on setpoint.
+        canTalon.config_kP(0, currentGearSettings.getkP(), 0);
+        canTalon.config_kI(0, currentGearSettings.getkI(), 0);
+        canTalon.config_kD(0, currentGearSettings.getkD(), 0);
 
-            //We set the MP gains when loading a profile so no need to do it here.
-        }
+        //We set the MP gains when loading a profile so no need to do it here.
     }
 
     /**
@@ -510,7 +508,11 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             canTalon.config_kF(0, 0, 0);
             canTalon.set(ControlMode.MotionMagic, nativeSetpoint);
         } else {
-            canTalon.config_kF(0, 1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(feet), 0);
+            if (nativeSetpoint == 0){
+                canTalon.config_kF(0, 0,0);
+            } else {
+                canTalon.config_kF(0, 1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(feet), 0);
+            }
             canTalon.set(ControlMode.Position, nativeSetpoint);
         }
     }
@@ -558,7 +560,11 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      */
     @Nullable
     public Double getError() {
-        return encoderToFPS(canTalon.getClosedLoopError(0));
+        if (canTalon.getControlMode().equals(ControlMode.Velocity)) {
+            return encoderToFPS(canTalon.getClosedLoopError(0));
+        } else {
+            return encoderToFeet(canTalon.getClosedLoopError(0));
+        }
     }
 
     /**
@@ -722,6 +728,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * Starts running the loaded motion profile.
      */
     public void startRunningMP() {
+        setpoint = SetValueMotionProfile.Enable.value;
         canTalon.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
     }
 
@@ -729,6 +736,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * Holds the current position point in MP mode.
      */
     public void holdPositionMP() {
+        setpoint = SetValueMotionProfile.Hold.value;
         canTalon.set(ControlMode.MotionProfile, SetValueMotionProfile.Hold.value);
     }
 
@@ -739,6 +747,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      */
     public void loadProfile(MotionProfileData data) {
         bottomBufferLoader.stop();
+        setpoint = SetValueMotionProfile.Disable.value;
+        canTalon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
         //Reset the Talon
         disable();
         clearMP();
@@ -748,7 +758,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
 
         //Set proper PID constants
         if (data.isInverted()) {
-            System.out.println("Is inverted!");
             if (data.isVelocityOnly()) {
                 canTalon.config_kP(1, 0, 0);
                 canTalon.config_kI(1, 0, 0);
@@ -793,7 +802,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
                     data.getData()[i][1], data.getData()[i][2]);
             Logger.addEvent("VelPlusAccel: " + feedforward, this.getClass());
-//            System.out.println("VelPlusAccel: "+feedforward);
             point.velocity = feedforward;
 
             //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change either the profile or kA.
@@ -803,7 +811,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             }
             point.zeroPos = i == 0 && data.resetPosition(); // If it's the first point, set the encoder position to 0.
             point.isLastPoint = (i + 1) == data.getData().length; // If it's the last point, isLastPoint = true
-
             // Send the point to the Talon's buffer
             canTalon.pushMotionProfileTrajectory(point);
         }
@@ -818,6 +825,11 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         if (canTalon.getMotionProfileTopLevelBufferCount() == 0) {
             bottomBufferLoader.stop();
         }
+    }
+
+    public MotionProfileStatus getMotionProfileStatus(){
+        canTalon.getMotionProfileStatus(motionProfileStatus);
+        return motionProfileStatus;
     }
 
     /**

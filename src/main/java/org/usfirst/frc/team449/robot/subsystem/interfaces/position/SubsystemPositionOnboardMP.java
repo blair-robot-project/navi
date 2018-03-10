@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.components.PathGenerator;
 import org.usfirst.frc.team449.robot.generalInterfaces.updatable.Updatable;
 import org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon;
+import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.other.MotionProfileData;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.SubsystemMP;
@@ -165,8 +166,10 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
         //Start the profile if it's ready
         if (shouldStartProfile && readyToRunProfile()) {
             startRunningLoadedProfile();
-            System.out.println("Started profile");
             shouldStartProfile = false;
+        }
+        if (!shouldStartProfile && profileFinished()) {
+            talon.holdPositionMP();
         }
     }
 

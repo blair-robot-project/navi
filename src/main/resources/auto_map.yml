@@ -236,17 +236,19 @@ logger:
             port: 10
             name: "elevatorTalon"
             reverseOutput: false
-            reverseSensor: false
+            reverseSensor: true
             enableBrakeMode: true
             postEncoderGearing: 1
             feetPerRotation: .869
             currentLimit: 40
+            minNumPointsInBottomBuffer: 40
             enableVoltageComp: true
             feedbackDevice: QuadEncoder
             encoderCPR: 1024
             perGearSettings:
                 -   motionProfilePFwd: 0.5
                     kP: 2
+                    maxSpeed: 10
                     feedForwardComponent:
                         org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardMPElevatorComponent:
                             feetToFFComponentMap: !!map
@@ -333,18 +335,18 @@ buttons:
                         fastSpeed: 0.5
                         slowSpeed: 0.25
                 elevator:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionSimple:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         '@id': elevator
-                        motor:
+                        talon:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                                 elevatorTalon
-                        onTargetTolerance: 0.1
-#                        pathGenerator:
-#                            '@id': pathGenerator
-#                            fwdMaxVel: 4
-#                            revMaxVel: 6
-#                            maxAccel: 10
-#                            deltaTimeSecs: 0.02
+#                        onTargetTolerance: 0.1
+                        pathGenerator:
+                            '@id': pathGenerator
+                            fwdMaxVel: 4
+                            revMaxVel: 6
+                            maxAccel: 10
+                            deltaTimeSecs: 0.02
                 intakeSolenoidPos: kReverse
                 elevatorUpPos: 2
                 actuatedIntakeMode: IN_FAST

@@ -101,5 +101,4 @@ public class PathGenerator {
         accel.add(motionState.acc());
         return new MotionProfileData(pos, vel, accel, deltaTimeSecs, currentPos > destinationPos, false, false);
     }
-
 }
