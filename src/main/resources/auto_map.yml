@@ -236,7 +236,7 @@ logger:
             port: 10
             name: "elevatorTalon"
             reverseOutput: false
-            reverseSensor: true
+            reverseSensor: false
             enableBrakeMode: true
             postEncoderGearing: 1
             feetPerRotation: .869
@@ -248,7 +248,6 @@ logger:
             perGearSettings:
                 -   motionProfilePFwd: 0.5
                     kP: 2
-                    maxSpeed: 10
                     feedForwardComponent:
                         org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardMPElevatorComponent:
                             feetToFFComponentMap: !!map
