@@ -52,16 +52,18 @@ public class LowerIntakeRaise<T extends Subsystem & SubsystemIntake & SubsystemS
                             @JsonProperty(required = true) double elevatorUpPos,
                             @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode actuatedIntakeMode,
                             @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode carriageIntakeMode,
-                            @Nullable SubsystemIntake.IntakeMode carriageHoldMode) {
+                            @Nullable SubsystemIntake.IntakeMode carriageHoldMode,
+                            @Nullable Boolean raiseIntake) {
         addSequential(new SetSolenoid(actuatedIntake, intakeSolenoidPos));
-        addSequential(new GoToPosition<>(elevator, elevatorIntakePos));
         addSequential(new SetIntakeMode(actuatedIntake, actuatedIntakeMode));
-        addSequential(new IntakeUntilConditonMet<>(carriage, carriageIntakeMode, carriageHoldMode));
-        addSequential(new SetIntakeMode(actuatedIntake, SubsystemIntake.IntakeMode.OFF));
-        addSequential(new GoToPosition<>(elevator, elevatorUpPos));
-        //Retract the intake by setting the piston to the opposite
-        addSequential(new SetSolenoid(actuatedIntake,
-                intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward));
+        addSequential(new SetIntakeMode(carriage, carriageIntakeMode));
+//        addSequential(new IntakeUntilConditonMet<>(carriage, carriageIntakeMode, carriageHoldMode));
+//        addSequential(new SetIntakeMode(actuatedIntake, SubsystemIntake.IntakeMode.OFF));
+//        //Retract the intake by setting the piston to the opposite
+//        if (raiseIntake != null && raiseIntake){
+//        addSequential(new SetSolenoid(actuatedIntake,
+//                intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward));
+//        }
     }
 
 }

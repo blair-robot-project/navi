@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
         //Read sensors
         this.robotMap.getUpdater().run();
 
+        this.robotMap.getAutoStartupCommand().cancel();
+
         //Run startup command if we start in teleop.
         if (!enabled) {
             if (robotMap.getStartupCommand() != null) {

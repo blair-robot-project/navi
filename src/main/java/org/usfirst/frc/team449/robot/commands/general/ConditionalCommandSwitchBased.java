@@ -22,8 +22,8 @@ public class ConditionalCommandSwitchBased extends ConditionalCommand {
      * @param rightSwitch The Command to execute if the right side of the switch is our alliance color.
      */
     @JsonCreator
-    public ConditionalCommandSwitchBased(@NotNull @JsonProperty(required = true) Command leftSwitch,
-                                         @NotNull @JsonProperty(required = true) Command rightSwitch) {
+    public ConditionalCommandSwitchBased(@NotNull Command leftSwitch,
+                                         @NotNull Command rightSwitch) {
         super(leftSwitch, rightSwitch);
     }
 
