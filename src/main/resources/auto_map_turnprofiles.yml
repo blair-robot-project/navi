@@ -637,7 +637,7 @@ autoStartupCommand:
         '@id': totalAutoCommand
         commandList:
             -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                  '@id': succc
+                  '@id': succcf
                   subsystem:
                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                           carriage
@@ -718,18 +718,20 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftLLLdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                &tta
-                                                                '@id': turnToCube
-                                                                absoluteTolerance: 2
-                                                                kP: 1.0
-                                                                deadband: 2
-                                                                inverted: false
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': LeftLLLTurnToSwitch
                                                                 subsystem:
                                                                     org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                                                                         drive
-                                                                timeout: 2
-                                                                setpoint: -158.1526
+                                                                left:
+                                                                    '@id': leftTurnToSwitch
+                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToSwitchProfile.csv"
+                                                                    inverted: false
+                                                                right:
+                                                                    '@id': rightTurnToSwitch
+                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToSwitchProfile.csv"
+                                                                    inverted: true
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': LeftLLL2
                                                                 subsystem:
@@ -930,10 +932,20 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftRLRdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnAfterScaleLeftRLR
-                                                                setpoint: -153.1526
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': LeftRLRTurnAfterScale
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    '@id': leftTurnAfterScale
+                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnAfterScaleProfile.csv"
+                                                                    inverted: false
+                                                                right:
+                                                                    '@id': rightTurnAfterScale
+                                                                    filename: "/home/lvuser/449_resources/naviRightTurnAfterScaleProfile.csv"
+                                                                    inverted: true
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': LeftRLR2
                                                                 subsystem:
@@ -948,10 +960,20 @@ autoStartupCommand:
                                                                     filename: "/home/lvuser/449_resources/naviRightCrossFromScaleProfile.csv"
                                                                     inverted: false
                                                                 timeout: 5
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnToCrossCubeLeftRLR
-                                                                setpoint: 146.1162
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': LeftRLRTurnToCrossCube
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    '@id': leftTurnToCrossCube
+                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToCrossCubeProfile.csv"
+                                                                    inverted: false
+                                                                right:
+                                                                    '@id': rightTurnToCrossCube
+                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToCrossCubeProfile.csv"
+                                                                    inverted: true
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': LeftRLR3
                                                                 subsystem:
@@ -1024,10 +1046,20 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftRRRdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnToCubeLeftRRR
-                                                                setpoint: -180
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': LeftRRRTurn180
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    '@id': leftTurn180
+                                                                    filename: "/home/lvuser/449_resources/naviLeftTurn180Profile.csv"
+                                                                    inverted: false
+                                                                right:
+                                                                    '@id': rightTurn180
+                                                                    filename: "/home/lvuser/449_resources/naviRightTurn180Profile.csv"
+                                                                    inverted: true
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': LeftRRR2
                                                                 subsystem:
@@ -1112,10 +1144,16 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightRRRdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': RightRRRTurnToCube
-                                                                setpoint: 158.1526
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': RightRRRTurnToSwitch
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    rightTurnToSwitch
+                                                                right:
+                                                                    leftTurnToSwitch
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightRRR2
                                                                 subsystem:
@@ -1275,10 +1313,16 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightLRLdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnAfterScaleRightLRL
-                                                                setpoint: 153.1526
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': RightLRLTurnAfterScale
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    rightTurnAfterScale
+                                                                right:
+                                                                    leftTurnAfterScale
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightLRL2
                                                                 subsystem:
@@ -1289,10 +1333,16 @@ autoStartupCommand:
                                                                 right:
                                                                     leftCrossFromScale
                                                                 timeout: 5
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnToCrossCubeRightLRL
-                                                                setpoint: -146.1162
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': RightLRLTurnToCrossCube
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    rightTurnToCrossCube
+                                                                right:
+                                                                    leftTurnToCrossCube
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightLRL3
                                                                 subsystem:
@@ -1355,10 +1405,16 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightLLLdriveToCube
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                <<: *tta
-                                                                '@id': turnToCubeRightLLL
-                                                                setpoint: 180
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                                                                '@id': RightLLLTurn180
+                                                                subsystem:
+                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                                                                        drive
+                                                                left:
+                                                                    rightTurn180
+                                                                right:
+                                                                    leftTurn180
+                                                                timeout: 5
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightLLL2
                                                                 subsystem:
