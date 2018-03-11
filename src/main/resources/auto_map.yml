@@ -250,6 +250,8 @@ logger:
 #                -   motionProfilePFwd: 0.5
                 -   motionProfilePFwd: 0
 #                    kP: 2
+                    fwdPeakOutputVoltage: 12
+                    revPeakOutputVoltage: -6
                     feedForwardComponent:
                         org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardMPElevatorComponent:
                             feetToFFComponentMap: !!map
@@ -310,8 +312,8 @@ buttons:
                             '@id': sideswipePiston
                             forward: 1
                             reverse: 0
-                        fastSpeed: 0.5
-                        slowSpeed: 0.25
+                        fastSpeed: 1.0
+                        slowSpeed: 0.5
                         motor:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                                 '@id': intakeTalon
@@ -342,7 +344,7 @@ buttons:
                                 slaveVictors:
                                     - port: 13
                                       inverted: false
-                        fastSpeed: 0.5
+                        fastSpeed: 0.75
                         slowSpeed: 0.25
                 elevator:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
@@ -1421,8 +1423,8 @@ autoStartupCommand:
                 subsystem:
                     org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                         drive
-                velocity: 0.5
-                seconds: 1.5
+                velocity: 0.25
+                seconds: 3
             - org.usfirst.frc.team449.robot.commands.general.ConditionalCommandSwitchBased:
                 '@id': dropCube
                 rightSwitch:
