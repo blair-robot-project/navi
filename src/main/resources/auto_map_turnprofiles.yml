@@ -8,10 +8,6 @@ logger:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
             canID: 0
-            voltagePerCurrentLinReg:
-                &voltagePerCurrent
-                bufferSize: 250
-                rSquaredThreshhold: 0.75
         - org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
             '@id': drive
             leftMaster:
@@ -62,9 +58,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 2
                             inverted: true
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 1
-                            inverted: true
+                    slaveVictors:
+                        - port: 21
+                          inverted: true
+#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+#                            port: 1
+#                            inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
@@ -94,9 +93,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 4
                             inverted: false
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 5
-                            inverted: false
+                    slaveVictors:
+                        - port: 17
+                          inverted: false
+#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+#                            port: 5
+#                            inverted: false
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
@@ -233,7 +235,6 @@ logger:
             reverseSensor: false
             enableBrakeMode: true
             postEncoderGearing: 1
-            #1.7626
             feetPerRotation: 0.5962
             currentLimit: 40
             minNumPointsInBottomBuffer: 40
@@ -325,17 +326,27 @@ buttons:
                                 fastSpeed: 0.75
                                 slowSpeed: 0.25
                                 motor:
-                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                        '@id': intakeTalon
-                                        port: 11
-                                        name: "sideswipe_talon"
-                                        reverseOutput: false
-                                        enableBrakeMode: false
-                                        enableVoltageComp: true
-                                        currentLimit: 30
-                                        slaveVictors:
-                                            - port: 14
-                                              inverted: true
+                                    org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotorCluster:
+                                        motors:
+                                            - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                                '@id': rightSideswipeMotor
+                                                port: 4
+                                                inverted: true
+                                            - org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.MappedVictor:
+                                                '@id': leftSideswipeMotor
+                                                port: 1
+                                                inverted: false
+#                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
+#                                        '@id': intakeTalon
+#                                        port: 11
+#                                        name: "sideswipe_talon"
+#                                        reverseOutput: false
+#                                        enableBrakeMode: false
+#                                        enableVoltageComp: true
+#                                        currentLimit: 30
+#                                        slaveVictors:
+#                                            - port: 14
+#                                              inverted: true
                         pistonPos: kReverse
                         intakeMode: IN_FAST
         action: WHEN_PRESSED
@@ -632,823 +643,832 @@ buttons:
                         drive
                 override: false
         action: WHEN_RELEASED
-autoStartupCommand:
-    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-        '@id': totalAutoCommand
-        commandList:
-            -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                  '@id': succcf
-                  subsystem:
-                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                          carriage
-                  mode: IN_SLOW
-            -   org.usfirst.frc.team449.robot.commands.general.ConditionalCommandDigitalInputBased:
-                    '@id': autoCommand
-                    digitalInput:
-                        org.usfirst.frc.team449.robot.jacksonWrappers.MappedDigitalInput:
-                            positionSwitch
-                    onFalse:
-                        org.usfirst.frc.team449.robot.commands.general.SelectCommandFMSMessageBased:
-                            '@id': leftAutoCommand
-                            commands:
-                                "LLL" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': LeftLLLCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleLeftLLL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': LeftLLL1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            '@id': leftSameScale
-                                                            filename: "/home/lvuser/449_resources/naviLeftSameScaleProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        right:
-                                                            '@id': rightSameScale
-                                                            filename: "/home/lvuser/449_resources/naviRightSameScaleProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftLLLRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeLeftLLL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': LeftLLLgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftLLLshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeLeftLLL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          &lowLIR
-                                                          '@id': LeftLLLlir
-                                                          actuatedIntake:
-                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                  intake
-                                                          carriage:
-                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                                  carriage
-                                                          elevator:
-                                                              org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                  elevator
-                                                          intakeSolenoidPos: kReverse
-                                                          elevatorUpPos: 2.5
-                                                          actuatedIntakeMode: IN_FAST
-                                                          carriageIntakeMode: IN_FAST
-                                                          carriageHoldMode: IN_SLOW
-                                                          raiseIntake: true
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftLLLdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftLLLTurnToSwitch
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftTurnToSwitch
-                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToSwitchProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightTurnToSwitch
-                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToSwitchProfile.csv"
-                                                                    inverted: true
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftLLL2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftSameScaleToCube
-                                                                    filename: "/home/lvuser/449_resources/naviLeftSameScaleToCubeProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightSameScaleToCube
-                                                                    filename: "/home/lvuser/449_resources/naviRightSameScaleToCubeProfile.csv"
-                                                                    inverted: false
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': LeftLLL3
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    '@id': leftCubeToSwitch
-                                                    filename: "/home/lvuser/449_resources/naviLeftCubeToSwitchModifiedProfile.csv"
-                                                    inverted: false
-                                                right:
-                                                    '@id': rightCubeToSwitch
-                                                    filename: "/home/lvuser/449_resources/naviRightCubeToSwitchModifiedProfile.csv"
-                                                    inverted: false
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftLLLshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                "LRL" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': LeftLRLCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToSwitchLeftLRL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': LeftLRL1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            '@id': leftSameSwitch
-                                                            filename: "/home/lvuser/449_resources/naviLeftSameSwitchProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        right:
-                                                            '@id': rightSameSwitch
-                                                            filename: "/home/lvuser/449_resources/naviRightSameSwitchProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftLRLRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeLeftLRL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': LeftLRLgoToSwitchHeight
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 2
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
-                                                                    '@id': raiseIntakeLeftLRL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftLRLshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': LeftLRL2
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    '@id': rightCrossFromSwitch
-                                                    filename: "/home/lvuser/449_resources/naviRightCrossFromSwitchProfile.csv"
-                                                    inverted: true
-                                                right:
-                                                    '@id': leftCrossFromSwitch
-                                                    filename: "/home/lvuser/449_resources/naviLeftCrossFromSwitchProfile.csv"
-                                                    inverted: true
-                                                timeout: 10
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeLeftLRL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          &tallLIR
-                                                          '@id': LeftLRLlir
-                                                          actuatedIntake:
-                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                  intake
-                                                          carriage:
-                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                                  carriage
-                                                          elevator:
-                                                              org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                  elevator
-                                                          intakeSolenoidPos: kReverse
-                                                          elevatorUpPos: 6
-                                                          actuatedIntakeMode: IN_FAST
-                                                          carriageIntakeMode: IN_FAST
-                                                          carriageHoldMode: IN_SLOW
-                                                          raiseIntake: true
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftLRLdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftLRL3
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftForwards2
-                                                                    filename: "/home/lvuser/449_resources/naviLeftForward2Profile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightForwards2
-                                                                    filename: "/home/lvuser/449_resources/naviRightForward2Profile.csv"
-                                                                    inverted: false
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': LeftLRL4
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    '@id': rightCrossBackup
-                                                    filename: "/home/lvuser/449_resources/naviRightCrossBackupProfile.csv"
-                                                    inverted: true
-                                                right:
-                                                    '@id': leftCrossBackup
-                                                    filename: "/home/lvuser/449_resources/naviLeftCrossBackupProfile.csv"
-                                                    inverted: true
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftLRLshootFast
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_FAST
-                                "RLR" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': LeftRLRCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleLeftRLR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': LeftRLR1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            leftSameScale
-                                                        right:
-                                                            rightSameScale
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftRLRRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeLeftRLR
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': LeftRLRgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftRLRshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeLeftRLR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': LeftRLRlir
-                                                          <<: *lowLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftRLRdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRLRTurnAfterScale
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftTurnAfterScale
-                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnAfterScaleProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightTurnAfterScale
-                                                                    filename: "/home/lvuser/449_resources/naviRightTurnAfterScaleProfile.csv"
-                                                                    inverted: true
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRLR2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftCrossFromScale
-                                                                    filename: "/home/lvuser/449_resources/naviLeftCrossFromScaleProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightCrossFromScale
-                                                                    filename: "/home/lvuser/449_resources/naviRightCrossFromScaleProfile.csv"
-                                                                    inverted: false
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRLRTurnToCrossCube
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftTurnToCrossCube
-                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToCrossCubeProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightTurnToCrossCube
-                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToCrossCubeProfile.csv"
-                                                                    inverted: true
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRLR3
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftForwardTwo
-                                                                    filename: "/home/lvuser/449_resources/naviLeftForward2Profile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightForwardTwo
-                                                                    filename: "/home/lvuser/449_resources/naviRightForward2Profile.csv"
-                                                                    inverted: false
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftRLRshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                "RRR" :
-                                   org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': LeftRRRCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleLeftRRR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': LeftRRR1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            '@id': leftOtherScale
-                                                            filename: "/home/lvuser/449_resources/naviLeftOtherScaleProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        right:
-                                                            '@id': rightOtherScale
-                                                            filename: "/home/lvuser/449_resources/naviRightOtherScaleProfile.csv"
-                                                            inverted: false
-                                                            resetPosition: true
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftRRRRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeLeftRRR
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': LeftRRRgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftRRRshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeLeftRRR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': LeftRRRlir
-                                                          <<: *lowLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': LeftRRRdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRRRTurn180
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftTurn180
-                                                                    filename: "/home/lvuser/449_resources/naviLeftTurn180Profile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightTurn180
-                                                                    filename: "/home/lvuser/449_resources/naviRightTurn180Profile.csv"
-                                                                    inverted: true
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRRR2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    '@id': leftOtherScaleToCube
-                                                                    filename: "/home/lvuser/449_resources/naviLeftOtherScaleToCubeProfile.csv"
-                                                                    inverted: false
-                                                                right:
-                                                                    '@id': rightOtherScaleToCube
-                                                                    filename: "/home/lvuser/449_resources/naviRightOtherScaleToCubeProfile.csv"
-                                                                    inverted: false
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': LeftRRR3
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    '@id': leftCubeToOtherSwitch
-                                                    filename: "/home/lvuser/449_resources/naviLeftCubeToOtherSwitchProfile.csv"
-                                                    inverted: false
-                                                right:
-                                                    '@id': rightCubeToOtherSwitch
-                                                    filename: "/home/lvuser/449_resources/naviRightCubeToOtherSwitchProfile.csv"
-                                                    inverted: false
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': LeftRRRshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                    onTrue:
-                        org.usfirst.frc.team449.robot.commands.general.SelectCommandFMSMessageBased:
-                            '@id': rightAutoCommand
-                            commands:
-                                "RRR" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': RightRRRCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleRightRRR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': RightRRR1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            rightSameScale
-                                                        right:
-                                                            leftSameScale
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightRRRRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeRightRRR
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': RightRRRgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightRRRshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeRightRRR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': RightRRRlir
-                                                          <<: *lowLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightRRRdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightRRRTurnToSwitch
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightTurnToSwitch
-                                                                right:
-                                                                    leftTurnToSwitch
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightRRR2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightSameScaleToCube
-                                                                right:
-                                                                    leftSameScaleToCube
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': RightRRR3
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    rightCubeToSwitch
-                                                right:
-                                                    leftCubeToSwitch
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightRRRshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                "RLR" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': RightRLRCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToSwitchRightRLR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': RightRLR1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            rightSameSwitch
-                                                        right:
-                                                            leftSameSwitch
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightRLRRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeRightRLR
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': RightRLRgoToSwitchHeight
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 2
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
-                                                                    '@id': raiseIntakeRLL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightRLRshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': RightRLR2
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    leftCrossFromSwitch
-                                                right:
-                                                    rightCrossFromSwitch
-                                                timeout: 10
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeRightRLR
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': RightRLRlir
-                                                          <<: *tallLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightRLRdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightRLR3
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightForwards2
-                                                                right:
-                                                                    leftForwards2
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': RightRLR4
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    leftCrossBackup
-                                                right:
-                                                    rightCrossBackup
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightRLRshootFast
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_FAST
-                                "LRL" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': RightLRLCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleRightLRL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': RightLRL1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            rightSameScale
-                                                        right:
-                                                            leftSameScale
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightLRLRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeRightLRL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': RightLRLgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightLRLshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeRightLRL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': RightLRLlir
-                                                          <<: *lowLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightLRLdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLRLTurnAfterScale
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightTurnAfterScale
-                                                                right:
-                                                                    leftTurnAfterScale
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLRL2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightCrossFromScale
-                                                                right:
-                                                                    leftCrossFromScale
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLRLTurnToCrossCube
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightTurnToCrossCube
-                                                                right:
-                                                                    leftTurnToCrossCube
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLRL3
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightForwardTwo
-                                                                right:
-                                                                    leftForwardTwo
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightLRLshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                "LLL" :
-                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                        '@id': RightLLLCommand
-                                        commandList:
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToScaleRightLLL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                        '@id': RightLLL1
-                                                        subsystem:
-                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                drive
-                                                        left:
-                                                            rightOtherScale
-                                                        right:
-                                                            leftOtherScale
-                                                        timeout: 10
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightLLLRaiseElevatorLowerIntake
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
-                                                                    '@id': lowerIntakeRightLLL
-                                                                    subsystem:
-                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                                                            intake
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                                                                  '@id': RightLLLgoToHighScale
-                                                                  subsystem:
-                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                                                                          elevator
-                                                                  setpoint: 6
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightLLLshootSlow
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
-                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
-                                                '@id': goToCubeRightLLL
-                                                commandSet:
-                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
-                                                          '@id': RightLLLlir
-                                                          <<: *lowLIR
-                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': RightLLLdriveToCube
-                                                        commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLLLTurn180
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightTurn180
-                                                                right:
-                                                                    leftTurn180
-                                                                timeout: 5
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightLLL2
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                left:
-                                                                    rightOtherScaleToCube
-                                                                right:
-                                                                    leftOtherScaleToCube
-                                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                '@id': RightLLL3
-                                                subsystem:
-                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                        drive
-                                                left:
-                                                    rightCubeToOtherSwitch
-                                                right:
-                                                    leftCubeToOtherSwitch
-                                                timeout: 5
-                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                                                  '@id': RightLLLshootSlow2
-                                                  subsystem:
-                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                                          carriage
-                                                  mode: OUT_SLOW
 #autoStartupCommand:
-#    org.usfirst.frc.team449.robot.drive.unidirectional.commands.DriveAtSpeed:
-#        '@id': autoDrive
-#        subsystem:
-#            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-#                drive
-#        velocity: 0.25
-#        seconds: 2.5
+#    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#        '@id': totalAutoCommand
+#        commandList:
+#            -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                  '@id': succcf
+#                  subsystem:
+#                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                          carriage
+#                  mode: IN_SLOW
+#            -   org.usfirst.frc.team449.robot.commands.general.ConditionalCommandDigitalInputBased:
+#                    '@id': autoCommand
+#                    digitalInput:
+#                        org.usfirst.frc.team449.robot.jacksonWrappers.MappedDigitalInput:
+#                            positionSwitch
+#                    onFalse:
+#                        org.usfirst.frc.team449.robot.commands.general.SelectCommandFMSMessageBased:
+#                            '@id': leftAutoCommand
+#                            commands:
+#                                "LLL" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': LeftLLLCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleLeftLLL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': LeftLLL1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            '@id': leftSameScale
+#                                                            filename: "/home/lvuser/449_resources/naviLeftSameScaleProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        right:
+#                                                            '@id': rightSameScale
+#                                                            filename: "/home/lvuser/449_resources/naviRightSameScaleProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftLLLRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeLeftLLL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': LeftLLLgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftLLLshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeLeftLLL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          &lowLIR
+#                                                          '@id': LeftLLLlir
+#                                                          actuatedIntake:
+#                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                  intake
+#                                                          carriage:
+#                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                                  carriage
+#                                                          elevator:
+#                                                              org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                  elevator
+#                                                          intakeSolenoidPos: kReverse
+#                                                          elevatorUpPos: 2.5
+#                                                          actuatedIntakeMode: IN_FAST
+#                                                          carriageIntakeMode: IN_FAST
+#                                                          carriageHoldMode: IN_SLOW
+#                                                          raiseIntake: true
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftLLLdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftLLLTurnToSwitch
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftTurnToSwitch
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToSwitchProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightTurnToSwitch
+#                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToSwitchProfile.csv"
+#                                                                    inverted: true
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftLLL2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftSameScaleToCube
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftSameScaleToCubeProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightSameScaleToCube
+#                                                                    filename: "/home/lvuser/449_resources/naviRightSameScaleToCubeProfile.csv"
+#                                                                    inverted: false
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': LeftLLL3
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    '@id': leftCubeToSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviLeftCubeToSwitchModifiedProfile.csv"
+#                                                    inverted: false
+#                                                right:
+#                                                    '@id': rightCubeToSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviRightCubeToSwitchModifiedProfile.csv"
+#                                                    inverted: false
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftLLLshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                "LRL" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': LeftLRLCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToSwitchLeftLRL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': LeftLRL1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            '@id': leftSameSwitch
+#                                                            filename: "/home/lvuser/449_resources/naviLeftSameSwitchProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        right:
+#                                                            '@id': rightSameSwitch
+#                                                            filename: "/home/lvuser/449_resources/naviRightSameSwitchProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftLRLRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeLeftLRL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': LeftLRLgoToSwitchHeight
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 2
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+#                                                                    '@id': raiseIntakeLeftLRL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftLRLshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': LeftLRL2
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    '@id': rightCrossFromSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviRightCrossFromSwitchProfile.csv"
+#                                                    inverted: true
+#                                                right:
+#                                                    '@id': leftCrossFromSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviLeftCrossFromSwitchProfile.csv"
+#                                                    inverted: true
+#                                                timeout: 10
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeLeftLRL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          &tallLIR
+#                                                          '@id': LeftLRLlir
+#                                                          actuatedIntake:
+#                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                  intake
+#                                                          carriage:
+#                                                              org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                                  carriage
+#                                                          elevator:
+#                                                              org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                  elevator
+#                                                          intakeSolenoidPos: kReverse
+#                                                          elevatorUpPos: 6
+#                                                          actuatedIntakeMode: IN_FAST
+#                                                          carriageIntakeMode: IN_FAST
+#                                                          carriageHoldMode: IN_SLOW
+#                                                          raiseIntake: true
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftLRLdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftLRL3
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftForwards2
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftForward2Profile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightForwards2
+#                                                                    filename: "/home/lvuser/449_resources/naviRightForward2Profile.csv"
+#                                                                    inverted: false
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': LeftLRL4
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    '@id': rightCrossBackup
+#                                                    filename: "/home/lvuser/449_resources/naviRightCrossBackupProfile.csv"
+#                                                    inverted: true
+#                                                right:
+#                                                    '@id': leftCrossBackup
+#                                                    filename: "/home/lvuser/449_resources/naviLeftCrossBackupProfile.csv"
+#                                                    inverted: true
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftLRLshootFast
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_FAST
+#                                "RLR" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': LeftRLRCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleLeftRLR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': LeftRLR1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            leftSameScale
+#                                                        right:
+#                                                            rightSameScale
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftRLRRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeLeftRLR
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': LeftRLRgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftRLRshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeLeftRLR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': LeftRLRlir
+#                                                          <<: *lowLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftRLRdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRLRTurnAfterScale
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftTurnAfterScale
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnAfterScaleProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightTurnAfterScale
+#                                                                    filename: "/home/lvuser/449_resources/naviRightTurnAfterScaleProfile.csv"
+#                                                                    inverted: true
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRLR2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftCrossFromScale
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftCrossFromScaleProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightCrossFromScale
+#                                                                    filename: "/home/lvuser/449_resources/naviRightCrossFromScaleProfile.csv"
+#                                                                    inverted: false
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRLRTurnToCrossCube
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftTurnToCrossCube
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftTurnToCrossCubeProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightTurnToCrossCube
+#                                                                    filename: "/home/lvuser/449_resources/naviRightTurnToCrossCubeProfile.csv"
+#                                                                    inverted: true
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRLR3
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftForwardTwo
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftForward2Profile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightForwardTwo
+#                                                                    filename: "/home/lvuser/449_resources/naviRightForward2Profile.csv"
+#                                                                    inverted: false
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftRLRshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                "RRR" :
+#                                   org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': LeftRRRCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleLeftRRR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': LeftRRR1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            '@id': leftOtherScale
+#                                                            filename: "/home/lvuser/449_resources/naviLeftOtherScaleProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        right:
+#                                                            '@id': rightOtherScale
+#                                                            filename: "/home/lvuser/449_resources/naviRightOtherScaleProfile.csv"
+#                                                            inverted: false
+#                                                            resetPosition: true
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftRRRRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeLeftRRR
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': LeftRRRgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftRRRshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeLeftRRR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': LeftRRRlir
+#                                                          <<: *lowLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': LeftRRRdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRRRTurn180
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftTurn180
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftTurn180Profile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightTurn180
+#                                                                    filename: "/home/lvuser/449_resources/naviRightTurn180Profile.csv"
+#                                                                    inverted: true
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': LeftRRR2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    '@id': leftOtherScaleToCube
+#                                                                    filename: "/home/lvuser/449_resources/naviLeftOtherScaleToCubeProfile.csv"
+#                                                                    inverted: false
+#                                                                right:
+#                                                                    '@id': rightOtherScaleToCube
+#                                                                    filename: "/home/lvuser/449_resources/naviRightOtherScaleToCubeProfile.csv"
+#                                                                    inverted: false
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': LeftRRR3
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    '@id': leftCubeToOtherSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviLeftCubeToOtherSwitchProfile.csv"
+#                                                    inverted: false
+#                                                right:
+#                                                    '@id': rightCubeToOtherSwitch
+#                                                    filename: "/home/lvuser/449_resources/naviRightCubeToOtherSwitchProfile.csv"
+#                                                    inverted: false
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': LeftRRRshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                    onTrue:
+#                        org.usfirst.frc.team449.robot.commands.general.SelectCommandFMSMessageBased:
+#                            '@id': rightAutoCommand
+#                            commands:
+#                                "RRR" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': RightRRRCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleRightRRR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': RightRRR1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            rightSameScale
+#                                                        right:
+#                                                            leftSameScale
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightRRRRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeRightRRR
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': RightRRRgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightRRRshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeRightRRR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': RightRRRlir
+#                                                          <<: *lowLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightRRRdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightRRRTurnToSwitch
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightTurnToSwitch
+#                                                                right:
+#                                                                    leftTurnToSwitch
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightRRR2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightSameScaleToCube
+#                                                                right:
+#                                                                    leftSameScaleToCube
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': RightRRR3
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    rightCubeToSwitch
+#                                                right:
+#                                                    leftCubeToSwitch
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightRRRshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                "RLR" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': RightRLRCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToSwitchRightRLR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': RightRLR1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            rightSameSwitch
+#                                                        right:
+#                                                            leftSameSwitch
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightRLRRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeRightRLR
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': RightRLRgoToSwitchHeight
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 2
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+#                                                                    '@id': raiseIntakeRLL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightRLRshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': RightRLR2
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    leftCrossFromSwitch
+#                                                right:
+#                                                    rightCrossFromSwitch
+#                                                timeout: 10
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeRightRLR
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': RightRLRlir
+#                                                          <<: *tallLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightRLRdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightRLR3
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightForwards2
+#                                                                right:
+#                                                                    leftForwards2
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': RightRLR4
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    leftCrossBackup
+#                                                right:
+#                                                    rightCrossBackup
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightRLRshootFast
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_FAST
+#                                "LRL" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': RightLRLCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleRightLRL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': RightLRL1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            rightSameScale
+#                                                        right:
+#                                                            leftSameScale
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightLRLRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeRightLRL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': RightLRLgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightLRLshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeRightLRL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': RightLRLlir
+#                                                          <<: *lowLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightLRLdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLRLTurnAfterScale
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightTurnAfterScale
+#                                                                right:
+#                                                                    leftTurnAfterScale
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLRL2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightCrossFromScale
+#                                                                right:
+#                                                                    leftCrossFromScale
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLRLTurnToCrossCube
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightTurnToCrossCube
+#                                                                right:
+#                                                                    leftTurnToCrossCube
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLRL3
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightForwardTwo
+#                                                                right:
+#                                                                    leftForwardTwo
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightLRLshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                "LLL" :
+#                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                        '@id': RightLLLCommand
+#                                        commandList:
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToScaleRightLLL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                        '@id': RightLLL1
+#                                                        subsystem:
+#                                                            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                drive
+#                                                        left:
+#                                                            rightOtherScale
+#                                                        right:
+#                                                            leftOtherScale
+#                                                        timeout: 10
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightLLLRaiseElevatorLowerIntake
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+#                                                                    '@id': lowerIntakeRightLLL
+#                                                                    subsystem:
+#                                                                        org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+#                                                                            intake
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+#                                                                  '@id': RightLLLgoToHighScale
+#                                                                  subsystem:
+#                                                                      org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+#                                                                          elevator
+#                                                                  setpoint: 6
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightLLLshootSlow
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+#                                            - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
+#                                                '@id': goToCubeRightLLL
+#                                                commandSet:
+#                                                    - org.usfirst.frc.team449.robot.commands.multiSubsystem.LowerIntakeRaise:
+#                                                          '@id': RightLLLlir
+#                                                          <<: *lowLIR
+#                                                    - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#                                                        '@id': RightLLLdriveToCube
+#                                                        commandList:
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLLLTurn180
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightTurn180
+#                                                                right:
+#                                                                    leftTurn180
+#                                                                timeout: 5
+#                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                                '@id': RightLLL2
+#                                                                subsystem:
+#                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                                        drive
+#                                                                left:
+#                                                                    rightOtherScaleToCube
+#                                                                right:
+#                                                                    leftOtherScaleToCube
+#                                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                                                '@id': RightLLL3
+#                                                subsystem:
+#                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                                                        drive
+#                                                left:
+#                                                    rightCubeToOtherSwitch
+#                                                right:
+#                                                    leftCubeToOtherSwitch
+#                                                timeout: 5
+#                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+#                                                  '@id': RightLLLshootSlow2
+#                                                  subsystem:
+#                                                      org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
+#                                                          carriage
+#                                                  mode: OUT_SLOW
+autoStartupCommand:
+    org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+        '@id': calibrateProfile
+        subsystem:
+            org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                drive
+        left:
+            '@id': leftForward9
+            filename: "/home/lvuser/449_resources/naviLeftForward9Profile.csv"
+            inverted: false
+            resetPosition: true
+        right:
+            '@id': rightForward9
+            filename: "/home/lvuser/449_resources/naviRightForward9Profile.csv"
+            inverted: false
+            resetPosition: true
+        timeout: 10
 updater:
     org.usfirst.frc.team449.robot.other.Updater:
         '@id': updater

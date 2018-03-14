@@ -22,11 +22,6 @@ public class PDP implements Loggable, Updatable {
     private final PowerDistributionPanel PDP;
 
     /**
-     * The component for doing linear regression to find the resistance.
-     */
-    private final RunningLinRegComponent voltagePerCurrentLinReg;
-
-    /**
      * The cached values from the PDP object this wraps.
      */
     private double voltage, totalCurrent;
@@ -34,32 +29,11 @@ public class PDP implements Loggable, Updatable {
     /**
      * Default constructor.
      *
-     * @param canID                   CAN ID of the PDP. Defaults to 0.
-     * @param voltagePerCurrentLinReg The component for doing linear regression to find the resistance.
+     * @param canID CAN ID of the PDP. Defaults to 0.
      */
     @JsonCreator
-    public PDP(int canID,
-               @NotNull @JsonProperty(required = true) RunningLinRegComponent voltagePerCurrentLinReg) {
+    public PDP(int canID) {
         this.PDP = new PowerDistributionPanel(canID);
-        this.voltagePerCurrentLinReg = voltagePerCurrentLinReg;
-    }
-
-    /**
-     * Get the resistance of the wires leading to the PDP.
-     *
-     * @return Resistance in ohms.
-     */
-    public double getResistance() {
-        return -voltagePerCurrentLinReg.getSlope();
-    }
-
-    /**
-     * Get the voltage at the PDP when there's no load on the battery.
-     *
-     * @return Voltage in volts when there's 0 amps of current draw
-     */
-    public double getUnloadedVoltage() {
-        return voltagePerCurrentLinReg.getIntercept();
     }
 
     /**
@@ -90,9 +64,7 @@ public class PDP implements Loggable, Updatable {
     public String[] getHeader() {
         return new String[]{
                 "current",
-                "voltage",
-                "resistance",
-                "unloaded_voltage"
+                "voltage"
         };
     }
 
@@ -106,9 +78,7 @@ public class PDP implements Loggable, Updatable {
     public Object[] getData() {
         return new Object[]{
                 getTotalCurrent(),
-                getVoltage(),
-                getResistance(),
-                getUnloadedVoltage()
+                getVoltage()
         };
     }
 
@@ -130,7 +100,5 @@ public class PDP implements Loggable, Updatable {
     public void update() {
         this.totalCurrent = PDP.getTotalCurrent();
         this.voltage = PDP.getVoltage();
-        //Calculate running linear regression
-        voltagePerCurrentLinReg.addPoint(totalCurrent, voltage);
     }
 }

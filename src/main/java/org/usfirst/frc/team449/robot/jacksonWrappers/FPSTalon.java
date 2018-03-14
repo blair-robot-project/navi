@@ -814,6 +814,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             // Send the point to the Talon's buffer
             canTalon.pushMotionProfileTrajectory(point);
         }
+        //Update profile status because we made a major change
+        canTalon.getMotionProfileStatus(motionProfileStatus);
         bottomBufferLoader.startPeriodic(updaterProcessPeriodSecs);
     }
 

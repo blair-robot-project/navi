@@ -47,6 +47,7 @@ public class GoToPosition<T extends Subsystem & SubsystemPosition> extends Comma
      */
     @Override
     protected void initialize() {
+        Logger.addEvent("GoToPosition init.", this.getClass());
         subsystem.setPositionSetpoint(setpoint);
     }
 
