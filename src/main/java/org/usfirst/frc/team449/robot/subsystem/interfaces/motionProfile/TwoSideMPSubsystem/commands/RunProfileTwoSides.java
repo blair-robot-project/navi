@@ -34,7 +34,7 @@ public class RunProfileTwoSides<T extends Subsystem & SubsystemMPTwoSides> exten
                               @NotNull @JsonProperty(required = true) MotionProfileData right,
                               @JsonProperty(required = true) double timeout) {
         addSequential(new LoadProfileTwoSides(subsystem, left, right));
-        addSequential(new RunLoadedProfile<>(subsystem, timeout, true));
+        addSequential(new RunLoadedProfile<>(subsystem, timeout));
     }
 
     /**
@@ -50,6 +50,6 @@ public class RunProfileTwoSides<T extends Subsystem & SubsystemMPTwoSides> exten
                               @NotNull Supplier<MotionProfileData> rightSupplier,
                               double timeout) {
         addSequential(new LoadProfileTwoSides(subsystem, leftSupplier, rightSupplier));
-        addSequential(new RunLoadedProfile<>(subsystem, timeout, true));
+        addSequential(new RunLoadedProfile<>(subsystem, timeout));
     }
 }

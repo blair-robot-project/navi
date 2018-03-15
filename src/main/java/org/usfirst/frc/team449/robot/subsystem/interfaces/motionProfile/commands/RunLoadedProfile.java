@@ -43,17 +43,12 @@ public class RunLoadedProfile<T extends Subsystem & SubsystemMP> extends Command
      *
      * @param subsystem The subsystem to execute this command on.
      * @param timeout   The max amount of time this subsystem is allowed to run for, in seconds.
-     * @param require   Whether or not to require the subsystem this command is running on.
      */
     @JsonCreator
     public RunLoadedProfile(@NotNull @JsonProperty(required = true) T subsystem,
-                            @JsonProperty(required = true) double timeout,
-                            @JsonProperty(required = true) boolean require) {
+                            @JsonProperty(required = true) double timeout) {
         this.subsystem = subsystem;
-        //Require if specified.
-        if (require) {
-            requires(subsystem);
-        }
+        requires(subsystem);
 
         //Convert to milliseconds.
         this.timeout = (long) (timeout * 1000.);

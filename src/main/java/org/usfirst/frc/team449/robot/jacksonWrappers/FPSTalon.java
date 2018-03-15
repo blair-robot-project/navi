@@ -686,23 +686,12 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
     }
 
     /**
-     * A private utility method for updating motionProfileStatus with the current motion profile status. Makes sure that
-     * the status is only gotten once per tic, to avoid CAN traffic overload.
-     */
-    private void updateMotionProfileStatus() {
-        if (timeMPStatusLastRead < Clock.currentTimeMillis()) {
-            canTalon.getMotionProfileStatus(motionProfileStatus);
-            timeMPStatusLastRead = Clock.currentTimeMillis();
-        }
-    }
-
-    /**
      * Whether this talon is ready to start running a profile.
      *
      * @return True if minNumPointsInBottomBuffer points have been loaded or the top buffer is empty, false otherwise.
      */
     public boolean readyForMP() {
-        updateMotionProfileStatus();
+        canTalon.getMotionProfileStatus(motionProfileStatus);
         return motionProfileStatus.topBufferCnt == 0 || motionProfileStatus.btmBufferCnt >= minNumPointsInBottomBuffer;
     }
 
@@ -712,7 +701,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * @return True if the active point in the talon is the last point, false otherwise.
      */
     public boolean MPIsFinished() {
-        updateMotionProfileStatus();
+        canTalon.getMotionProfileStatus(motionProfileStatus);
         return motionProfileStatus.isLast;
     }
 
@@ -814,8 +803,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             // Send the point to the Talon's buffer
             canTalon.pushMotionProfileTrajectory(point);
         }
-        //Update profile status because we made a major change
-        canTalon.getMotionProfileStatus(motionProfileStatus);
         bottomBufferLoader.startPeriodic(updaterProcessPeriodSecs);
     }
 
