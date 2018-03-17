@@ -75,9 +75,9 @@ public class NavXTurnToAngle<T extends Subsystem & DriveUnidirectional & Subsyst
                            @Nullable Integer loopTimeMillis,
                            double deadband,
                            boolean inverted,
-                           int kP,
-                           int kI,
-                           int kD,
+                           double kP,
+                           double kI,
+                           double kD,
                            @JsonProperty(required = true) double setpoint,
                            @NotNull @JsonProperty(required = true) T subsystem,
                            @JsonProperty(required = true) double timeout) {

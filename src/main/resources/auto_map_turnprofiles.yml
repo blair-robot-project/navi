@@ -1456,7 +1456,7 @@ autoStartupCommand:
     org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
         '@id': turnToCube
         absoluteTolerance: 2
-        kP: 0.5
+        kP: 0.005
         onTargetBuffer:
             '@id': ttaBuffer
             bufferTimeSeconds: 0.25

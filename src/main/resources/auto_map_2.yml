@@ -8,10 +8,6 @@ logger:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
             canID: 0
-            voltagePerCurrentLinReg:
-                &voltagePerCurrent
-                bufferSize: 250
-                rSquaredThreshhold: 0.75
         - org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
             '@id': drive
             leftMaster:
@@ -62,9 +58,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 2
                             inverted: true
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 1
-                            inverted: true
+                    slaveVictors:
+                        - port: 21
+                          inverted: true
+#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+#                            port: 1
+#                            inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
@@ -94,9 +93,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 4
                             inverted: false
-                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
-                            port: 5
-                            inverted: false
+                    slaveVictors:
+                        - port: 17
+                          inverted: false
+#                        - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+#                            port: 5
+#                            inverted: false
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
@@ -642,6 +644,11 @@ autoStartupCommand:
                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                           carriage
                   mode: IN_SLOW
+            -   org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.SetHeading:
+                    '@id': resetHeading
+                    subsystem:
+                        org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                            drive
             -   org.usfirst.frc.team449.robot.commands.general.ConditionalCommandDigitalInputBased:
                     '@id': autoCommand
                     digitalInput:
@@ -722,7 +729,7 @@ autoStartupCommand:
                                                                 &tta
                                                                 '@id': turnToCube
                                                                 absoluteTolerance: 2
-                                                                kP: 1.0
+                                                                kP: 0.005
                                                                 deadband: 2
                                                                 inverted: false
                                                                 subsystem:
