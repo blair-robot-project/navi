@@ -338,7 +338,7 @@ buttons:
                                         slaveVictors:
                                             - port: 14
                                               inverted: true
-                        pistonPos: kReverse
+                        pistonPos: kForward
                         intakeMode: IN_FAST
         action: WHEN_PRESSED
     #Shootin' fast
@@ -429,7 +429,6 @@ buttons:
                         talon:
                             org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                                 elevatorTalon
-#                        onTargetTolerance: 0.1
                         pathGenerator:
                             '@id': pathGenerator
                             fwdMaxVel: 4
@@ -468,9 +467,9 @@ buttons:
                 subsystem:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
-                setpoint: 6
+                setpoint: 6.2
         action: WHEN_PRESSED
-    #Exchange
+    #Down
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
                 '@id': prepareForExchangeButton
@@ -479,13 +478,20 @@ buttons:
                         mechanismsGamepad
                 buttonNumber: 1
         command:
-            org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
-                '@id': sideswipeExchangeMode
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                        intake
-                pistonPos: kReverse
-                intakeMode: OUT_FAST
+            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+                '@id': lowerIntakeAndCarriage
+                commandList:
+                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+                            '@id': lowerIntakeA
+                            subsystem:
+                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                                    intake
+                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                            '@id': elevatorToBottom
+                            subsystem:
+                                org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+                                    elevator
+                            setpoint: 0
         action: WHEN_PRESSED
     #Manual control
     -   button:
@@ -516,7 +522,7 @@ buttons:
                     org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                         elevator
         action: WHEN_PRESSED
-    #Raise intake stuff if sensor breaks
+    #Raise intake
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
                 '@id': raiseIntakeButton
@@ -525,24 +531,15 @@ buttons:
                         mechanismsGamepad
                 buttonNumber: 5
         command:
-            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                '@id': raiseIntakeAndCarriage
-                commandList:
-                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                            '@id': holdCubeGently
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                    carriage
-                            mode: IN_SLOW
-                    -   org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
-                            '@id': liftSideswipeManual
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                    intake
-                            pistonPos: kForward
-                            intakeMode: "OFF"
+            org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
+                '@id': liftSideswipeManual
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                        intake
+                pistonPos: kReverse
+                intakeMode: "OFF"
         action: WHEN_PRESSED
-    #Put down intake stuff if sensor breaks
+    #Put down intake and spin out to avoid intaking
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
                 '@id': lowerIntakeOverrideButton
@@ -555,22 +552,13 @@ buttons:
                         axis: 2
                 triggerAt: 0.9
         command:
-            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                '@id': lowerIntakeAndCarriageManual
-                commandList:
-                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                            '@id': intakeCube
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
-                                    carriage
-                            mode: IN_FAST
-                    -   org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
-                            '@id': lowerSideswipeManual
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                    intake
-                            pistonPos: kReverse
-                            intakeMode: IN_FAST
+            org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
+                '@id': lowerSideswipeManual
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                        intake
+                pistonPos: kForward
+                intakeMode: OUT_FAST
         action: WHEN_PRESSED
     #NavX override
     -   button:
@@ -634,6 +622,43 @@ buttons:
                         drive
                 override: false
         action: WHEN_RELEASED
+    #Climb
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
+                '@id': climbButton
+                throttle:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
+                        '@id': climbTrigger
+                        stick:
+                            org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                                mechanismsGamepad
+                        axis: 3
+                triggerAt: 0.9
+        command:
+            org.usfirst.frc.team449.robot.commands.general.ConditionalCommandTimeBased:
+                '@id': climbCommandTimeBased
+                afterCommand:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOn:
+                        '@id': climbCommand
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
+                                '@id': climber
+                                velocity: 1
+                                motor:
+
+                matchTimeSecs: 30
+        action: WHEN_PRESSED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
+                forceLowGear
+        command:
+            org.usfirst.frc.team449.robot.drive.shifting.commands.OverrideAutoShift:
+                '@id': unoverrideAutoshift
+                drive:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                override: false
+        action: WHEN_RELEASED
 autoStartupCommand:
     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
         '@id': totalAutoCommand
@@ -684,7 +709,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftLLLRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeLeftLLL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -716,7 +741,7 @@ autoStartupCommand:
                                                           elevator:
                                                               org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                                                   elevator
-                                                          intakeSolenoidPos: kReverse
+                                                          intakeSolenoidPos: kForward
                                                           elevatorUpPos: 2.5
                                                           actuatedIntakeMode: IN_FAST
                                                           carriageIntakeMode: IN_FAST
@@ -797,7 +822,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftLRLRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeLeftLRL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -808,7 +833,7 @@ autoStartupCommand:
                                                                       org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                                                           elevator
                                                                   setpoint: 2
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
                                                                     '@id': raiseIntakeLeftLRL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -848,7 +873,7 @@ autoStartupCommand:
                                                           elevator:
                                                               org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                                                   elevator
-                                                          intakeSolenoidPos: kReverse
+                                                          intakeSolenoidPos: kForward
                                                           elevatorUpPos: 6
                                                           actuatedIntakeMode: IN_FAST
                                                           carriageIntakeMode: IN_FAST
@@ -911,7 +936,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftRLRRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeLeftRLR
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1005,7 +1030,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': LeftRRRRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeLeftRRR
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1093,7 +1118,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightRRRRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeRightRRR
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1169,7 +1194,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightRLRRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeRightRLR
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1180,7 +1205,7 @@ autoStartupCommand:
                                                                       org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
                                                                           elevator
                                                                   setpoint: 2
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
                                                                     '@id': raiseIntakeRLL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1256,7 +1281,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightLRLRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeRightLRL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1336,7 +1361,7 @@ autoStartupCommand:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                                         '@id': RightLLLRaiseElevatorLowerIntake
                                                         commandList:
-                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidReverse:
+                                                            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
                                                                     '@id': lowerIntakeRightLLL
                                                                     subsystem:
                                                                         org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
@@ -1410,3 +1435,5 @@ updater:
                 manuallyControlElevatorThrottle
             - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
                 lowerIntakeOverrideTrigger
+            - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
+                climbTrigger
