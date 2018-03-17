@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.SubsystemMP;
@@ -38,6 +39,8 @@ public class RunLoadedProfile<T extends Subsystem & SubsystemMP> extends Command
      */
     private boolean runningProfile;
 
+    private boolean startingFinished;
+
     /**
      * Default constructor.
      *
@@ -65,6 +68,7 @@ public class RunLoadedProfile<T extends Subsystem & SubsystemMP> extends Command
         startTime = Clock.currentTimeMillis();
         Logger.addEvent("RunLoadedProfile init", this.getClass());
         runningProfile = false;
+        startingFinished = subsystem.profileFinished();
     }
 
     /**
@@ -72,7 +76,10 @@ public class RunLoadedProfile<T extends Subsystem & SubsystemMP> extends Command
      */
     @Override
     protected void execute() {
-        if (subsystem.readyToRunProfile() && !runningProfile) {
+        if (!runningProfile && startingFinished){
+            startingFinished = subsystem.profileFinished();
+        }
+        if (subsystem.readyToRunProfile() && !runningProfile && !startingFinished) {
             subsystem.startRunningLoadedProfile();
             runningProfile = true;
         }

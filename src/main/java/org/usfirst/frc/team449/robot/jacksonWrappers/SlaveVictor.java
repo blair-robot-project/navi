@@ -2,6 +2,8 @@ package org.usfirst.frc.team449.robot.jacksonWrappers;
 
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,6 +33,19 @@ public class SlaveVictor {
                        boolean inverted) {
         victorSPX = new VictorSPX(port);
         victorSPX.setInverted(inverted);
+        victorSPX.configPeakOutputForward(1, 0);
+        victorSPX.enableVoltageCompensation(true);
+        victorSPX.configVoltageCompSaturation(12, 0);
+        victorSPX.configVoltageMeasurementFilter(32, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_1_General, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_6_Misc, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_7_CommStatus, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 100, 0);
+        victorSPX.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 100, 0);
     }
 
     /**

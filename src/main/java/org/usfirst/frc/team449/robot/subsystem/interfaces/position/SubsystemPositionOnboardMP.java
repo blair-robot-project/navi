@@ -126,7 +126,12 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
     @Override
     public boolean onTarget() {
         //Don't stop before we start the profile
-        return profileFinished() && !shouldStartProfile;
+        if (profileFinished() && !shouldStartProfile){
+            talon.holdPositionMP();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -167,9 +172,6 @@ public class SubsystemPositionOnboardMP extends Subsystem implements SubsystemPo
         if (shouldStartProfile && readyToRunProfile()) {
             startRunningLoadedProfile();
             shouldStartProfile = false;
-        }
-        if (!shouldStartProfile && profileFinished()) {
-            talon.holdPositionMP();
         }
     }
 

@@ -98,7 +98,7 @@ public class IntakeUntilConditonMet<T extends Subsystem & SubsystemIntake & Subs
     protected void interrupted() {
         //Stop the intake if this command is interrupted.
         subsystem.setMode(SubsystemIntake.IntakeMode.OFF);
-        Logger.addEvent("IntakeUntilConditonMet interrupted, stopping climb.", this.getClass());
+        Logger.addEvent("IntakeUntilConditonMet interrupted!", this.getClass());
     }
 
 }

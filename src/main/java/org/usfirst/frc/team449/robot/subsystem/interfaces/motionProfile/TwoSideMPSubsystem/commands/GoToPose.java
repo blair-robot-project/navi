@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * A command that drives the given subsystem to an absolute position.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS> extends CommandGroup implements PoseCommand {
+public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS> extends CommandGroup implements PoseCommand {
 
     /**
      * The object to get robot pose from.
@@ -60,14 +60,14 @@ public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemA
      * @param deltaTime     The time between setpoints in the profile, in seconds.
      */
     @JsonCreator
-    public GoToPosition(@NotNull @JsonProperty(required = true) T subsystem,
-                        @NotNull @JsonProperty(required = true) PathRequester pathRequester,
-                        @NotNull @JsonProperty(required = true) PoseEstimator poseEstimator,
-                        @Nullable Waypoint[] waypoints,
-                        @JsonProperty(required = true) double maxVel,
-                        @JsonProperty(required = true) double maxAccel,
-                        @JsonProperty(required = true) double maxJerk,
-                        @JsonProperty(required = true) double deltaTime) {
+    public GoToPose(@NotNull @JsonProperty(required = true) T subsystem,
+                    @NotNull @JsonProperty(required = true) PathRequester pathRequester,
+                    @NotNull @JsonProperty(required = true) PoseEstimator poseEstimator,
+                    @Nullable Waypoint[] waypoints,
+                    @JsonProperty(required = true) double maxVel,
+                    @JsonProperty(required = true) double maxAccel,
+                    @JsonProperty(required = true) double maxJerk,
+                    @JsonProperty(required = true) double deltaTime) {
         this.waypoints = waypoints;
         this.poseEstimator = poseEstimator;
         this.subsystem = subsystem;

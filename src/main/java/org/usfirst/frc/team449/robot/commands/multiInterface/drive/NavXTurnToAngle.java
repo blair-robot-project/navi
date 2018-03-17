@@ -105,6 +105,7 @@ public class NavXTurnToAngle<T extends Subsystem & DriveUnidirectional & Subsyst
      */
     @Override
     protected void initialize() {
+        Logger.addEvent("NavXTurnToAngle init.", this.getClass());
         //Set up start time
         this.startTime = Clock.currentTimeMillis();
         this.setSetpoint(clipTo180(setpoint));

@@ -739,7 +739,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         setpoint = SetValueMotionProfile.Disable.value;
         canTalon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
         //Reset the Talon
-        disable();
         clearMP();
 
         //Declare this out here to avoid garbage collection
@@ -790,7 +789,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
 
             feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
                     data.getData()[i][1], data.getData()[i][2]);
-            Logger.addEvent("VelPlusAccel: " + feedforward, this.getClass());
             point.velocity = feedforward;
 
             //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change either the profile or kA.
@@ -814,11 +812,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         if (canTalon.getMotionProfileTopLevelBufferCount() == 0) {
             bottomBufferLoader.stop();
         }
-    }
-
-    public MotionProfileStatus getMotionProfileStatus(){
-        canTalon.getMotionProfileStatus(motionProfileStatus);
-        return motionProfileStatus;
     }
 
     /**

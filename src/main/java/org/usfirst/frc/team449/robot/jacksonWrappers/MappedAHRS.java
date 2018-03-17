@@ -56,6 +56,7 @@ public class MappedAHRS implements Loggable, Updatable {
         } else {
             this.invertYaw = 1;
         }
+        setHeading(0);
     }
 
     /**
