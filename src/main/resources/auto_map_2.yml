@@ -314,7 +314,7 @@ buttons:
                                               inverted: false
                                 fastSpeed: 0.5
                                 slowSpeed: 0.25
-                        mode: IN_SLOW
+                        mode: IN_FAST
                     - org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
                         '@id': sideswipeIntakeMode
                         subsystem:
@@ -353,12 +353,12 @@ buttons:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': shootfastcommand
                 commandList:
-                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                            '@id': sideswipeout
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                    intake
-                            mode: OUT_FAST
+                    - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                        '@id': sideswipeOut
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                                intake
+                        mode: OUT_FAST
                     - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
                         '@id': shootFast
                         subsystem:
@@ -373,12 +373,12 @@ buttons:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': stopShootCommand
                 commandList:
-                    -   org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                            '@id': sideswipeoutstop
-                            subsystem:
-                                org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                                    intake
-                            mode: "OFF"
+                    - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
+                        '@id': sideswipeOutStop
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                                intake
+                        mode: "OFF"
                     - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
                         '@id': shootFastOff
                         subsystem:
@@ -409,6 +409,22 @@ buttons:
             org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
                 stopShootCommand
         action: WHEN_RELEASED
+    -   button:
+            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                '@id': driverRaiseIntakeButton
+                joystick:
+                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                        driverGamepad
+                buttonNumber: 4
+        command:
+            org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
+                '@id': liftSideswipeManual
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
+                        intake
+                pistonPos: kReverse
+                intakeMode: "OFF"
+        action: WHEN_PRESSED
     #Mechanisms player buttons
     #Elevator positioning
     #Low
@@ -421,21 +437,26 @@ buttons:
                         port: 2
                 buttonNumber: 2
         command:
-            org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
-                '@id': goToLowScale
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
-                        '@id': elevator
-                        talon:
-                            org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
-                                elevatorTalon
-                        pathGenerator:
-                            '@id': pathGenerator
-                            fwdMaxVel: 4
-                            revMaxVel: 6
-                            maxAccel: 6
-                            deltaTimeSecs: 0.05
-                setpoint: 4.5
+            org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+                '@id': switchHeightRaiseIntake
+                commandList:
+                    - org.usfirst.frc.team449.robot.subsystem.interfaces.position.commands.GoToPosition:
+                        '@id': goToSwitchHeight
+                        subsystem:
+                            org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPositionOnboardMP:
+                                '@id': elevator
+                                talon:
+                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
+                                        elevatorTalon
+                                pathGenerator:
+                                    '@id': pathGenerator
+                                    fwdMaxVel: 4
+                                    revMaxVel: 6
+                                    maxAccel: 6
+                                    deltaTimeSecs: 0.05
+                        setpoint: 2.75
+                    - org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
+                        liftSideswipeManual
         action: WHEN_PRESSED
     #Medium
     -   button:
@@ -532,12 +553,7 @@ buttons:
                 buttonNumber: 5
         command:
             org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
-                '@id': liftSideswipeManual
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuated:
-                        intake
-                pistonPos: kReverse
-                intakeMode: "OFF"
+                liftSideswipeManual
         action: WHEN_PRESSED
     #Put down intake and spin out to avoid intaking
     -   button:
