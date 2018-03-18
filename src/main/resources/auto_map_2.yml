@@ -645,19 +645,28 @@ buttons:
                                 '@id': climber
                                 velocity: 1
                                 motor:
-
+                                    org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
+                                        '@id': climberTalon
+                                        port: 7
+                                        name: "climber_talon"
+                                        reverseOutput: false
+                                        enableBrakeMode: false
+                                        enableVoltageComp: true
+                                        slaveTalons:
+                                            - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
+                                                port: 8
+                                                inverted: false
                 matchTimeSecs: 30
         action: WHEN_PRESSED
     -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.dPadButton:
-                forceLowGear
+            org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
+                climbButton
         command:
-            org.usfirst.frc.team449.robot.drive.shifting.commands.OverrideAutoShift:
-                '@id': unoverrideAutoshift
-                drive:
-                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                        drive
-                override: false
+            org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOffWithRequires:
+                '@id': stopClimb
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.BinaryMotorSimple:
+                        climber
         action: WHEN_RELEASED
 autoStartupCommand:
     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
