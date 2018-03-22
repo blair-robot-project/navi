@@ -1,21 +1,15 @@
-package org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands;
+package org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.commands;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
+import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.SubsystemIntakeTwoSides;
 
-/**
- * Sets the mode of the intake.
- */
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends InstantCommand {
-
+public class SetTwoSideIntakeMode <T extends Subsystem & SubsystemIntakeTwoSides> extends InstantCommand{
     /**
      * The subsystem to execute this command on.
      */
@@ -26,20 +20,21 @@ public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends Insta
      * The mode to set this subsystem to.
      */
     @NotNull
-    private final SubsystemIntake.IntakeMode mode;
+    private final SubsystemIntake.IntakeMode leftMode, rightMode;
 
     /**
      * Default constructor
      *
      * @param subsystem The subsystem to execute this command on.
-     * @param mode      The mode to set the intake to.
      */
     @JsonCreator
-    public SetIntakeMode(@NotNull @JsonProperty(required = true) T subsystem,
-                         @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode mode) {
+    public SetTwoSideIntakeMode(@NotNull @JsonProperty(required = true) T subsystem,
+                                @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode leftMode,
+                                @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode rightMode) {
         requires(subsystem);
         this.subsystem = subsystem;
-        this.mode = mode;
+        this.leftMode = leftMode;
+        this.rightMode = rightMode;
     }
 
     /**
@@ -47,7 +42,7 @@ public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends Insta
      */
     @Override
     protected void initialize() {
-        Logger.addEvent("SetIntakeMode init.", this.getClass());
+        Logger.addEvent("SetTwoSideIntakeMode init.", this.getClass());
     }
 
     /**
@@ -55,7 +50,8 @@ public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends Insta
      */
     @Override
     protected void execute() {
-        subsystem.setMode(mode);
+        subsystem.setLeftMode(leftMode);
+        subsystem.setRightMode(rightMode);
     }
 
     /**
@@ -73,7 +69,7 @@ public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends Insta
      */
     @Override
     protected void end() {
-        Logger.addEvent("SetIntakeMode end.", this.getClass());
+        Logger.addEvent("SetTwoSideIntakeMode end.", this.getClass());
     }
 
     /**
@@ -81,6 +77,6 @@ public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends Insta
      */
     @Override
     protected void interrupted() {
-        Logger.addEvent("SetIntakeMode Interrupted!", this.getClass());
+        Logger.addEvent("SetTwoSideIntakeMode Interrupted!", this.getClass());
     }
 }
