@@ -1,7 +1,9 @@
 package org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.commands;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +11,7 @@ import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.SubsystemIntakeTwoSides;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class SetTwoSideIntakeMode <T extends Subsystem & SubsystemIntakeTwoSides> extends InstantCommand{
     /**
      * The subsystem to execute this command on.

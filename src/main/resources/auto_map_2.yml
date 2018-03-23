@@ -321,10 +321,11 @@ buttons:
                                         '@id': intakeVictor
                                         port: 14
                                         inverted: true
+                                        brakeMode: false
                                         enableVoltageComp: true
                         pistonPos: kForward
                         intakeMode: IN_FAST
-                    - org.usfirst.frc.team449.robot.commands.multiInterface.IntakeUntilConditionMet:
+                    - org.usfirst.frc.team449.robot.commands.multiInterface.IntakeUntilConditonMet:
                         '@id': intakeWithCarriage
                         subsystem:
                             org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
@@ -419,10 +420,10 @@ buttons:
         action: WHEN_PRESSED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                placeButton
+                unjamButton
         command:
             org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                stopShootCommand
+                lowerAndIntake
         action: WHEN_RELEASED
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
