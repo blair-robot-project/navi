@@ -13,6 +13,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.SubsystemAHRS;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.SubsystemMPTwoSides;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.commands.GetPathFromJetson;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 /**
@@ -88,15 +89,12 @@ public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS>
 
         //Get the pose
         pos = poseEstimator.getPos();
+        Waypoint[] toRet = new Waypoint[waypoints.length+1];
+        toRet[0] = new Waypoint(pos[0], pos[1], subsystem.getHeadingCached());
 
-        //Subtract out current pose to get the change
-        for (Waypoint waypoint : waypoints){
-            waypoint.setX(waypoint.getX() - pos[0]);
-            waypoint.setY(waypoint.getY() - pos[1]);
-            waypoint.setThetaDegrees(waypoint.getThetaDegrees() - subsystem.getHeadingCached());
-        }
+        System.arraycopy(waypoints, 0, toRet, 1, waypoints.length);
 
-        return waypoints;
+        return toRet;
     }
 
     /**

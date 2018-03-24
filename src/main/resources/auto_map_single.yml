@@ -969,7 +969,7 @@ autoStartupCommand:
                                                                 '@id': turn2LeftRRR
                                                                 setpoint: 0
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': LeftRRR2
+                                                                '@id': LeftRRR3
                                                                 subsystem:
                                                                     org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                                                                         drive
@@ -1128,7 +1128,7 @@ autoStartupCommand:
                                 "RRR" :
                                     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         RightSwitchCommand
-                                "RRR" :
+                                "LLL" :
                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         '@id': RightRRRCommand
                                         commandList:
@@ -1136,7 +1136,7 @@ autoStartupCommand:
                                                 '@id': goToScaleRightRRR
                                                 commandSet:
                                                     - org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-                                                        '@id': crossScale
+                                                        '@id': crossScaleRightRRR
                                                         commandList:
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightRRR1
@@ -1149,17 +1149,9 @@ autoStartupCommand:
                                                                     leftForwardLong
                                                                 timeout: 10
                                                             - org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle:
-                                                                &tta
-                                                                '@id': turnToCube
-                                                                absoluteTolerance: 2
-                                                                kP: 0.005
-                                                                deadband: 2
-                                                                inverted: false
-                                                                subsystem:
-                                                                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                                                                        drive
-                                                                timeout: 2
-                                                                setpoint: -90
+                                                                <<: *tta
+                                                                '@id': turnRightRRR
+                                                                setpoint: 90
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                                 '@id': RightRRR2
                                                                 subsystem:
@@ -1175,7 +1167,7 @@ autoStartupCommand:
                                                                 '@id': turn2RightRRR
                                                                 setpoint: 0
                                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                                                                '@id': RightRRR2
+                                                                '@id': RightRRR3
                                                                 subsystem:
                                                                     org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                                                                         drive
