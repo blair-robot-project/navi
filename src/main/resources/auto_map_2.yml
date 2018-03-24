@@ -34,7 +34,7 @@ logger:
                     perGearSettings:
                         - &lowGear
                           gear: LOW
-                          motionProfilePFwd: 2.0
+                          motionProfilePFwd: 3.0
                           maxSpeed: 6.75
                           kP: 0.15
                           feedForwardComponent:
@@ -239,6 +239,8 @@ logger:
             reverseOutput: false
             reverseSensor: false
             enableBrakeMode: true
+            remoteLimitSwitchID: 1
+            revLimitSwitchNormallyOpen: true
             postEncoderGearing: 1
             #1.7626
             feetPerRotation: 0.5962
@@ -758,6 +760,11 @@ autoStartupCommand:
                     subsystem:
                         org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                             drive
+            - org.usfirst.frc.team449.robot.generalInterfaces.shiftable.commands.SwitchToLowGear:
+                '@id': autoDownshift
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
             -   org.usfirst.frc.team449.robot.commands.general.ConditionalCommandDigitalInputBased:
                     '@id': autoCommand
                     digitalInput:
@@ -810,6 +817,9 @@ autoStartupCommand:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
                                                   mode: OUT_SLOW
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootLeftLLL
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeLeftLLL
                                                 commandSet:
@@ -1037,6 +1047,9 @@ autoStartupCommand:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
                                                   mode: OUT_SLOW
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootLeftRLR
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeLeftRLR
                                                 commandSet:
@@ -1130,7 +1143,10 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootLeftRRR
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeLeftRRR
                                                 commandSet:
@@ -1177,7 +1193,7 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
                     onTrue:
                         org.usfirst.frc.team449.robot.commands.general.SelectCommandFMSMessageBased:
                             '@id': rightAutoCommand
@@ -1218,7 +1234,10 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootRightRRR
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeRightRRR
                                                 commandSet:
@@ -1257,7 +1276,7 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
                                 "RLR" :
                                     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         '@id': RightRLRCommand
@@ -1299,7 +1318,7 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
                                             - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
                                                 '@id': RightRLR2
                                                 subsystem:
@@ -1381,7 +1400,10 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootRightLRL
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeRightLRL
                                                 commandSet:
@@ -1424,7 +1446,7 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
                                 "LLL" :
                                     org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         '@id': RightLLLCommand
@@ -1461,7 +1483,10 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
+                                            - org.usfirst.frc.team449.robot.commands.general.MappedWaitCommand:
+                                                '@id': waitAfterShootRightLLL
+                                                timeout: 0.5
                                             - org.usfirst.frc.team449.robot.commands.general.ParallelCommandGroup:
                                                 '@id': goToCubeRightLLL
                                                 commandSet:
@@ -1500,7 +1525,7 @@ autoStartupCommand:
                                                   subsystem:
                                                       org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeSensored:
                                                           carriage
-                                                  mode: OUT_SLOW
+                                                  mode: OUT_FAST
 #autoStartupCommand:
 #    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
 #        '@id': autoCommand

@@ -160,6 +160,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                     @JsonProperty(required = true) boolean enableBrakeMode,
                     @Nullable Boolean fwdLimitSwitchNormallyOpen,
                     @Nullable Boolean revLimitSwitchNormallyOpen,
+                    @Nullable Integer remoteLimitSwitchID,
                     @Nullable Double fwdSoftLimit,
                     @Nullable Double revSoftLimit,
                     @Nullable Double postEncoderGearing,
@@ -245,16 +246,28 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
 
         //Only enable the limit switches if it was specified if they're normally open or closed.
         if (fwdLimitSwitchNormallyOpen != null) {
-            canTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                    fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            if (remoteLimitSwitchID != null){
+                canTalon.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX,
+                        fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
+                        remoteLimitSwitchID,0);
+            } else {
+                canTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                        fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            }
             this.fwdLimitSwitchNormallyOpen = fwdLimitSwitchNormallyOpen;
         } else {
             canTalon.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled, 0);
             this.fwdLimitSwitchNormallyOpen = true;
         }
         if (revLimitSwitchNormallyOpen != null) {
-            canTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                    revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            if (remoteLimitSwitchID != null){
+                canTalon.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX,
+                        revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
+                        remoteLimitSwitchID, 0);
+            } else {
+                canTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                        revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            }
             this.revLimitSwitchNormallyOpen = revLimitSwitchNormallyOpen;
         } else {
             canTalon.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled, 0);
