@@ -2,8 +2,13 @@
 logger:
     '@id': logger
     loopTimeMillis: 100
+    #loopTimeMillis: 20
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevAccel-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdQuasi-"
+#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevQuasi-"
     loggables:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
@@ -1541,3 +1546,20 @@ updater:
                 climbTrigger
             - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
                 intakeDownTrigger
+#autoStartupCommand:
+#    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#        '@id': autoCommand
+#        commandList:
+#            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.DriveAtSpeed:
+#                '@id': accel
+#                velocity: 1.0
+#                seconds: 3
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+##            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.VoltageRamp:
+##                '@id': voltageRamp
+##                subsystem:
+##                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+##                        drive
+##                voltsPerSecond: 3
