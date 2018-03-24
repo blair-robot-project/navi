@@ -227,9 +227,9 @@ executeProfileSequence <- function(names, leftInverted, rightInverted, wheelbase
 wheelbaseDiameter <- 2.34
 centerToBack <- (39.5/2.)/12.
 centerToSide <- (34.5/2.)/12.
-totalOut <- executeProfileSequence(names = c("SameScale","TurnToSwitch", "SameScaleToCube", "CubeToSwitchModified"),
-                                   leftInverted = c(FALSE,FALSE, FALSE,FALSE),
-                                   rightInverted = c(FALSE, TRUE, FALSE,FALSE),
+totalOut <- executeProfileSequence(names = c("SameScale"),
+                                   leftInverted = c(FALSE),
+                                   rightInverted = c(FALSE),
                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
 # totalOut <- executeProfileSequence(names = c("OtherScale", "Turn180","OtherScaleToCube", "CubeToOtherSwitch"),
