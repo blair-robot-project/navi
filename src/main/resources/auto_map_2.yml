@@ -1,13 +1,9 @@
 ---
 logger:
     '@id': logger
-    loopTimeMillis: 20
+    loopTimeMillis: 100
     eventLogFilename: "/home/lvuser/logs/eventLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearRevAccel-"
-#    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdQuasi-"
-    telemetryLogFilename: "/home/lvuser/logs/lowGearRevQuasi-"
+    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
     loggables:
         - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
             '@id': PDP
@@ -576,35 +572,18 @@ buttons:
             org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
                 liftSideswipeManual
         action: WHEN_PRESSED
-    #Put down intake and spin out to avoid intaking
+    #Spin in intake and carriage, ignoring the sensor.
     -   button:
             org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
-                '@id': lowerIntakeOverrideButton
+                '@id': sensorBrokeIntakeDownButton
                 throttle:
                     org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
-                        '@id': lowerIntakeOverrideTrigger
+                        '@id': intakeDownTrigger
                         stick:
                             org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                                 mechanismsGamepad
                         axis: 2
                 triggerAt: 0.9
-        command:
-            org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake:
-                '@id': lowerSideswipeManual
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
-                        intake
-                pistonPos: kForward
-                intakeMode: OUT_FAST
-        action: WHEN_PRESSED
-    #Spin in intake and carriage, ignoring the sensor.
-    -   button:
-            org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
-                '@id': sensorBrokeIntakeDownButton
-                joystick:
-                    org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                        mechanismsGamepad
-                buttonNumber: 0
         command:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': sensorBrokeLowerAndIntake
@@ -630,7 +609,7 @@ buttons:
                 joystick:
                     org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
                         mechanismsGamepad
-                buttonNumber: 1
+                buttonNumber: 6
         command:
             org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                 '@id': allOff
@@ -737,9 +716,12 @@ buttons:
                                         '@id': climberTalon
                                         port: 7
                                         name: "climber_talon"
-                                        reverseOutput: false
+                                        reverseOutput: true
                                         enableBrakeMode: false
                                         enableVoltageComp: true
+#                                        slaveVictors:
+#                                            - port: 22
+#                                              inverted: false
                                         slaveTalons:
                                             - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                                                 port: 8
@@ -1556,6 +1538,6 @@ updater:
             - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
                 manuallyControlElevatorThrottle
             - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
-                lowerIntakeOverrideTrigger
-            - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
                 climbTrigger
+            - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
+                intakeDownTrigger
