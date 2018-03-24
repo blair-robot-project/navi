@@ -242,9 +242,14 @@ centerToSide <- (34.5/2.)/12.
 #                                    rightInverted = c(FALSE, TRUE, FALSE, TRUE, FALSE),
 #                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
 #                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
-totalOut <- executeProfileSequence(names = c("SameSwitch" ,"CrossFromSwitch", "Forward2","CrossBackup"),
-                                   leftInverted = c(FALSE,TRUE, FALSE,TRUE),
-                                   rightInverted = c(FALSE, TRUE, FALSE, TRUE),
+# totalOut <- executeProfileSequence(names = c("SameSwitch" ,"CrossFromSwitch", "Forward2","CrossBackup"),
+#                                    leftInverted = c(FALSE,TRUE, FALSE,TRUE),
+#                                    rightInverted = c(FALSE, TRUE, FALSE, TRUE),
+#                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
+#                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
+totalOut <- executeProfileSequence(names = c("ForwardLong" ,"Turn90", "ForwardMedium","Turn90","ForwardShort"),
+                                   leftInverted = c(FALSE,FALSE, FALSE, TRUE, FALSE),
+                                   rightInverted = c(FALSE, TRUE, FALSE, FALSE, FALSE),
                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
 print(length(totalOut[,1])*0.05)
