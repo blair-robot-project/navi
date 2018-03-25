@@ -47,7 +47,6 @@ public class MovePistonAndRunIntake<T extends Subsystem & SubsystemIntake & Subs
     public MovePistonAndRunIntake(@NotNull @JsonProperty(required = true) T subsystem,
                                   @NotNull @JsonProperty(required = true) DoubleSolenoid.Value pistonPos,
                                   @NotNull @JsonProperty(required = true) SubsystemIntake.IntakeMode intakeMode) {
-        requires(subsystem);
         this.subsystem = subsystem;
         this.pistonPos = pistonPos;
         this.intakeMode = intakeMode;
