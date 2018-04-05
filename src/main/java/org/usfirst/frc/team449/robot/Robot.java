@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
     /**
      * The name of the map to read from. Should be overriden by a subclass to change the name.
      */
-    protected String mapName = "auto_map_single.yml";
+    protected String mapName = "outreach.yml";
 
     /**
      * The object constructed directly from the yaml map.
@@ -93,7 +93,9 @@ public class Robot extends TimedRobot {
         //Read sensors
         this.robotMap.getUpdater().run();
 
-        this.robotMap.getAutoStartupCommand().cancel();
+        if (this.robotMap.getAutoStartupCommand() != null) {
+            this.robotMap.getAutoStartupCommand().cancel();
+        }
 
         //Run startup command if we start in teleop.
         if (!enabled) {
