@@ -800,8 +800,13 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             // Set all the fields of the profile point
             point.position = feetToEncoder(startPosition + (data.getData()[i][0] * (data.isInverted() ? -1 : 1)));
 
-            feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
-                    data.getData()[i][1], data.getData()[i][2]);
+            if (data.isInverted()){
+                feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(-data.getData()[i][0],
+                        -data.getData()[i][1], -data.getData()[i][2]);
+            } else {
+                feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
+                        data.getData()[i][1], data.getData()[i][2]);
+            }
             point.velocity = feedforward;
 
             //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change either the profile or kA.

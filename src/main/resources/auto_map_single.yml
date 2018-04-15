@@ -1,10 +1,11 @@
 ---
 logger:
     '@id': logger
-    loopTimeMillis: 100
-    #loopTimeMillis: 20
+#    loopTimeMillis: 100
+    loopTimeMillis: 20
     eventLogFilename: "/home/lvuser/logs/eventLog-"
-    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
+    telemetryLogFilename: "/home/lvuser/logs/angularVelLog-"
+#    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdAccel-"
 #    telemetryLogFilename: "/home/lvuser/logs/lowGearRevAccel-"
 #    telemetryLogFilename: "/home/lvuser/logs/lowGearFwdQuasi-"
@@ -34,7 +35,7 @@ logger:
                     perGearSettings:
                         - &lowGear
                           gear: LOW
-                          motionProfilePFwd: 3.0
+                          motionProfilePFwd: 0.5
                           maxSpeed: 6.75
                           kP: 0.15
                           feedForwardComponent:
@@ -1236,31 +1237,36 @@ autoStartupCommand:
                                 "RLR" :
                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         RightRRRCommand
-#autoStartupCommand:
-#    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-#        '@id': autoCommand
-#        commandList:
-#            - org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.SetHeading:
-#                '@id': resetHeading
-#                subsystem:
-#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-#                        drive
-#            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-#                '@id': calibrateProfile
-#                subsystem:
-#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-#                        drive
-#                left:
-#                    '@id': leftForward9
-#                    filename: "/home/lvuser/449_resources/naviLeftForward9Profile.csv"
-#                    inverted: false
-#                    resetPosition: true
-#                right:
-#                    '@id': rightForward9
-#                    filename: "/home/lvuser/449_resources/naviRightForward9Profile.csv"
-#                    inverted: true
-#                    resetPosition: true
-#                timeout: 10
+autoStartupCommand:
+    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+        '@id': autoCommand
+        commandList:
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.SetHeading:
+                '@id': resetHeading
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+                '@id': lowerIntakeAuto
+                subsystem:
+                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
+                        intake
+            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+                '@id': calibrateProfile
+                subsystem:
+                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+                        drive
+                left:
+                    '@id': leftForward9
+                    filename: "/home/lvuser/449_resources/naviLeftForward9Profile.csv"
+                    inverted: false
+                    resetPosition: true
+                right:
+                    '@id': rightForward9
+                    filename: "/home/lvuser/449_resources/naviRightForward9Profile.csv"
+                    inverted: true
+                    resetPosition: true
+                timeout: 10
 updater:
     org.usfirst.frc.team449.robot.other.Updater:
         '@id': updater
@@ -1285,6 +1291,11 @@ updater:
 #    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
 #        '@id': autoCommand
 #        commandList:
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+#                '@id': lowerIntakeAuto
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
+#                        intake
 #            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.DriveAtSpeed:
 #                '@id': accel
 #                velocity: 1.0
@@ -1292,9 +1303,10 @@ updater:
 #                subsystem:
 #                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
 #                        drive
-##            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.VoltageRamp:
-##                '@id': voltageRamp
-##                subsystem:
-##                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-##                        drive
-##                voltsPerSecond: 3
+#            - org.usfirst.frc.team449.robot.drive.unidirectional.commands.VoltageRamp:
+#                '@id': voltageRamp
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#                voltsPerSecond: .5
+#                spin: true
