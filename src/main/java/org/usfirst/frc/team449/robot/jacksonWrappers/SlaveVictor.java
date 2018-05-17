@@ -34,6 +34,7 @@ public class SlaveVictor {
         victorSPX = new VictorSPX(port);
         victorSPX.setInverted(inverted);
         victorSPX.configPeakOutputForward(1, 0);
+        victorSPX.configPeakOutputReverse(-1, 0);
         victorSPX.enableVoltageCompensation(true);
         victorSPX.configVoltageCompSaturation(12, 0);
         victorSPX.configVoltageMeasurementFilter(32, 0);

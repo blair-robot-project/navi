@@ -29,9 +29,10 @@ logger:
                     perGearSettings:
                         - &lowGear
                           gear: LOW
+#                          fwdPeakOutputVoltage: 6
                           motionProfilePFwd: 0.5
-                          maxSpeed: 7.5
-                          kP: 0.15
+                          maxSpeed: 4.0
+                          kP: 1.0
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 1.341715
@@ -42,8 +43,8 @@ logger:
                                 interceptVoltageRev: 0.662020
                         - &highGear
                           gear: HIGH
-                          maxSpeed: 17
-                          kP: 0.3
+                          maxSpeed: 4.0
+#                          kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 0.581216
@@ -56,21 +57,22 @@ logger:
                     updaterProcessPeriodSecs: 0.005
                     statusFrameRatesMillis: !!map
                         Status_4_AinTempVbat : 15
-                    slaveVictors:
-                        - port: 2
-                          inverted: true
-                        - port: 3
-                          inverted: true
+#                    slaveVictors:
+#                        - port: 2
+#                          inverted: true
+#                        - port: 3
+#                          inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
                     '@id': rightMaster
                     name: right
-                    port: 4
+                    port: 7
                     reverseOutput: false
                     reverseSensor: false
                     perGearSettings:
                         - <<: *lowGear
+                          kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 1.338784
@@ -111,8 +113,8 @@ logger:
                             rightMaster
                     piston:
                         '@id': driveShifter
-                        forward: 5
-                        reverse: 4
+                        forward: 0
+                        reverse: 1
                     startingGear: LOW
         - org.usfirst.frc.team449.robot.oi.unidirectional.OIOutreach:
             '@id': oi
@@ -139,34 +141,20 @@ logger:
                                     1 : 1
                                     3 : 2
                 fwdThrottle:
-                    org.usfirst.frc.team449.robot.oi.throttles.ThrottleSum:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
+                        <<: *overridenRotThrottle
                         '@id': overridenFwdThrottle
-                        throttles:
-                            - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                <<: *overridenRotThrottle
-                                '@id': overridenPosThrottle
-                                axis: 3
-                                inverted: false
-                                deadband: 0.05
-                                polynomial:
-                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
-                                        '@id': overridenPosPoly
-                                        powerToCoefficientMap: !!map
-                                            2 : 1
-                            - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                <<: *overridenRotThrottle
-                                '@id': overridenNegThrottle
-                                axis: 2
-                                inverted: true
-                                deadband: 0.05
-                                polynomial:
-                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
-                                        '@id': overridenNegPoly
-                                        powerToCoefficientMap: !!map
-                                            2 : 1
+                        axis: 5
+                        inverted: false
+                        deadband: 0.05
+                        polynomial:
+                            org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
+                                '@id': overridenPosPoly
+                                powerToCoefficientMap: !!map
+                                    2 : 1
                 invertDPad: false
                 dPadShift: 0.1
-                turnInPlaceRotScale: 0.3
+                turnInPlaceRotScale: 0.7
                 rescaleOutputs: true
                 scaleRotByFwdPoly:
                     org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
@@ -198,34 +186,20 @@ logger:
                                     1 : 1
                                     3 : 2
                 fwdThrottle:
-                    org.usfirst.frc.team449.robot.oi.throttles.ThrottleSum:
+                    org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
+                        <<: *rotThrottle
                         '@id': fwdThrottle
-                        throttles:
-                            - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                <<: *rotThrottle
-                                '@id': posThrottle
-                                axis: 3
-                                inverted: false
-                                deadband: 0.05
-                                polynomial:
-                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
-                                        '@id': posPoly
-                                        powerToCoefficientMap: !!map
-                                            2 : 1
-                            - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
-                                <<: *rotThrottle
-                                '@id': negThrottle
-                                axis: 2
-                                inverted: true
-                                deadband: 0.05
-                                polynomial:
-                                    org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
-                                        '@id': negPoly
-                                        powerToCoefficientMap: !!map
-                                            2 : 1
+                        axis: 5
+                        inverted: false
+                        deadband: 0.05
+                        polynomial:
+                            org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
+                                '@id': posPoly
+                                powerToCoefficientMap: !!map
+                                    2 : 1
                 invertDPad: false
                 dPadShift: 0.1
-                turnInPlaceRotScale: 0.3
+                turnInPlaceRotScale: 0.7
                 rescaleOutputs: true
                 scaleRotByFwdPoly:
                     org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polynomial:
@@ -235,12 +209,16 @@ logger:
                             0: 0.2
                             1 : 0.75
             button:
-                org.usfirst.frc.team449.robot.oi.buttons.SimpleButton:
+                org.usfirst.frc.team449.robot.oi.buttons.TriggerButton:
                     '@id': overrideButton
-                    joystick:
-                        org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
-                            driverGamepad
-                    buttonNumber: 6
+                    throttle:
+                        org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
+                            '@id': overrideThrottle
+                            axis: 3
+                            stick:
+                                org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick:
+                                    driverGamepad
+                    triggerAt: 0.5
         - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
             rotThrottle
         - org.usfirst.frc.team449.robot.oi.throttles.ThrottlePolynomial:
@@ -259,32 +237,19 @@ logger:
             rightMaster
         - org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
             navX
-        - org.usfirst.frc.team449.robot.commands.multiInterface.drive.UnidirectionalNavXDefaultDrive:
+defaultCommands:
+    - subsystem:
+        org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+            drive
+      command:
+        org.usfirst.frc.team449.robot.drive.unidirectional.commands.SimpleUnidirectionalDrive:
             '@id': defaultDriveCommand
-            kP: 0.0
-            absoluteTolerance: 0
-            deadband: 2
-            maxAngularVelToEnterLoop: 15
-            inverted: false
-            rampComponent:
-                org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.RampComponent:
-                    maxChangePerSecond: 4
-            driveStraightLoopEntryTimer:
-                '@id': driveStraightLoopEntryTimer
-                bufferTimeSeconds: 0.15
             subsystem:
                 org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
                     drive
             oi:
                 org.usfirst.frc.team449.robot.oi.unidirectional.OIOutreach:
                     oi
-defaultCommands:
-    - subsystem:
-        org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-            drive
-      command:
-        org.usfirst.frc.team449.robot.commands.multiInterface.drive.UnidirectionalNavXDefaultDrive:
-            defaultDriveCommand
 teleopStartupCommand:
     org.usfirst.frc.team449.robot.subsystem.singleImplementation.pneumatics.commands.StartCompressor:
         '@id': startCompressor
@@ -303,3 +268,5 @@ updater:
                 navX
             - org.usfirst.frc.team449.robot.jacksonWrappers.PDP:
                 PDP
+            - org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic:
+                overrideThrottle
