@@ -32,7 +32,7 @@ logger:
 #                          fwdPeakOutputVoltage: 6
                           motionProfilePFwd: 0.5
                           maxSpeed: 4.0
-                          kP: 1.0
+#                          kP: 1.0
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 1.341715
@@ -57,11 +57,11 @@ logger:
                     updaterProcessPeriodSecs: 0.005
                     statusFrameRatesMillis: !!map
                         Status_4_AinTempVbat : 15
-#                    slaveVictors:
-#                        - port: 2
-#                          inverted: true
-#                        - port: 3
-#                          inverted: true
+                    slaveVictors:
+                        - port: 2
+                          inverted: true
+                        - port: 3
+                          inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
@@ -72,7 +72,7 @@ logger:
                     reverseSensor: false
                     perGearSettings:
                         - <<: *lowGear
-                          kP: 0.3
+#                          kP: 0.3
                           feedForwardComponent:
                               org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardKaKvComponent:
                                 kVFwd: 1.338784
@@ -97,6 +97,7 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 5
                             inverted: false
+                    slaveVictors:
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
