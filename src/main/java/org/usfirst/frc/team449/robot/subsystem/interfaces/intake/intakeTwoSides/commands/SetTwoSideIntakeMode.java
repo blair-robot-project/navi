@@ -11,6 +11,9 @@ import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.SubsystemIntakeTwoSides;
 
+/**
+ * Set the intake modes of a two-sided intake to something different for each side.
+ */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class SetTwoSideIntakeMode<T extends Subsystem & SubsystemIntakeTwoSides> extends InstantCommand {
     /**

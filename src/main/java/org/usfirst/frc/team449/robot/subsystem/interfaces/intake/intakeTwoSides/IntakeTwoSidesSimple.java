@@ -11,7 +11,7 @@ import org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotor;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
 
 /**
- * A simple intake subsystem.
+ * A simple two-sided intake subsystem.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class IntakeTwoSidesSimple extends Subsystem implements SubsystemIntakeTwoSides {
