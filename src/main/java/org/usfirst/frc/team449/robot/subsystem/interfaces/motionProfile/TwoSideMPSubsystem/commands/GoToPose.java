@@ -13,7 +13,6 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.SubsystemAHRS;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.SubsystemMPTwoSides;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.commands.GetPathFromJetson;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 /**
@@ -38,7 +37,8 @@ public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS>
     @Nullable
     private Waypoint[] waypoints;
     /**
-     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is ignored.
+     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is
+     * ignored.
      */
     @Nullable
     private Supplier<Waypoint[]> waypointSupplier;
@@ -54,7 +54,7 @@ public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS>
      * @param subsystem     The subsystem to run the path gotten from the Jetson on.
      * @param pathRequester The object for interacting with the Jetson.
      * @param poseEstimator The object to get robot pose from.
-     * @param waypoints The points for the path to hit. Can be null to use setters.
+     * @param waypoints     The points for the path to hit. Can be null to use setters.
      * @param maxVel        The maximum velocity, in feet/second.
      * @param maxAccel      The maximum acceleration, in feet/(second^2)
      * @param maxJerk       The maximum jerk, in feet/(second^3)
@@ -72,7 +72,8 @@ public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS>
         this.waypoints = waypoints;
         this.poseEstimator = poseEstimator;
         this.subsystem = subsystem;
-        GetPathFromJetson getPath = new GetPathFromJetson(pathRequester, null, deltaTime, maxVel, maxAccel, maxJerk, false);
+        GetPathFromJetson getPath = new GetPathFromJetson(pathRequester, null, deltaTime, maxVel, maxAccel, maxJerk,
+                false);
         GoToPositionRelative goToPositionRelative = new GoToPositionRelative<>(getPath, subsystem);
         goToPositionRelative.setWaypoints(this::getWaypoints);
         addSequential(goToPositionRelative);
@@ -83,13 +84,13 @@ public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS>
      */
     @NotNull
     private Waypoint[] getWaypoints() {
-        if (waypointSupplier != null){
+        if (waypointSupplier != null) {
             waypoints = waypointSupplier.get();
         }
 
         //Get the pose
         pos = poseEstimator.getPos();
-        Waypoint[] toRet = new Waypoint[waypoints.length+1];
+        Waypoint[] toRet = new Waypoint[waypoints.length + 1];
         toRet[0] = new Waypoint(pos[0], pos[1], subsystem.getHeadingCached());
 
         System.arraycopy(waypoints, 0, toRet, 1, waypoints.length);

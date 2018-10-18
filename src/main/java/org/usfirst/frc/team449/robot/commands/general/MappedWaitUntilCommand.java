@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.WaitUntilCommand;
  * Waits until a certain in-game time.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class MappedWaitUntilCommand extends WaitUntilCommand{
+public class MappedWaitUntilCommand extends WaitUntilCommand {
 
     /**
      * Default constructor.

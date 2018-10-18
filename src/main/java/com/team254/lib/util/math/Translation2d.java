@@ -11,6 +11,7 @@ public class Translation2d implements Interpolable<Translation2d> {
     protected static final Translation2d kIdentity = new Translation2d();
     protected double x_;
     protected double y_;
+
     public Translation2d() {
         x_ = 0;
         y_ = 0;

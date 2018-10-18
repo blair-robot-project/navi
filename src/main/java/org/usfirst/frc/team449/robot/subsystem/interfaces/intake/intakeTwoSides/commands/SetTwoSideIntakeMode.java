@@ -12,7 +12,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.SubsystemIntakeTwoSides;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class SetTwoSideIntakeMode <T extends Subsystem & SubsystemIntakeTwoSides> extends InstantCommand{
+public class SetTwoSideIntakeMode<T extends Subsystem & SubsystemIntakeTwoSides> extends InstantCommand {
     /**
      * The subsystem to execute this command on.
      */
@@ -29,6 +29,8 @@ public class SetTwoSideIntakeMode <T extends Subsystem & SubsystemIntakeTwoSides
      * Default constructor
      *
      * @param subsystem The subsystem to execute this command on.
+     * @param leftMode  The mode for the left side of the intake to run at.
+     * @param rightMode The mode for the right side of the intake to run at.
      */
     @JsonCreator
     public SetTwoSideIntakeMode(@NotNull @JsonProperty(required = true) T subsystem,

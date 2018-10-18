@@ -76,7 +76,8 @@ public class DriveStraightUntilConditionMet<T extends Subsystem & DriveUnidirect
                                           @NotNull @JsonProperty(required = true) T drive,
                                           @NotNull @JsonProperty(required = true) SubsystemConditional subsystemConditional,
                                           @JsonProperty(required = true) double driveVelocity) {
-        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, drive, kP, kI, kD);
+        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted,
+                drive, kP, kI, kD);
         this.drive = drive;
         this.subsystemConditional = subsystemConditional;
         this.driveVelocity = driveVelocity;

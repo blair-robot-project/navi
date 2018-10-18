@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.SubsystemMP;
@@ -76,7 +75,7 @@ public class RunLoadedProfile<T extends Subsystem & SubsystemMP> extends Command
      */
     @Override
     protected void execute() {
-        if (!runningProfile && startingFinished){
+        if (!runningProfile && startingFinished) {
             startingFinished = subsystem.profileFinished();
         }
         if (subsystem.readyToRunProfile() && !runningProfile && !startingFinished) {

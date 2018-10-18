@@ -13,7 +13,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.SubsystemAHRS;
  * Set the heading of the AHRS.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class SetHeading extends InstantCommand{
+public class SetHeading extends InstantCommand {
 
     /**
      * The subsystem to execute this command on.
@@ -29,12 +29,12 @@ public class SetHeading extends InstantCommand{
     /**
      * Default constructor.
      *
-     * @param subsystem The subsystem to execute this command on.
+     * @param subsystem  The subsystem to execute this command on.
      * @param newHeading The heading to set, in degrees. Defaults to 0.
      */
     @JsonCreator
     public SetHeading(@NotNull @JsonProperty(required = true) SubsystemAHRS subsystem,
-                      double newHeading){
+                      double newHeading) {
         this.subsystem = subsystem;
         this.newHeading = newHeading;
     }
@@ -43,7 +43,7 @@ public class SetHeading extends InstantCommand{
      * Log on init.
      */
     @Override
-    public void initialize(){
+    public void initialize() {
         Logger.addEvent("SetHeading init.", this.getClass());
     }
 
@@ -51,7 +51,7 @@ public class SetHeading extends InstantCommand{
      * Set the heading.
      */
     @Override
-    public void execute(){
+    public void execute() {
         subsystem.setHeading(newHeading);
     }
 
@@ -59,7 +59,7 @@ public class SetHeading extends InstantCommand{
      * Log on exit.
      */
     @Override
-    public void end(){
+    public void end() {
         Logger.addEvent("SetHeading end.", this.getClass());
     }
 }

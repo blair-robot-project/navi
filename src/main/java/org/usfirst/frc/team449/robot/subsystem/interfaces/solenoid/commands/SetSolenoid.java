@@ -36,7 +36,7 @@ public class SetSolenoid extends InstantCommand {
      */
     @JsonCreator
     public SetSolenoid(@NotNull @JsonProperty(required = true) SubsystemSolenoid subsystem,
-                       @NotNull @JsonProperty(required = true)DoubleSolenoid.Value pistonPos) {
+                       @NotNull @JsonProperty(required = true) DoubleSolenoid.Value pistonPos) {
         this.subsystem = subsystem;
         this.pistonPos = pistonPos;
     }

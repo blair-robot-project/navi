@@ -14,7 +14,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake
  * Sets the mode of the intake.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class SetIntakeMode <T extends Subsystem & SubsystemIntake> extends InstantCommand {
+public class SetIntakeMode<T extends Subsystem & SubsystemIntake> extends InstantCommand {
 
     /**
      * The subsystem to execute this command on.

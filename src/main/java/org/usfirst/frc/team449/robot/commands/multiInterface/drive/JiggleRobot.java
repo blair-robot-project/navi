@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngleRelative;
 import org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectional;
 import org.usfirst.frc.team449.robot.other.BufferTimer;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.SubsystemAHRS;
@@ -48,7 +47,9 @@ public class JiggleRobot<T extends Subsystem & DriveUnidirectional & SubsystemAH
                        int kI,
                        int kD,
                        @NotNull @JsonProperty(required = true) T subsystem) {
-        addSequential(new NavXTurnToAngleRelative<>(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP, kI, kD, 10, subsystem, 3));
-        addSequential(new NavXTurnToAngleRelative<>(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP, kI, kD, -10, subsystem, 3));
+        addSequential(new NavXTurnToAngleRelative<>(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput,
+                loopTimeMillis, deadband, inverted, kP, kI, kD, 10, subsystem, 3));
+        addSequential(new NavXTurnToAngleRelative<>(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput,
+                loopTimeMillis, deadband, inverted, kP, kI, kD, -10, subsystem, 3));
     }
 }

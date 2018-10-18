@@ -16,6 +16,7 @@ public class Rotation2d implements Interpolable<Rotation2d> {
     protected static final double kEpsilon = 1E-9;
     protected double cos_angle_;
     protected double sin_angle_;
+
     public Rotation2d() {
         this(1, 0, false);
     }

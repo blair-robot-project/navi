@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * A conditional command that picks which command to run based on match time.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class ConditionalCommandTimeBased extends ConditionalCommand{
+public class ConditionalCommandTimeBased extends ConditionalCommand {
 
     /**
      * The time when which command to run changes.
@@ -23,9 +23,10 @@ public class ConditionalCommandTimeBased extends ConditionalCommand{
     /**
      * Default constructor.
      *
-     * @param beforeCommand  The Command to execute before the given time. Can be null to not run a command before.
-     * @param afterCommand The Command to execute after the given time. Can be null to not run a command after.
-     * @param matchTimeSecs The time, in seconds until the end of the current period, when which command to run changes.
+     * @param beforeCommand The Command to execute before the given time. Can be null to not run a command before.
+     * @param afterCommand  The Command to execute after the given time. Can be null to not run a command after.
+     * @param matchTimeSecs The time, in seconds until the end of the current period, when which command to run
+     *                      changes.
      */
     @JsonCreator
     public ConditionalCommandTimeBased(@Nullable Command beforeCommand,

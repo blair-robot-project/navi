@@ -3,7 +3,6 @@ package org.usfirst.frc.team449.robot.jacksonWrappers;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,8 +51,8 @@ public class SlaveVictor {
     /**
      * Set this Victor to follow another CAN device.
      *
-     * @param toFollow  The motor controller to follow.
-     * @param brakeMode Whether this Talon should be in brake mode or coast mode.
+     * @param toFollow           The motor controller to follow.
+     * @param brakeMode          Whether this Talon should be in brake mode or coast mode.
      * @param voltageCompSamples The number of voltage compensation samples to use, or null to not compensate voltage.
      */
     public void setMaster(@NotNull IMotorController toFollow, boolean brakeMode, @Nullable Integer voltageCompSamples) {
@@ -61,7 +60,7 @@ public class SlaveVictor {
         victorSPX.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
 
         //Voltage comp might not follow master either
-        if (voltageCompSamples != null){
+        if (voltageCompSamples != null) {
             victorSPX.enableVoltageCompensation(true);
             victorSPX.configVoltageCompSaturation(12, 0);
             victorSPX.configVoltageMeasurementFilter(voltageCompSamples, 0);

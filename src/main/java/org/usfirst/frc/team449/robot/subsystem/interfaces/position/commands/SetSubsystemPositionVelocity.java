@@ -34,7 +34,7 @@ public class SetSubsystemPositionVelocity extends InstantCommand {
      */
     @JsonCreator
     public SetSubsystemPositionVelocity(@NotNull @JsonProperty(required = true) SubsystemPosition subsystem,
-                          @JsonProperty(required = true) double setpoint) {
+                                        @JsonProperty(required = true) double setpoint) {
         this.subsystem = subsystem;
         this.setpoint = setpoint;
     }

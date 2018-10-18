@@ -16,7 +16,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetInt
  * runs feeder.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class FireShooter <T extends Subsystem & SubsystemIntake> extends CommandGroup {
+public class FireShooter<T extends Subsystem & SubsystemIntake> extends CommandGroup {
 
     /**
      * Constructs a FireShooter command group

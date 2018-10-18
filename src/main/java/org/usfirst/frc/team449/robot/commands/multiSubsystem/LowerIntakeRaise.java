@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.commands.multiInterface.IntakeUntilConditonMet;
-import org.usfirst.frc.team449.robot.commands.multiInterface.MovePistonAndRunIntake;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.conditional.SubsystemConditional;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode;
@@ -42,6 +41,7 @@ public class LowerIntakeRaise<T extends Subsystem & SubsystemIntake & SubsystemS
      * @param carriageIntakeMode The mode for the carriage intake to be in to intake game pieces.
      * @param carriageHoldMode   The mode for the carriage intake to be in to hold game pieces after intaking them.
      *                           Defaults to off.
+     * @param raiseIntake        Whether to raise the intake after the condition is met. Defaults to false.
      */
     @JsonCreator
     public LowerIntakeRaise(@NotNull @JsonProperty(required = true) T actuatedIntake,
@@ -62,9 +62,10 @@ public class LowerIntakeRaise<T extends Subsystem & SubsystemIntake & SubsystemS
         addSequential(new SetIntakeMode(actuatedIntake, SubsystemIntake.IntakeMode.OFF));
         addSequential(new GoToPosition<>(elevator, elevatorUpPos));
         //Retract the intake by setting the piston to the opposite
-        if (raiseIntake != null && raiseIntake){
-        addSequential(new SetSolenoid(actuatedIntake,
-                intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward));
+        if (raiseIntake != null && raiseIntake) {
+            addSequential(new SetSolenoid(actuatedIntake,
+                    intakeSolenoidPos == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse :
+                            DoubleSolenoid.Value.kForward));
         }
     }
 

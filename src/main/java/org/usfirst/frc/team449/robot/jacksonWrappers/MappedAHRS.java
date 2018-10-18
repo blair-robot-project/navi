@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -81,7 +80,7 @@ public class MappedAHRS implements Loggable, Updatable {
      * @return The heading, in degrees from [-180, 180]
      */
     public double getHeading() {
-        toRet = invertYaw*ahrs.getFusedHeading() - offsetAngle;
+        toRet = invertYaw * ahrs.getFusedHeading() - offsetAngle;
         while (toRet > 180) {
             toRet -= 360;
         }

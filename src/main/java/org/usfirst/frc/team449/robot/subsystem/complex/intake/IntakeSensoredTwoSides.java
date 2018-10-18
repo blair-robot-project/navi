@@ -10,7 +10,8 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.conditional.SubsystemC
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.IntakeTwoSidesSimple;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.intakeTwoSides.SubsystemIntakeTwoSides;
 
-public class IntakeSensoredTwoSides extends IntakeTwoSidesSimple implements SubsystemIntakeTwoSides, SubsystemConditional {
+public class IntakeSensoredTwoSides extends IntakeTwoSidesSimple implements SubsystemIntakeTwoSides,
+        SubsystemConditional {
 
     /**
      * The sensor for detecting if there's something in the intake.
@@ -25,9 +26,11 @@ public class IntakeSensoredTwoSides extends IntakeTwoSidesSimple implements Subs
     /**
      * Default constructor.
      *
-     * @param sensor    The sensor for detecting if there's something in the intake.
-     * @param fastSpeed The speed to run the motor at going fast.
-     * @param slowSpeed The speed to run the motor at going slow.
+     * @param sensor     The sensor for detecting if there's something in the intake.
+     * @param leftMotor  The left motor that this subsystem controls.
+     * @param rightMotor The left motor that this subsystem controls.
+     * @param fastSpeed  The speed to run the motor at going fast.
+     * @param slowSpeed  The speed to run the motor at going slow.
      */
     @JsonCreator
     public IntakeSensoredTwoSides(@NotNull @JsonProperty(required = true) MappedDigitalInput sensor,
@@ -35,7 +38,7 @@ public class IntakeSensoredTwoSides extends IntakeTwoSidesSimple implements Subs
                                   @NotNull @JsonProperty(required = true) SimpleMotor rightMotor,
                                   @JsonProperty(required = true) double fastSpeed,
                                   @JsonProperty(required = true) double slowSpeed) {
-        super(leftMotor,rightMotor, slowSpeed, fastSpeed, -slowSpeed, -fastSpeed);
+        super(leftMotor, rightMotor, slowSpeed, fastSpeed, -slowSpeed, -fastSpeed);
         this.sensor = sensor;
     }
 

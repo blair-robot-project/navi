@@ -64,7 +64,7 @@ public class PathRequester {
     public void requestPath(Waypoint[] waypoints, double deltaTime, double maxVel, double maxAccel, double maxJerk) {
         //Send the request
         pathRequest = PathRequestOuterClass.PathRequest.newBuilder();
-        for (Waypoint waypoint : waypoints){
+        for (Waypoint waypoint : waypoints) {
             pathRequest.addX(waypoint.getX());
             pathRequest.addY(waypoint.getY());
             pathRequest.addTheta(waypoint.getThetaRadians());

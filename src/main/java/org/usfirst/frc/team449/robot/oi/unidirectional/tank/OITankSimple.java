@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.oi.throttles.Throttle;
-import org.usfirst.frc.team449.robot.oi.unidirectional.tank.OITank;
 
 /**
  * A simple tank drive, where each joystick controls a side of the robot.

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.filters.LinearDigitalFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick;
-import org.usfirst.frc.team449.robot.oi.throttles.ThrottleBasic;
 
 /**
  * A throttle with a deadband and smoothing.
@@ -48,7 +47,8 @@ public class ThrottleDeadbanded extends ThrottleBasic {
                               boolean inverted) {
         super(stick, axis, inverted);
         this.deadband = deadband;
-        this.filter = LinearDigitalFilter.singlePoleIIR(this, smoothingTimeSecs != null ? smoothingTimeSecs : 0.02, 0.02);
+        this.filter = LinearDigitalFilter.singlePoleIIR(this, smoothingTimeSecs != null ? smoothingTimeSecs : 0.02,
+                0.02);
     }
 
     /**

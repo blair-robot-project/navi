@@ -44,14 +44,16 @@ public class IntakeTwoSidesSimple extends Subsystem implements SubsystemIntakeTw
     /**
      * Default constructor
      *
-     * @param inSlowVel  The velocity for the motor to go at for the IN_SLOW {@link IntakeMode}, on [-1,
-     *                   1]. Can be null to indicate that this intake doesn't have/use IN_SLOW.
-     * @param inFastVel  The velocity for the motor to go at for the IN_FAST {@link IntakeMode}, on [-1,
-     *                   1]. Can be null to indicate that this intake doesn't have/use IN_FAST.
-     * @param outSlowVel The velocity for the motor to go at for the OUT_SLOW {@link IntakeMode}, on
-     *                   [-1, 1]. Can be null to indicate that this intake doesn't have/use OUT_SLOW.
-     * @param outFastVel The velocity for the motor to go at for the OUT_FAST {@link IntakeMode}, on
-     *                   [-1, 1]. Can be null to indicate that this intake doesn't have/use OUT_FAST.
+     * @param leftMotor  The left motor that this subsystem controls.
+     * @param rightMotor The left motor that this subsystem controls.
+     * @param inSlowVel  The velocity for the motor to go at for the IN_SLOW {@link IntakeMode}, on [-1, 1]. Can be null
+     *                   to indicate that this intake doesn't have/use IN_SLOW.
+     * @param inFastVel  The velocity for the motor to go at for the IN_FAST {@link IntakeMode}, on [-1, 1]. Can be null
+     *                   to indicate that this intake doesn't have/use IN_FAST.
+     * @param outSlowVel The velocity for the motor to go at for the OUT_SLOW {@link IntakeMode}, on [-1, 1]. Can be
+     *                   null to indicate that this intake doesn't have/use OUT_SLOW.
+     * @param outFastVel The velocity for the motor to go at for the OUT_FAST {@link IntakeMode}, on [-1, 1]. Can be
+     *                   null to indicate that this intake doesn't have/use OUT_FAST.
      */
     @JsonCreator
     public IntakeTwoSidesSimple(@JsonProperty(required = true) @NotNull SimpleMotor leftMotor,
@@ -88,78 +90,58 @@ public class IntakeTwoSidesSimple extends Subsystem implements SubsystemIntakeTw
         return mode;
     }
 
+    /**
+     * @param mode The mode to switch the left side of the intake to.
+     */
     @Override
     public void setLeftMode(@NotNull SubsystemIntake.IntakeMode mode) {
-        switch (mode) {
-            case OFF:
-                leftMotor.setVelocity(0);
-                leftMotor.disable();
-                this.mode = IntakeMode.OFF;
-                break;
-            case IN_FAST:
-                if (inFastVel != null) {
-                    leftMotor.enable();
-                    leftMotor.setVelocity(inFastVel);
-                    this.mode = IntakeMode.IN_FAST;
-                }
-                break;
-            case IN_SLOW:
-                if (inSlowVel != null) {
-                    leftMotor.enable();
-                    leftMotor.setVelocity(inSlowVel);
-                    this.mode = IntakeMode.IN_SLOW;
-                }
-                break;
-            case OUT_FAST:
-                if (outFastVel != null) {
-                    leftMotor.enable();
-                    leftMotor.setVelocity(outFastVel);
-                    this.mode = IntakeMode.OUT_FAST;
-                }
-                break;
-            case OUT_SLOW:
-                if (outSlowVel != null) {
-                    leftMotor.enable();
-                    leftMotor.setVelocity(outSlowVel);
-                    this.mode = IntakeMode.OUT_SLOW;
-                }
-                break;
-        }
+        setMode(mode, leftMotor);
     }
 
+    /**
+     * @param mode The mode to switch the right side of the intake to.
+     */
     @Override
     public void setRightMode(@NotNull SubsystemIntake.IntakeMode mode) {
+        setMode(mode, rightMotor);
+    }
+
+    /**
+     * @param mode
+     * @param motor
+     */
+    private void setMode(@NotNull IntakeMode mode, @NotNull SimpleMotor motor) {
         switch (mode) {
             case OFF:
-                rightMotor.setVelocity(0);
-                rightMotor.disable();
+                motor.setVelocity(0);
+                motor.disable();
                 this.mode = IntakeMode.OFF;
                 break;
             case IN_FAST:
                 if (inFastVel != null) {
-                    rightMotor.enable();
-                    rightMotor.setVelocity(inFastVel);
+                    motor.enable();
+                    motor.setVelocity(inFastVel);
                     this.mode = IntakeMode.IN_FAST;
                 }
                 break;
             case IN_SLOW:
                 if (inSlowVel != null) {
-                    rightMotor.enable();
-                    rightMotor.setVelocity(inSlowVel);
+                    motor.enable();
+                    motor.setVelocity(inSlowVel);
                     this.mode = IntakeMode.IN_SLOW;
                 }
                 break;
             case OUT_FAST:
                 if (outFastVel != null) {
-                    rightMotor.enable();
-                    rightMotor.setVelocity(outFastVel);
+                    motor.enable();
+                    motor.setVelocity(outFastVel);
                     this.mode = IntakeMode.OUT_FAST;
                 }
                 break;
             case OUT_SLOW:
                 if (outSlowVel != null) {
-                    rightMotor.enable();
-                    rightMotor.setVelocity(outSlowVel);
+                    motor.enable();
+                    motor.setVelocity(outSlowVel);
                     this.mode = IntakeMode.OUT_SLOW;
                 }
                 break;

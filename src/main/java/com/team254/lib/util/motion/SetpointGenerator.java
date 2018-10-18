@@ -15,6 +15,7 @@ public class SetpointGenerator {
     protected MotionProfile mProfile = null;
     protected MotionProfileGoal mGoal = null;
     protected MotionProfileConstraints mConstraints = null;
+
     public SetpointGenerator() {
     }
 

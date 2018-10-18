@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * Require a subsystem, stopping the default command until another command is run.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class RequireSubsystem extends Command{
+public class RequireSubsystem extends Command {
 
     /**
      * Default constructor.
@@ -18,7 +18,7 @@ public class RequireSubsystem extends Command{
      * @param subsystem The subsystem to require.
      */
     @JsonCreator
-    public RequireSubsystem(Subsystem subsystem){
+    public RequireSubsystem(Subsystem subsystem) {
         requires(subsystem);
     }
 

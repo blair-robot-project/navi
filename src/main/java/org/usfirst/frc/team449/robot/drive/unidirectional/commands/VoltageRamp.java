@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectional;
 import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
@@ -28,28 +27,25 @@ public class VoltageRamp<T extends Subsystem & DriveUnidirectional> extends Comm
      * The number of percentage points to increase motor output by per millisecond.
      */
     private final double percentPerMillis;
-
+    /**
+     * Whether to spin in place or drive straight.
+     */
+    private final boolean spin;
     /**
      * The last time execute() was run.
      */
     private long lastTime;
-
     /**
      * The output to give to the motors.
      */
     private double output;
 
     /**
-     * Whether to spin in place or drive straight.
-     */
-    private final boolean spin;
-
-    /**
      * Default constructor
      *
      * @param subsystem      The subsystem to execute this command on
      * @param voltsPerSecond How many volts to increase the output by per second.
-     * @param spin Whether to spin in place or drive straight. Defaults to false.
+     * @param spin           Whether to spin in place or drive straight. Defaults to false.
      */
     @JsonCreator
     public VoltageRamp(@NotNull @JsonProperty(required = true) T subsystem,
@@ -77,7 +73,7 @@ public class VoltageRamp<T extends Subsystem & DriveUnidirectional> extends Comm
     @Override
     protected void execute() {
         output += percentPerMillis * (Clock.currentTimeMillis() - lastTime);
-        subsystem.setOutput(output, (spin ? -1 : 1) *output);
+        subsystem.setOutput(output, (spin ? -1 : 1) * output);
         lastTime = Clock.currentTimeMillis();
     }
 

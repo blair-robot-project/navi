@@ -60,19 +60,20 @@ public class SlaveTalon implements Loggable {
     /**
      * Set this Talon to follow another CAN device.
      *
-     * @param port            The CAN ID of the device to follow.
-     * @param brakeMode       Whether this Talon should be in brake mode or coast mode.
-     * @param currentLimit    The current limit for this Talon. Can be null for no current limit.
+     * @param port               The CAN ID of the device to follow.
+     * @param brakeMode          Whether this Talon should be in brake mode or coast mode.
+     * @param currentLimit       The current limit for this Talon. Can be null for no current limit.
      * @param voltageCompSamples The number of voltage compensation samples to use, or null to not compensate voltage.
      */
-    public void setMaster(int port, boolean brakeMode, @Nullable Integer currentLimit, @Nullable Integer voltageCompSamples) {
+    public void setMaster(int port, boolean brakeMode, @Nullable Integer currentLimit,
+                          @Nullable Integer voltageCompSamples) {
         //Brake mode doesn't automatically follow master
         this.talonSRX.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
 
         //Current limiting might not automatically follow master, set it just to be safe
         if (currentLimit != null) {
             talonSRX.configContinuousCurrentLimit(currentLimit, 0);
-            talonSRX.configPeakCurrentDuration(0,0);
+            talonSRX.configPeakCurrentDuration(0, 0);
             talonSRX.configPeakCurrentLimit(0, 0); // No duration
             talonSRX.enableCurrentLimit(true);
         } else {
@@ -81,7 +82,7 @@ public class SlaveTalon implements Loggable {
         }
 
         //Voltage comp might not follow master either
-        if (voltageCompSamples != null){
+        if (voltageCompSamples != null) {
             talonSRX.enableVoltageCompensation(true);
             talonSRX.configVoltageCompSaturation(12, 0);
             talonSRX.configVoltageMeasurementFilter(voltageCompSamples, 0);

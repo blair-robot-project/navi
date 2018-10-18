@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * Loads the given profile into the subsystem, but doesn't run it.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class LoadProfile <T extends Subsystem & SubsystemMP> extends InstantCommand {
+public class LoadProfile<T extends Subsystem & SubsystemMP> extends InstantCommand {
 
     /**
      * The subsystem to execute this command on.

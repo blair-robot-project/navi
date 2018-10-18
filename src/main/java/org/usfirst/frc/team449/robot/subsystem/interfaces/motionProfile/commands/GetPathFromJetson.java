@@ -53,7 +53,8 @@ public class GetPathFromJetson extends Command implements PoseCommand {
     @Nullable
     private Waypoint[] waypoints;
     /**
-     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is ignored.
+     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is
+     * ignored.
      */
     @Nullable
     private Supplier<Waypoint[]> waypointSupplier;
@@ -67,7 +68,7 @@ public class GetPathFromJetson extends Command implements PoseCommand {
      * Default constructor.
      *
      * @param pathRequester The object for interacting with the Jetson.
-     * @param waypoints The points for the path to hit. Can be null to use setters.
+     * @param waypoints     The points for the path to hit. Can be null to use setters.
      * @param deltaTime     The time between setpoints in the profile, in seconds.
      * @param maxVel        The maximum velocity, in feet/second.
      * @param maxAccel      The maximum acceleration, in feet/(second^2)
@@ -98,14 +99,14 @@ public class GetPathFromJetson extends Command implements PoseCommand {
     protected void initialize() {
         Logger.addEvent("GetPathFromJetson init", this.getClass());
         //Check if we're using the supplier or the parameter
-        if (waypointSupplier != null){
+        if (waypointSupplier != null) {
             waypoints = waypointSupplier.get();
         }
 
         //Check inversion
         inverted = waypoints[0].getX() < 0;
-        if (inverted){
-            for (Waypoint waypoint : waypoints){
+        if (inverted) {
+            for (Waypoint waypoint : waypoints) {
                 waypoint.setX(-waypoint.getX());
                 waypoint.setThetaDegrees(-waypoint.getThetaDegrees());
             }
