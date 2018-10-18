@@ -1,8 +1,8 @@
 ---
 logger:
     '@id': logger
-#    loopTimeMillis: 100
-    loopTimeMillis: 20
+    loopTimeMillis: 100
+#    loopTimeMillis: 20
     eventLogFilename: "/home/lvuser/logs/eventLog-"
     telemetryLogFilename: "/home/lvuser/logs/angularVelLog-"
 #    telemetryLogFilename: "/home/lvuser/logs/telemetryLog-"
@@ -64,12 +64,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 2
                             inverted: true
-#                    slaveVictors:
-#                        - port: 21
-#                          inverted: true
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 1
                             inverted: true
+#                    slaveVictors:
+#                        - port: 21
+#                          inverted: true
             rightMaster:
                 org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
                     <<: *leftMaster
@@ -99,12 +99,12 @@ logger:
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 4
                             inverted: false
-#                    slaveVictors:
-#                        - port: 17
-#                          inverted: false
                         - org.usfirst.frc.team449.robot.jacksonWrappers.SlaveTalon:
                             port: 5
                             inverted: false
+#                    slaveVictors:
+#                        - port: 17
+#                          inverted: false
             startingOverrideAutoshift: false
             ahrs:
                 org.usfirst.frc.team449.robot.jacksonWrappers.MappedAHRS:
@@ -193,7 +193,7 @@ logger:
               '@id': pressureSensor
               port: 2
               oversampleBits: 0
-              averageBits: 0
+              averageBits: 3
         - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
             leftMaster
         - org.usfirst.frc.team449.robot.jacksonWrappers.FPSTalon:
@@ -243,7 +243,6 @@ logger:
             remoteLimitSwitchID: 1
             revLimitSwitchNormallyOpen: true
             postEncoderGearing: 1
-            #1.7626
             feetPerRotation: 0.5962
             currentLimit: 40
             minNumPointsInBottomBuffer: 40
@@ -354,7 +353,7 @@ buttons:
                         intakeMode: IN_FAST
                         stopMode: IN_SLOW
                     - org.usfirst.frc.team449.robot.subsystem.interfaces.intake.commands.SetIntakeMode:
-                        '@id': reverseSideswipe
+                        '@id': stopSideswipe
                         subsystem:
                             org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
                                 intake
@@ -1237,36 +1236,36 @@ autoStartupCommand:
                                 "RLR" :
                                    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
                                         RightRRRCommand
-autoStartupCommand:
-    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
-        '@id': autoCommand
-        commandList:
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.SetHeading:
-                '@id': resetHeading
-                subsystem:
-                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                        drive
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
-                '@id': lowerIntakeAuto
-                subsystem:
-                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
-                        intake
-            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
-                '@id': calibrateProfile
-                subsystem:
-                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
-                        drive
-                left:
-                    '@id': leftForward9
-                    filename: "/home/lvuser/449_resources/naviLeftForward9Profile.csv"
-                    inverted: false
-                    resetPosition: true
-                right:
-                    '@id': rightForward9
-                    filename: "/home/lvuser/449_resources/naviRightForward9Profile.csv"
-                    inverted: true
-                    resetPosition: true
-                timeout: 10
+#autoStartupCommand:
+#    org.usfirst.frc.team449.robot.commands.general.CommandSequence:
+#        '@id': autoCommand
+#        commandList:
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.AHRS.commands.SetHeading:
+#                '@id': resetHeading
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.solenoid.commands.SolenoidForward:
+#                '@id': lowerIntakeAuto
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.subsystem.complex.intake.IntakeActuatedTwoSides:
+#                        intake
+#            - org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.commands.RunProfileTwoSides:
+#                '@id': calibrateProfile
+#                subsystem:
+#                    org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectionalWithGyroShiftable:
+#                        drive
+#                left:
+#                    '@id': leftForward9
+#                    filename: "/home/lvuser/449_resources/naviLeftForward9Profile.csv"
+#                    inverted: false
+#                    resetPosition: true
+#                right:
+#                    '@id': rightForward9
+#                    filename: "/home/lvuser/449_resources/naviRightForward9Profile.csv"
+#                    inverted: true
+#                    resetPosition: true
+#                timeout: 10
 updater:
     org.usfirst.frc.team449.robot.other.Updater:
         '@id': updater
