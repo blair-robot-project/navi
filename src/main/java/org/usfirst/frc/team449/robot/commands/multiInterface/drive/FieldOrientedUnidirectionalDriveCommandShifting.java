@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.commands.multiInterface.drive.FieldOrientedUnidirectionalDriveCommand;
 import org.usfirst.frc.team449.robot.components.AutoshiftComponent;
 import org.usfirst.frc.team449.robot.drive.shifting.DriveShiftable;
 import org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectional;
@@ -90,7 +89,8 @@ public class FieldOrientedUnidirectionalDriveCommandShifting<T extends Subsystem
                                                            @NotNull @JsonProperty(required = true) AutoshiftComponent autoshiftComponent,
                                                            @Nullable Double highGearAngularCoefficient) {
         //Assign stuff
-        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP, kI, kD, subsystem, oi, snapPoints);
+        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP
+                , kI, kD, subsystem, oi, snapPoints);
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
@@ -106,7 +106,8 @@ public class FieldOrientedUnidirectionalDriveCommandShifting<T extends Subsystem
     @Override
     protected void execute() {
         if (!subsystem.getOverrideAutoshift()) {
-            autoshiftComponent.autoshift(oi.getVelCached(), subsystem.getLeftVelCached(), subsystem.getRightVelCached(), gear -> subsystem.setGear(gear));
+            autoshiftComponent.autoshift(oi.getVelCached(), subsystem.getLeftVelCached(),
+                    subsystem.getRightVelCached(), gear -> subsystem.setGear(gear));
         }
 
         //Gain schedule the loop if we shifted

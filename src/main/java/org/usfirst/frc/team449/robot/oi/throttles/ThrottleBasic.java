@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick;
-import org.usfirst.frc.team449.robot.oi.throttles.Throttle;
 
 /**
  * A class representing a single axis on a joystick.

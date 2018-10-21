@@ -13,12 +13,10 @@ import edu.wpi.first.wpilibj.Notifier;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.components.RunningLinRegComponent;
 import org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.feedForwardComponent.FeedForwardComponent;
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
 import org.usfirst.frc.team449.robot.generalInterfaces.shiftable.Shiftable;
 import org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotor;
-import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.other.MotionProfileData;
 
@@ -119,6 +117,9 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      *                                   the forward limit switch is disabled.
      * @param revLimitSwitchNormallyOpen Whether the reverse limit switch is normally open or closed. If this is null,
      *                                   the reverse limit switch is disabled.
+     * @param remoteLimitSwitchID        The CAN port of the Talon the limit switch to use for this talon is plugged
+     *                                   into, or null to not use a limit switch or use the limit switch plugged into
+     *                                   this talon.
      * @param fwdSoftLimit               The forward software limit, in feet. If this is null, the forward software
      *                                   limit is disabled. Ignored if there's no encoder.
      * @param revSoftLimit               The reverse software limit, in feet. If this is null, the reverse software
@@ -160,6 +161,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                     @JsonProperty(required = true) boolean enableBrakeMode,
                     @Nullable Boolean fwdLimitSwitchNormallyOpen,
                     @Nullable Boolean revLimitSwitchNormallyOpen,
+                    @Nullable Integer remoteLimitSwitchID,
                     @Nullable Double fwdSoftLimit,
                     @Nullable Double revSoftLimit,
                     @Nullable Double postEncoderGearing,
@@ -245,16 +247,30 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
 
         //Only enable the limit switches if it was specified if they're normally open or closed.
         if (fwdLimitSwitchNormallyOpen != null) {
-            canTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                    fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            if (remoteLimitSwitchID != null) {
+                canTalon.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX,
+                        fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
+                        remoteLimitSwitchID, 0);
+            } else {
+                canTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                        fwdLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen :
+                                LimitSwitchNormal.NormallyClosed, 0);
+            }
             this.fwdLimitSwitchNormallyOpen = fwdLimitSwitchNormallyOpen;
         } else {
             canTalon.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled, 0);
             this.fwdLimitSwitchNormallyOpen = true;
         }
         if (revLimitSwitchNormallyOpen != null) {
-            canTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                    revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed, 0);
+            if (remoteLimitSwitchID != null) {
+                canTalon.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX,
+                        revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
+                        remoteLimitSwitchID, 0);
+            } else {
+                canTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                        revLimitSwitchNormallyOpen ? LimitSwitchNormal.NormallyOpen :
+                                LimitSwitchNormal.NormallyClosed, 0);
+            }
             this.revLimitSwitchNormallyOpen = revLimitSwitchNormallyOpen;
         } else {
             canTalon.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled, 0);
@@ -508,10 +524,11 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             canTalon.config_kF(0, 0, 0);
             canTalon.set(ControlMode.MotionMagic, nativeSetpoint);
         } else {
-            if (nativeSetpoint == 0){
-                canTalon.config_kF(0, 0,0);
+            if (nativeSetpoint == 0) {
+                canTalon.config_kF(0, 0, 0);
             } else {
-                canTalon.config_kF(0, 1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(feet), 0);
+                canTalon.config_kF(0,
+                        1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(feet), 0);
             }
             canTalon.set(ControlMode.Position, nativeSetpoint);
         }
@@ -548,7 +565,9 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      */
     protected void setVelocityFPS(double velocity) {
         nativeSetpoint = FPSToEncoder(velocity);
-        canTalon.config_kF(0, 1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(velocity), 0);
+        canTalon.config_kF(0,
+                1023. / 12. / nativeSetpoint * currentGearSettings.getFeedForwardComponent().applyAsDouble(velocity),
+                0);
         setpoint = velocity;
         canTalon.set(ControlMode.Velocity, nativeSetpoint);
     }
@@ -686,23 +705,12 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
     }
 
     /**
-     * A private utility method for updating motionProfileStatus with the current motion profile status. Makes sure that
-     * the status is only gotten once per tic, to avoid CAN traffic overload.
-     */
-    private void updateMotionProfileStatus() {
-        if (timeMPStatusLastRead < Clock.currentTimeMillis()) {
-            canTalon.getMotionProfileStatus(motionProfileStatus);
-            timeMPStatusLastRead = Clock.currentTimeMillis();
-        }
-    }
-
-    /**
      * Whether this talon is ready to start running a profile.
      *
      * @return True if minNumPointsInBottomBuffer points have been loaded or the top buffer is empty, false otherwise.
      */
     public boolean readyForMP() {
-        updateMotionProfileStatus();
+        canTalon.getMotionProfileStatus(motionProfileStatus);
         return motionProfileStatus.topBufferCnt == 0 || motionProfileStatus.btmBufferCnt >= minNumPointsInBottomBuffer;
     }
 
@@ -712,7 +720,7 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
      * @return True if the active point in the talon is the last point, false otherwise.
      */
     public boolean MPIsFinished() {
-        updateMotionProfileStatus();
+        canTalon.getMotionProfileStatus(motionProfileStatus);
         return motionProfileStatus.isLast;
     }
 
@@ -750,7 +758,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         setpoint = SetValueMotionProfile.Disable.value;
         canTalon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
         //Reset the Talon
-        disable();
         clearMP();
 
         //Declare this out here to avoid garbage collection
@@ -799,15 +806,22 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             // Set all the fields of the profile point
             point.position = feetToEncoder(startPosition + (data.getData()[i][0] * (data.isInverted() ? -1 : 1)));
 
-            feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
-                    data.getData()[i][1], data.getData()[i][2]);
-            Logger.addEvent("VelPlusAccel: " + feedforward, this.getClass());
+            if (data.isInverted()) {
+                feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(-data.getData()[i][0],
+                        -data.getData()[i][1], -data.getData()[i][2]);
+            } else {
+                feedforward = currentGearSettings.getFeedForwardComponent().calcMPVoltage(data.getData()[i][0],
+                        data.getData()[i][1], data.getData()[i][2]);
+            }
             point.velocity = feedforward;
 
-            //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change either the profile or kA.
+            //Doing vel+accel shouldn't lead to impossible setpoints, so if it does, we log so we know to change
+            // either the profile or kA.
             if (Math.abs(feedforward) > 12) {
-                System.out.println("Point " + Arrays.toString(data.getData()[i]) + " has an unattainable velocity+acceleration setpoint!");
-                Logger.addEvent("Point " + Arrays.toString(data.getData()[i]) + " has an unattainable velocity+acceleration setpoint!", this.getClass());
+                System.out.println("Point " + Arrays.toString(data.getData()[i]) + " has an unattainable " +
+                        "velocity+acceleration setpoint!");
+                Logger.addEvent("Point " + Arrays.toString(data.getData()[i]) + " has an unattainable " +
+                        "velocity+acceleration setpoint!", this.getClass());
             }
             point.zeroPos = i == 0 && data.resetPosition(); // If it's the first point, set the encoder position to 0.
             point.isLastPoint = (i + 1) == data.getData().length; // If it's the last point, isLastPoint = true
@@ -825,11 +839,6 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
         if (canTalon.getMotionProfileTopLevelBufferCount() == 0) {
             bottomBufferLoader.stop();
         }
-    }
-
-    public MotionProfileStatus getMotionProfileStatus(){
-        canTalon.getMotionProfileStatus(motionProfileStatus);
-        return motionProfileStatus;
     }
 
     /**
@@ -1018,9 +1027,11 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
                                double motionMagicMaxAccel) {
             this.gear = gear != null ? gear.getNumVal() : gearNum;
             this.fwdPeakOutputVoltage = fwdPeakOutputVoltage != null ? fwdPeakOutputVoltage : 12;
-            this.revPeakOutputVoltage = revPeakOutputVoltage != null ? revPeakOutputVoltage : -this.fwdPeakOutputVoltage;
+            this.revPeakOutputVoltage = revPeakOutputVoltage != null ? revPeakOutputVoltage :
+                    -this.fwdPeakOutputVoltage;
             this.fwdNominalOutputVoltage = fwdNominalOutputVoltage != null ? fwdNominalOutputVoltage : 0;
-            this.revNominalOutputVoltage = revNominalOutputVoltage != null ? revNominalOutputVoltage : -this.fwdNominalOutputVoltage;
+            this.revNominalOutputVoltage = revNominalOutputVoltage != null ? revNominalOutputVoltage :
+                    -this.fwdNominalOutputVoltage;
             this.rampRate = rampRate;
             this.kP = kP;
             this.kI = kI;
@@ -1031,7 +1042,8 @@ public class FPSTalon implements SimpleMotor, Shiftable, Loggable {
             this.motionProfilePRev = motionProfilePRev != null ? motionProfilePRev : this.motionProfilePFwd;
             this.motionProfileIRev = motionProfileIRev != null ? motionProfileIRev : this.motionProfileIFwd;
             this.motionProfileDRev = motionProfileDRev != null ? motionProfileDRev : this.motionProfileDFwd;
-            this.feedForwardComponent = feedForwardComponent != null ? feedForwardComponent : FeedForwardComponent.getZeroFeedForward();
+            this.feedForwardComponent = feedForwardComponent != null ? feedForwardComponent :
+                    FeedForwardComponent.getZeroFeedForward();
             this.maxSpeed = maxSpeed;
             this.motionMagicMaxVel = motionMagicMaxVel;
             this.motionMagicMaxAccel = motionMagicMaxAccel;

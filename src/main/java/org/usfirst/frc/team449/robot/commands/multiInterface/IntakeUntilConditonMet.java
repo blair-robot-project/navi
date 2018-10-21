@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.other.Logger;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.SubsystemBinaryMotor;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.conditional.SubsystemConditional;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake;
-import zmq.socket.pubsub.Sub;
 
 /**
  * Run a BinaryMotor while a condition is true.
@@ -41,9 +39,9 @@ public class IntakeUntilConditonMet<T extends Subsystem & SubsystemIntake & Subs
     /**
      * Default constructor
      *
-     * @param subsystem The subsystem to execute this command on.
+     * @param subsystem  The subsystem to execute this command on.
      * @param intakeMode The mode to run the intake at until the condition is met.
-     * @param stopMode The mode to run the intake at after the condition is met. Defaults to off.
+     * @param stopMode   The mode to run the intake at after the condition is met. Defaults to off.
      */
     @JsonCreator
     public IntakeUntilConditonMet(@NotNull @JsonProperty(required = true) T subsystem,
@@ -98,7 +96,7 @@ public class IntakeUntilConditonMet<T extends Subsystem & SubsystemIntake & Subs
     protected void interrupted() {
         //Stop the intake if this command is interrupted.
         subsystem.setMode(SubsystemIntake.IntakeMode.OFF);
-        Logger.addEvent("IntakeUntilConditonMet interrupted, stopping climb.", this.getClass());
+        Logger.addEvent("IntakeUntilConditonMet interrupted!", this.getClass());
     }
 
 }

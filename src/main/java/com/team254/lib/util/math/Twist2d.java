@@ -11,6 +11,7 @@ public class Twist2d {
     public final double dx;
     public final double dy;
     public final double dtheta; // Radians!
+
     public Twist2d(double dx, double dy, double dtheta) {
         this.dx = dx;
         this.dy = dy;

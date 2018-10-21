@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.SubsystemBinaryMotor;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.binaryMotor.commands.TurnMotorOff;
 
 /**
  * Turns off the motor of the subsystem, but does so while using requires() to interrupt any other commands currently

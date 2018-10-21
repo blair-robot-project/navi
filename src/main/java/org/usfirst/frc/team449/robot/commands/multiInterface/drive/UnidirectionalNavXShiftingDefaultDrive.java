@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.commands.multiInterface.drive.UnidirectionalNavXDefaultDrive;
 import org.usfirst.frc.team449.robot.components.AutoshiftComponent;
 import org.usfirst.frc.team449.robot.drive.shifting.DriveShiftable;
 import org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectional;
@@ -94,7 +93,8 @@ public class UnidirectionalNavXShiftingDefaultDrive<T extends Subsystem & DriveU
                                                   @Nullable RampComponent rampComponent,
                                                   @NotNull @JsonProperty(required = true) AutoshiftComponent autoshiftComponent,
                                                   @Nullable Double highGearAngularCoefficient) {
-        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, maxAngularVelToEnterLoop,
+        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband,
+                maxAngularVelToEnterLoop,
                 inverted, kP, kI, kD, driveStraightLoopEntryTimer, subsystem, oi, rampComponent);
         this.kP = kP;
         this.kI = kI;

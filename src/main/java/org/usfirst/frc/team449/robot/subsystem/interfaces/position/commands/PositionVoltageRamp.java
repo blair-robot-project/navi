@@ -41,8 +41,8 @@ public class PositionVoltageRamp<T extends Subsystem & SubsystemPosition> extend
     /**
      * Default constructor
      *
-     * @param subsystem      The subsystem to execute this command on
-     * @param voltsPerSecond How many volts to increase the output by per second.
+     * @param subsystem       The subsystem to execute this command on
+     * @param voltsPerSecond  How many volts to increase the output by per second.
      * @param startingVoltage The voltage to start the ramp at. Defaults to 0.
      */
     @JsonCreator

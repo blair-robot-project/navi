@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.usfirst.frc.team449.robot.commands.multiInterface.drive.NavXTurnToAngle;
 import org.usfirst.frc.team449.robot.drive.unidirectional.DriveUnidirectional;
 import org.usfirst.frc.team449.robot.other.BufferTimer;
 import org.usfirst.frc.team449.robot.other.Clock;
@@ -54,7 +53,8 @@ public class NavXTurnToAngleRelative<T extends Subsystem & DriveUnidirectional &
                                    @JsonProperty(required = true) double setpoint,
                                    @NotNull @JsonProperty(required = true) T drive,
                                    @JsonProperty(required = true) double timeout) {
-        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP, kI, kD, setpoint, drive, timeout);
+        super(absoluteTolerance, onTargetBuffer, minimumOutput, maximumOutput, loopTimeMillis, deadband, inverted, kP
+                , kI, kD, setpoint, drive, timeout);
     }
 
     /**

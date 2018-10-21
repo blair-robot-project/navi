@@ -13,6 +13,7 @@ public class MotionProfileGoal {
     protected CompletionBehavior completion_behavior = CompletionBehavior.OVERSHOOT;
     protected double pos_tolerance = 1E-3;
     protected double vel_tolerance = 1E-2;
+
     public MotionProfileGoal() {
     }
 

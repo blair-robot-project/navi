@@ -16,7 +16,7 @@ import org.usfirst.frc.team449.robot.subsystem.interfaces.intake.SubsystemIntake
  * An intake with a digital input.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class IntakeSensored extends IntakeSimple implements SubsystemIntake, SubsystemConditional{
+public class IntakeSensored extends IntakeSimple implements SubsystemIntake, SubsystemConditional {
 
     /**
      * The sensor for detecting if there's something in the intake.

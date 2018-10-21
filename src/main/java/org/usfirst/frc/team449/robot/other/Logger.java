@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
-import org.usfirst.frc.team449.robot.other.Clock;
-import org.usfirst.frc.team449.robot.other.LogEvent;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -114,7 +112,7 @@ public class Logger implements Runnable {
      *                             appended onto the end.
      * @param telemetryLogFilename The filepath of the log for telemetry data. Will have the timestamp and file
      *                             extension appended onto the end.
-     * @param loopTimeMillis The loop time of the logging loop in milliseconds.
+     * @param loopTimeMillis       The loop time of the logging loop in milliseconds.
      * @throws IOException If the file names provided from the log can't be written to.
      */
     @JsonCreator
@@ -224,7 +222,7 @@ public class Logger implements Runnable {
         for (int i = 0; i < loggables.length; i++) {
             try {
                 data = loggables[i].getData();
-            } catch (ConcurrentModificationException e){
+            } catch (ConcurrentModificationException e) {
                 data = new Object[0];
             }
 
@@ -264,7 +262,7 @@ public class Logger implements Runnable {
 
         //Log the data to a file.
         try {
-            telemetryLogWriter.write(telemetryData.toString().substring(0, telemetryData.length() - 1)+"\n");
+            telemetryLogWriter.write(telemetryData.toString().substring(0, telemetryData.length() - 1) + "\n");
             telemetryLogWriter.flush();
         } catch (Exception e) {
             System.out.println("Logging failed!");
@@ -275,7 +273,7 @@ public class Logger implements Runnable {
     /**
      * Start running the logger.
      */
-    public void start(){
-        notifier.startPeriodic(loopTimeMillis/1000.);
+    public void start() {
+        notifier.startPeriodic(loopTimeMillis / 1000.);
     }
 }

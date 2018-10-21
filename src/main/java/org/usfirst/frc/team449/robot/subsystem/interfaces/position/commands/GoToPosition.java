@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
-import org.usfirst.frc.team449.robot.other.Clock;
 import org.usfirst.frc.team449.robot.other.Logger;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.position.SubsystemPosition;
 
@@ -47,6 +46,7 @@ public class GoToPosition<T extends Subsystem & SubsystemPosition> extends Comma
      */
     @Override
     protected void initialize() {
+        Logger.addEvent("GoToPosition init.", this.getClass());
         subsystem.setPositionSetpoint(setpoint);
     }
 

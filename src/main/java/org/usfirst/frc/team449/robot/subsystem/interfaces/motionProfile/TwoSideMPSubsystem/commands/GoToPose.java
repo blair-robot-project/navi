@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * A command that drives the given subsystem to an absolute position.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS> extends CommandGroup implements PoseCommand {
+public class GoToPose<T extends Subsystem & SubsystemMPTwoSides & SubsystemAHRS> extends CommandGroup implements PoseCommand {
 
     /**
      * The object to get robot pose from.
@@ -37,7 +37,8 @@ public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemA
     @Nullable
     private Waypoint[] waypoints;
     /**
-     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is ignored.
+     * Getter for the points for the path to hit. Must not be null if the Waypoint[] parameter is null, otherwise is
+     * ignored.
      */
     @Nullable
     private Supplier<Waypoint[]> waypointSupplier;
@@ -53,25 +54,26 @@ public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemA
      * @param subsystem     The subsystem to run the path gotten from the Jetson on.
      * @param pathRequester The object for interacting with the Jetson.
      * @param poseEstimator The object to get robot pose from.
-     * @param waypoints The points for the path to hit. Can be null to use setters.
+     * @param waypoints     The points for the path to hit. Can be null to use setters.
      * @param maxVel        The maximum velocity, in feet/second.
      * @param maxAccel      The maximum acceleration, in feet/(second^2)
      * @param maxJerk       The maximum jerk, in feet/(second^3)
      * @param deltaTime     The time between setpoints in the profile, in seconds.
      */
     @JsonCreator
-    public GoToPosition(@NotNull @JsonProperty(required = true) T subsystem,
-                        @NotNull @JsonProperty(required = true) PathRequester pathRequester,
-                        @NotNull @JsonProperty(required = true) PoseEstimator poseEstimator,
-                        @Nullable Waypoint[] waypoints,
-                        @JsonProperty(required = true) double maxVel,
-                        @JsonProperty(required = true) double maxAccel,
-                        @JsonProperty(required = true) double maxJerk,
-                        @JsonProperty(required = true) double deltaTime) {
+    public GoToPose(@NotNull @JsonProperty(required = true) T subsystem,
+                    @NotNull @JsonProperty(required = true) PathRequester pathRequester,
+                    @NotNull @JsonProperty(required = true) PoseEstimator poseEstimator,
+                    @Nullable Waypoint[] waypoints,
+                    @JsonProperty(required = true) double maxVel,
+                    @JsonProperty(required = true) double maxAccel,
+                    @JsonProperty(required = true) double maxJerk,
+                    @JsonProperty(required = true) double deltaTime) {
         this.waypoints = waypoints;
         this.poseEstimator = poseEstimator;
         this.subsystem = subsystem;
-        GetPathFromJetson getPath = new GetPathFromJetson(pathRequester, null, deltaTime, maxVel, maxAccel, maxJerk, false);
+        GetPathFromJetson getPath = new GetPathFromJetson(pathRequester, null, deltaTime, maxVel, maxAccel, maxJerk,
+                false);
         GoToPositionRelative goToPositionRelative = new GoToPositionRelative<>(getPath, subsystem);
         goToPositionRelative.setWaypoints(this::getWaypoints);
         addSequential(goToPositionRelative);
@@ -82,21 +84,18 @@ public class GoToPosition<T extends Subsystem & SubsystemMPTwoSides & SubsystemA
      */
     @NotNull
     private Waypoint[] getWaypoints() {
-        if (waypointSupplier != null){
+        if (waypointSupplier != null) {
             waypoints = waypointSupplier.get();
         }
 
         //Get the pose
         pos = poseEstimator.getPos();
+        Waypoint[] toRet = new Waypoint[waypoints.length + 1];
+        toRet[0] = new Waypoint(pos[0], pos[1], subsystem.getHeadingCached());
 
-        //Subtract out current pose to get the change
-        for (Waypoint waypoint : waypoints){
-            waypoint.setX(waypoint.getX() - pos[0]);
-            waypoint.setY(waypoint.getY() - pos[1]);
-            waypoint.setThetaDegrees(waypoint.getThetaDegrees() - subsystem.getHeadingCached());
-        }
+        System.arraycopy(waypoints, 0, toRet, 1, waypoints.length);
 
-        return waypoints;
+        return toRet;
     }
 
     /**

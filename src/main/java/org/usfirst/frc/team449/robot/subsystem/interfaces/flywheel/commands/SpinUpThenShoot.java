@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.SubsystemFlywheel;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.commands.SpinUpFlywheel;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.commands.TurnAllOn;
 
 /**
  * Spin up the flywheel until it's at the target speed, then start feeding in balls.

@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.other.MotionProfileData;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.TwoSideMPSubsystem.SubsystemMPTwoSides;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.commands.LoadProfile;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.motionProfile.commands.RunLoadedProfile;
 
 import java.util.function.Supplier;
 
@@ -32,7 +30,7 @@ public class RunProfile<T extends Subsystem & SubsystemMPTwoSides> extends Comma
                       @NotNull @JsonProperty(required = true) MotionProfileData profile,
                       @JsonProperty(required = true) double timeout) {
         addSequential(new LoadProfile(subsystem, profile));
-        addSequential(new RunLoadedProfile<>(subsystem, timeout, true));
+        addSequential(new RunLoadedProfile<>(subsystem, timeout));
     }
 
     /**
@@ -46,6 +44,6 @@ public class RunProfile<T extends Subsystem & SubsystemMPTwoSides> extends Comma
                       @NotNull Supplier<MotionProfileData> profileSupplier,
                       double timeout) {
         addSequential(new LoadProfile(subsystem, profileSupplier));
-        addSequential(new RunLoadedProfile<>(subsystem, timeout, true));
+        addSequential(new RunLoadedProfile<>(subsystem, timeout));
     }
 }

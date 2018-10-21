@@ -1,9 +1,7 @@
 package org.usfirst.frc.team449.robot.other;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * A waypoint to hit during a motion profile.
@@ -28,8 +26,8 @@ public class Waypoint {
     /**
      * Default constructor.
      *
-     * @param x The X position to hit, in feet.
-     * @param y The Y position to hit, in feet.
+     * @param x     The X position to hit, in feet.
+     * @param y     The Y position to hit, in feet.
      * @param theta The angle, in degrees, for the robot to be at when it arrives at (x, y).
      */
     @JsonCreator
@@ -49,31 +47,17 @@ public class Waypoint {
     }
 
     /**
-     * @return The Y position to hit, in feet.
-     */
-    public double getY() {
-        return y;
-    }
-
-    /**
-     * @return The angle, in radians, for the robot to be at when it arrives at (x, y).
-     */
-    public double getThetaRadians() {
-        return Math.toRadians(theta);
-    }
-
-    /**
-     * @return The angle, in degrees, for the robot to be at when it arrives at (x, y).
-     */
-    public double getThetaDegrees() {
-        return theta;
-    }
-
-    /**
      * @param x The X position to hit, in feet.
      */
     public void setX(double x) {
         this.x = x;
+    }
+
+    /**
+     * @return The Y position to hit, in feet.
+     */
+    public double getY() {
+        return y;
     }
 
     /**
@@ -84,10 +68,24 @@ public class Waypoint {
     }
 
     /**
+     * @return The angle, in radians, for the robot to be at when it arrives at (x, y).
+     */
+    public double getThetaRadians() {
+        return Math.toRadians(theta);
+    }
+
+    /**
      * @param theta The angle, in radians, for the robot to be at when it arrives at (x, y).
      */
     public void setThetaRadians(double theta) {
         this.theta = Math.toDegrees(theta);
+    }
+
+    /**
+     * @return The angle, in degrees, for the robot to be at when it arrives at (x, y).
+     */
+    public double getThetaDegrees() {
+        return theta;
     }
 
     /**

@@ -16,6 +16,7 @@ public class RigidTransform2d implements Interpolable<RigidTransform2d> {
     private final static double kEps = 1E-9;
     protected Translation2d translation_;
     protected Rotation2d rotation_;
+
     public RigidTransform2d() {
         translation_ = new Translation2d();
         rotation_ = new Rotation2d();
@@ -44,7 +45,8 @@ public class RigidTransform2d implements Interpolable<RigidTransform2d> {
     }
 
     /**
-     * Obtain a new RigidTransform2d from a (constant curvature) velocity. See: https://github.com/strasdat/Sophus/blob/master/sophus/se2.hpp
+     * Obtain a new RigidTransform2d from a (constant curvature) velocity. See: https://github
+     * .com/strasdat/Sophus/blob/master/sophus/se2.hpp
      */
     public static RigidTransform2d exp(Twist2d delta) {
         double sin_theta = Math.sin(delta.dtheta);

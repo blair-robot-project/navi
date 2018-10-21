@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
-import org.usfirst.frc.team449.robot.generalInterfaces.simpleMotor.SimpleMotor;
 import org.usfirst.frc.team449.robot.jacksonWrappers.SlaveVictor;
 
 import java.util.List;
@@ -30,12 +29,12 @@ public class MappedVictorSPX implements SimpleMotor, Loggable {
     /**
      * Default constructor.
      *
-     * @param port              The CAN ID of this Victor SPX.
-     * @param brakeMode         Whether to have the Victor brake or coast when no voltage is applied.
-     * @param inverted          Whether or not to invert this Victor. Defaults to false.
-     * @param enableVoltageComp Whether or not to enable voltage compensation. Defaults to false.
+     * @param port               The CAN ID of this Victor SPX.
+     * @param brakeMode          Whether to have the Victor brake or coast when no voltage is applied.
+     * @param inverted           Whether or not to invert this Victor. Defaults to false.
+     * @param enableVoltageComp  Whether or not to enable voltage compensation. Defaults to false.
      * @param voltageCompSamples The number of 1-millisecond samples to use for voltage compensation. Defaults to 32.
-     * @param slaveVictors      Any other Victor SPXs slaved to this one.
+     * @param slaveVictors       Any other Victor SPXs slaved to this one.
      */
     @JsonCreator
     public MappedVictorSPX(@JsonProperty(required = true) int port,

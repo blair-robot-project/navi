@@ -11,7 +11,6 @@ import org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.Polyn
 import org.usfirst.frc.team449.robot.generalInterfaces.loggable.Loggable;
 import org.usfirst.frc.team449.robot.jacksonWrappers.MappedJoystick;
 import org.usfirst.frc.team449.robot.oi.throttles.Throttle;
-import org.usfirst.frc.team449.robot.oi.unidirectional.arcade.OIArcade;
 
 /**
  * An arcade OI with an option to use the D-pad for turning.

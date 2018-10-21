@@ -2,6 +2,17 @@
 rad2deg <- function(rad) {return((rad * 180) / (pi))}
 deg2rad <- function(deg) {return((deg * pi) / (180))}
 distance <- function(x1, y1, x2, y2){return(sqrt((x1-x2)^2 + (y1-y2)^2))}
+leftKVFwd <- 1.483639
+leftKVRev <- 1.465076
+leftKA <- 0.179707
+leftInterceptFwd <- 0.718235
+leftInterceptRev <- 0.969839
+rightKVFwd <- 1.479436
+rightKVRev <- 1.439699
+rightKA <- 0.171817
+rightInterceptFwd <- 0.703256
+rightInterceptRev <- 0.984755
+
 
 plotProfile <- function(profileName, leftInverted = FALSE, rightInverted=FALSE, wheelbaseDiameter, centerToBack, startY = 0, startPos = c(-1,-1,-1,-1,-1,-1), usePosition = TRUE){
   if (leftInverted & rightInverted){
@@ -14,13 +25,13 @@ plotProfile <- function(profileName, leftInverted = FALSE, rightInverted=FALSE, 
   startingCenter <- c(startY, centerToBack)
   left$V1[1] <- 0
   left$V2[1] <- 0
-  left$V3[1] <- left$V3[2]
+  left$V4[1] <- left$V4[2]
   right$V1[1] <- 0
   right$V2[1] <- 0
-  right$V3[1] <- right$V3[2]
-  #Position,Velocity,Delta t, Elapsed time
-  left$V4 <- (0:(length(left$V1)-1))*left$V3[1]
-  right$V4 <- (0:(length(right$V1)-1))*right$V3[1]
+  right$V4[1] <- right$V4[2]
+  #Position,Velocity,Accel,Delta t, Elapsed time
+  left$V5 <- (0:(length(left$V1)-1))*left$V4[1]
+  right$V5 <- (0:(length(right$V1)-1))*right$V4[1]
   #Time, Left X, Left Y, Right X, Right Y, Angle
   out <- array(dim=c(length(left$V1),6))
   if(identical(startPos, c(-1,-1,-1,-1,-1,-1))){
@@ -29,30 +40,47 @@ plotProfile <- function(profileName, leftInverted = FALSE, rightInverted=FALSE, 
     out[1,]<-startPos
   }
   
-  for(i in 2:length(left$V4)){
+  for(i in 2:length(left$V5)){
     #Get the angle the robot is facing.
     perpendicular <- out[i-1,6]
-    print(perpendicular)
     
     #Add the change in time
-    out[i,1] <- out[i-1,1]+left$V3[i]
+    out[i,1] <- out[i-1,1]+left$V4[i]
     
     #Figure out linear change for each side using position or velocity
     if (usePosition){
       deltaLeft <- left$V1[i] - left$V1[i-1]
       deltaRight <- right$V1[i] - right$V1[i-1]
     } else {
-      deltaLeft <- left$V2[i]*left$V3[i]
-      deltaRight <- right$V2[i]*left$V3[i]
+      deltaLeft <- left$V2[i]*left$V4[i]
+      deltaRight <- right$V2[i]*left$V4[i]
     }
     
     # Invert the change if nessecary
     if (leftInverted){
+      # print(paste("L:",left$V2[i]*leftKVRev+left$V3[i]*leftKA+leftInterceptRev))
+      if (left$V2[i]*leftKVRev+left$V3[i]*leftKA+leftInterceptRev > 12){
+        print("Over 12v!")
+      }
       deltaLeft <- -deltaLeft
+    } else {
+      # print(paste("L:",left$V2[i]*leftKVFwd+left$V3[i]*leftKA+leftInterceptFwd))
+      if (left$V2[i]*leftKVFwd+left$V3[i]*leftKA+leftInterceptFwd > 12){
+        print("Over 12v!")
+      }
     }
     
     if (rightInverted){
+      # print(paste("R:",right$V2[i]*rightKVRev+right$V3[i]*rightKA+rightInterceptRev))
+      if (right$V2[i]*rightKVRev+right$V3[i]*rightKA+rightInterceptRev > 12){
+        print("Over 12v!")
+      }
       deltaRight <- -deltaRight
+    } else {
+      # print(paste("R:",right$V2[i]*rightKVFwd+right$V3[i]*rightKA+rightInterceptFwd))
+      if (right$V2[i]*rightKVFwd+right$V3[i]*rightKA+rightInterceptFwd > 12){
+        print("Over 12v!")
+      }
     }
     
     diffTerm <- deltaRight - deltaLeft
@@ -177,14 +205,15 @@ tracedAnimation <- function(x, y, leftX, leftY, rightX, rightY, headingRadians, 
 executeProfileSequence <- function(names, leftInverted, rightInverted, wheelbaseDiameter, centerToBack, startY, robotFile, intakeFile = NA){
   out <- plotProfile(names[1], leftInverted = leftInverted[1], rightInverted = rightInverted[1], wheelbaseDiameter=wheelbaseDiameter, centerToBack=centerToBack, startY = startY,  usePosition = TRUE)
   totalOut <- out
-  drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = TRUE)
+  drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = TRUE, linePlot = TRUE)
   tmp <- out[length(out[,1]),]
   drawRobot(robotFile, x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], intakeFile)
   if(length(names) > 1){
     for(i in 2:length(names)){
+      print(paste("Starting profile",i))
       out <- plotProfile(names[i], leftInverted = leftInverted[i], rightInverted = rightInverted[i], wheelbaseDiameter=wheelbaseDiameter, centerToBack=centerToBack, startPos = tmp,  usePosition = TRUE)
       totalOut <- rbind(totalOut, out)
-      drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = FALSE)
+      drawProfile(out, centerToBack = centerToBack, wheelbaseDiameter = wheelbaseDiameter, clear = FALSE, linePlot = TRUE)
       tmp <- out[length(out[,1]),]
       drawRobot(robotFile, x=(tmp[2]+tmp[4])/2, y= (tmp[3]+tmp[5])/2, theta = tmp[6], intakeFile)
     }
@@ -195,18 +224,23 @@ executeProfileSequence <- function(names, leftInverted, rightInverted, wheelbase
   return(totalOut)
 }
 
-wheelbaseDiameter <- 25.5/12.
+wheelbaseDiameter <- 2.34
 centerToBack <- (39.5/2.)/12.
 centerToSide <- (34.5/2.)/12.
-# totalOut <- executeProfileSequence(names = c("SameScale","TurnToSwitch", "SameScaleToCube", "CubeToSwitchModified",
-#                                              "CubeToAlign", "AlignToCube", "BackupToScale", "TurnToScale"),
-#                                    leftInverted = c(FALSE,FALSE, FALSE,FALSE, TRUE,FALSE, TRUE, TRUE),
-#                                    rightInverted = c(FALSE, TRUE, FALSE,FALSE, TRUE,FALSE, TRUE, FALSE),
+# totalOut <- executeProfileSequence(names = c("SameScale"),
+#                                    leftInverted = c(FALSE),
+#                                    rightInverted = c(FALSE),
 #                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
 #                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
-totalOut <- executeProfileSequence(names = c("OtherScale", "Turn180","OtherScaleToCube", "CubeToOtherSwitch"),
-                                   leftInverted = c(FALSE, FALSE, FALSE, FALSE),
-                                   rightInverted = c(FALSE, TRUE, FALSE, FALSE),
+totalOut <- executeProfileSequence(names = c("OtherScale"
+                                             #, "Turn180","OtherScaleToCube", "CubeToOtherSwitch"
+                                             ),
+                                   leftInverted = c(FALSE
+                                                    #, FALSE, FALSE, FALSE
+                                                    ),
+                                   rightInverted = c(FALSE
+                                                     #, TRUE, FALSE, FALSE
+                                                     ),
                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
 # totalOut <- executeProfileSequence(names = c("SameScale", "TurnAfterScale", "CrossFromScale","TurnToCrossCube", "Forward2"),
@@ -214,9 +248,14 @@ totalOut <- executeProfileSequence(names = c("OtherScale", "Turn180","OtherScale
 #                                    rightInverted = c(FALSE, TRUE, FALSE, TRUE, FALSE),
 #                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
 #                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
-# totalOut <- executeProfileSequence(names = c("SameSwitch", "CrossFromSwitch", "Forward2","CrossBackup"),
-#                                    leftInverted = c(FALSE, TRUE, FALSE, TRUE),
+# totalOut <- executeProfileSequence(names = c("SameSwitch" ,"CrossFromSwitch", "Forward2","CrossBackup"),
+#                                    leftInverted = c(FALSE,TRUE, FALSE,TRUE),
 #                                    rightInverted = c(FALSE, TRUE, FALSE, TRUE),
+#                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
+#                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
+# totalOut <- executeProfileSequence(names = c("ForwardLong" ,"Turn90", "ForwardMedium","Turn90","ForwardShort"),
+#                                    leftInverted = c(FALSE,FALSE, FALSE, TRUE, FALSE),
+#                                    rightInverted = c(FALSE, TRUE, FALSE, FALSE, FALSE),
 #                                    wheelbaseDiameter = wheelbaseDiameter, centerToBack = centerToBack,
 #                                    startY = 11.092-centerToSide, robotFile = "navi.csv", intakeFile = "naviIntake.csv")
 print(length(totalOut[,1])*0.05)

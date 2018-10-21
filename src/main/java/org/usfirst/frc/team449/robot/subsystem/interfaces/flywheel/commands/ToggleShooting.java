@@ -7,9 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.SubsystemFlywheel;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.commands.SpinUpThenShoot;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.commands.TurnAllOff;
-import org.usfirst.frc.team449.robot.subsystem.interfaces.flywheel.commands.TurnAllOn;
 
 /**
  * Toggle whether or not the subsystem is firing.

@@ -3,7 +3,8 @@ package org.usfirst.frc.team449.robot;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team449.robot.other.Clock;
@@ -27,7 +28,7 @@ public class Robot extends TimedRobot {
     /**
      * The name of the map to read from. Should be overriden by a subclass to change the name.
      */
-    protected String mapName = "auto_map.yml";
+    protected String mapName = "test_bed.yml";
 
     /**
      * The object constructed directly from the yaml map.
@@ -93,7 +94,9 @@ public class Robot extends TimedRobot {
         //Read sensors
         this.robotMap.getUpdater().run();
 
-        this.robotMap.getAutoStartupCommand().cancel();
+        if (this.robotMap.getAutoStartupCommand() != null) {
+            this.robotMap.getAutoStartupCommand().cancel();
+        }
 
         //Run startup command if we start in teleop.
         if (!enabled) {
@@ -153,7 +156,7 @@ public class Robot extends TimedRobot {
         this.robotMap.getUpdater().run();
 
         //Start auto if the game-specific message has been set
-        if (shouldStartAuto && DriverStation.getInstance().getGameSpecificMessage().length() == 3){
+        if (shouldStartAuto && DriverStation.getInstance().getGameSpecificMessage().length() == 3) {
             robotMap.getAutoStartupCommand().start();
             shouldStartAuto = false;
         }

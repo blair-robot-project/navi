@@ -26,9 +26,9 @@ public class ConditionalCommandDigitalInputBased extends ConditionalCommand {
     /**
      * Default constructor
      *
-     * @param onTrue          The Command to execute if the digital input returns true.
-     * @param onFalse         The Command to execute if the digital input returns false. Can be null to not execute a
-     *                        command if the supplier is false.
+     * @param onTrue       The Command to execute if the digital input returns true.
+     * @param onFalse      The Command to execute if the digital input returns false. Can be null to not execute a
+     *                     command if the supplier is false.
      * @param digitalInput A digital input for determining which command to run.
      */
     @JsonCreator
