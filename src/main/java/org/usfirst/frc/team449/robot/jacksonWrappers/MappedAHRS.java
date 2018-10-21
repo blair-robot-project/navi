@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +54,11 @@ public class MappedAHRS implements Loggable, Updatable {
     @JsonCreator
     public MappedAHRS(@JsonProperty(required = true) SerialPort.Port port,
                       Boolean invertYaw) {
-        this.ahrs = new AHRS(port, kProcessedData, (byte) 100);
+        if (port.equals(SerialPort.Port.kMXP)){
+            this.ahrs = new AHRS(SPI.Port.kMXP);
+        } else {
+            this.ahrs = new AHRS(port, kProcessedData, (byte) 100);
+        }
         ahrs.reset();
         if (invertYaw == null || invertYaw) {
             this.invertYaw = -1;
