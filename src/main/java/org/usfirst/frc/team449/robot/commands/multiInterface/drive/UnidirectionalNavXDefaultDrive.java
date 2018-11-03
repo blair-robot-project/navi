@@ -224,7 +224,7 @@ public class UnidirectionalNavXDefaultDrive<T extends Subsystem & DriveUnidirect
     @Override
     public String[] getHeader() {
         return new String[]{
-                "drivingStraight",
+                "driving_straight",
                 "running",
                 "raw_output",
                 "processed_output",

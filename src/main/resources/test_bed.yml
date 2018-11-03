@@ -165,7 +165,7 @@ logger:
               absoluteTolerance: 0
               deadband: 2
               maxAngularVelToEnterLoop: 15
-              inverted: false
+              inverted: true
               rampComponent:
                   org.usfirst.frc.team449.robot.generalInterfaces.doubleUnaryOperator.RampComponent:
                       maxChangePerSecond: 3
